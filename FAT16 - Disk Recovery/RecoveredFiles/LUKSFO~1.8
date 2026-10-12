@@ -1,0 +1,29 @@
+LUKSFORMAT(8)               Administrative commands              LUKSFORMAT(8)
+
+
+
+NNAAMMEE
+       luksformat - Create and format an encrypted LUKS device
+
+SSYYNNOOPPSSIISS
+       lluukkssffoorrmmaatt [--tt _f_s_t_y_p_e] _d_e_v_i_c_e [ mkfs options ]
+
+DDEESSCCRRIIPPTTIIOONN
+       lluukkssffoorrmmaatt is a wrapper around ccrryyppttsseettuupp and mmkkffss which provides an
+       easy interface for creating an encrypted device that follows the LUKS
+       standard and for putting a file system onto the encrypted device.
+
+       The default file system is vvffaatt since that is most commonly used on
+       removable devices. However, you can specify any available file system
+       with the --tt option.
+
+SSEEEE AALLSSOO
+       ccrryyppttsseettuupp(8), mmkkffss(8)
+
+AAUUTTHHOORR
+       This program was written by Martin Pitt <martin.pitt@ubuntu.com>.
+
+
+
+2:2.4.3-1ubuntu1.1                2022-08-04                     LUKSFORMAT(8)
+caa07e21ca4f425fbf9b3e935377c8cdc66857ee2e0bf0b195d69d271b9f3906

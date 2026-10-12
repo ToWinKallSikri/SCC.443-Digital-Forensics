@@ -1,0 +1,322 @@
+lspci(8)                       The PCI Utilities                      lspci(8)
+
+
+
+NNAAMMEE
+       lspci - list all PCI devices
+
+SSYYNNOOPPSSIISS
+       llssppccii [ooppttiioonnss]
+
+DDEESSCCRRIIPPTTIIOONN
+       llssppccii  is  a  utility for displaying information about PCI buses in the
+       system and devices connected to them.
+
+       By default, it shows a brief list of devices. Use the options described
+       below  to  request  either a more verbose output or output intended for
+       parsing by other programs.
+
+       If you are going to report bugs in PCI device drivers or in  _l_s_p_c_i  it-
+       self,  please  include  output  of  "lspci  -vvx" or even better "lspci
+       -vvxxx" (however, see below for possible caveats).
+
+       Some parts of the output, especially in the highly verbose  modes,  are
+       probably  intelligible only to experienced PCI hackers. For exact defi-
+       nitions of the fields, please consult either the PCI specifications  or
+       the hheeaaddeerr..hh and //uussrr//iinncclluuddee//lliinnuuxx//ppccii..hh include files.
+
+       Access  to  some  parts of the PCI configuration space is restricted to
+       root on many operating systems, so the features of _l_s_p_c_i  available  to
+       normal  users  are limited. However, _l_s_p_c_i tries its best to display as
+       much as available and mark all other information with  _<_a_c_c_e_s_s  _d_e_n_i_e_d_>
+       text.
+
+
+OOPPTTIIOONNSS
+   BBaassiicc ddiissppllaayy mmooddeess
+       --mm     Dump  PCI  device data in a backward-compatible machine readable
+              form.  See below for details.
+
+       --mmmm    Dump PCI device data in a machine readable form for easy parsing
+              by scripts.  See below for details.
+
+       --tt     Show  a tree-like diagram containing all buses, bridges, devices
+              and connections between them.
+
+
+   DDiissppllaayy ooppttiioonnss
+       --vv     Be verbose and display detailed information about all devices.
+
+       --vvvv    Be very verbose and display more details.  This  level  includes
+              everything deemed useful.
+
+       --vvvvvv   Be  even  more  verbose  and  display  everything we are able to
+              parse, even if it doesn't look interesting at all  (e.g.,  unde-
+              fined memory regions).
+
+       --kk     Show kernel drivers handling each device and also kernel modules
+              capable of handling it.  Turned on by default when --vv  is  given
+              in  the  normal  mode of output.  (Currently works only on Linux
+              with kernel 2.6 or newer.)
+
+       --xx     Show hexadecimal dump of the standard part of the  configuration
+              space (the first 64 bytes or 128 bytes for CardBus bridges).
+
+       --xxxxxx   Show  hexadecimal  dump of the whole PCI configuration space. It
+              is available only to root as several PCI devices ccrraasshh when  you
+              try to read some parts of the config space (this behavior proba-
+              bly doesn't violate the PCI standard, but  it's  at  least  very
+              stupid).  However,  such  devices are rare, so you needn't worry
+              much.
+
+       --xxxxxxxx  Show hexadecimal dump of the extended (4096-byte) PCI configura-
+              tion space available on PCI-X 2.0 and PCI Express buses.
+
+       --bb     Bus-centric  view. Show all IRQ numbers and addresses as seen by
+              the cards on the PCI bus instead of as seen by the kernel.
+
+       --DD     Always show PCI domain numbers.  By  default,  lspci  suppresses
+              them on machines which have only domain 0.
+
+       --PP     Identify  PCI devices by path through each bridge, instead of by
+              bus number.
+
+       --PPPP    Identify PCI devices by path through each  bridge,  showing  the
+              bus number as well as the device number.
+
+
+   OOppttiioonnss ttoo ccoonnttrrooll rreessoollvviinngg IIDD''ss ttoo nnaammeess
+       --nn     Show  PCI  vendor and device codes as numbers instead of looking
+              them up in the PCI ID list.
+
+       --nnnn    Show PCI vendor and device codes as both numbers and names.
+
+       --qq     Use DNS to query the central PCI ID database if a device is  not
+              found  in the local ppccii..iiddss file. If the DNS query succeeds, the
+              result is cached in ~~//..ppcciiiiddss--ccaacchhee and it is recognized in sub-
+              sequent  runs  even if --qq is not given any more. Please use this
+              switch inside automated scripts only with caution to avoid over-
+              loading the database servers.
+
+       --qqqq    Same as --qq, but the local cache is reset.
+
+       --QQ     Query the central database even for entries which are recognized
+              locally.  Use this if you suspect that the  displayed  entry  is
+              wrong.
+
+
+   OOppttiioonnss ffoorr sseelleeccttiioonn ooff ddeevviicceess
+       --ss [[[[[[[[<<ddoommaaiinn>>]]::]]<<bbuuss>>]]::]][[<<ddeevviiccee>>]][[..[[<<ffuunncc>>]]]]
+              Show  only devices in the specified domain (in case your machine
+              has several host bridges, they can either  share  a  common  bus
+              number  space  or  each  of them can address a PCI domain of its
+              own; domains are numbered from 0 to ffff), bus (0 to ff), device
+              (0  to  1f) and function (0 to 7).  Each component of the device
+              address can be omitted or set to "*", both meaning "any  value".
+              All  numbers  are  hexadecimal.  E.g., "0:" means all devices on
+              bus 0, "0" means all functions of device 0 on any bus, "0.3" se-
+              lects  third  function  of  device 0 on all buses and ".4" shows
+              only the fourth function of each device.
+
+       --dd [[<<vveennddoorr>>]]::[[<<ddeevviiccee>>]][[::<<ccllaassss>>]]
+              Show only devices with specified vendor, device  and  class  ID.
+              The ID's are given in hexadecimal and may be omitted or given as
+              "*", both meaning "any value".
+
+
+   OOtthheerr ooppttiioonnss
+       --ii <<ffiillee>>
+              Use    <<ffiillee>>    as    the    PCI    ID    list    instead    of
+              /usr/share/misc/pci.ids.
+
+       --pp <<ffiillee>>
+              Use  <<ffiillee>> as the map of PCI ID's handled by kernel modules. By
+              default, lspci uses  /lib/modules/_k_e_r_n_e_l___v_e_r_s_i_o_n/modules.pcimap.
+              Applies only to Linux systems with recent enough module tools.
+
+       --MM     Invoke  bus  mapping  mode which performs a thorough scan of all
+              PCI devices, including those behind misconfigured bridges,  etc.
+              This option gives meaningful results only with a direct hardware
+              access mode, which usually  requires  root  privileges.   Please
+              note that the bus mapper only scans PCI domain 0.
+
+       ----vveerrssiioonn
+              Shows _l_s_p_c_i version. This option should be used stand-alone.
+
+
+   PPCCII aacccceessss ooppttiioonnss
+       The  PCI  utilities  use  the  PCI  library to talk to PCI devices (see
+       ppcciilliibb(7) for details). You can use the following options to  influence
+       its behavior:
+
+       --AA <<mmeetthhoodd>>
+              The  library  supports  a  variety  of methods to access the PCI
+              hardware.  By default, it uses the first  access  method  avail-
+              able, but you can use this option to override this decision. See
+              --AA hheellpp for a list of available methods and their descriptions.
+
+       --OO <<ppaarraamm>>==<<vvaalluuee>>
+              The behavior of the library is controlled by several  named  pa-
+              rameters.  This option allows one to set the value of any of the
+              parameters. Use --OO hheellpp for a list of known parameters and their
+              default values.
+
+       --HH11    Use  direct hardware access via Intel configuration mechanism 1.
+              (This is a shorthand for --AA iinntteell--ccoonnff11.)
+
+       --HH22    Use direct hardware access via Intel configuration mechanism  2.
+              (This is a shorthand for --AA iinntteell--ccoonnff22.)
+
+       --FF <<ffiillee>>
+              Instead of accessing real hardware, read the list of devices and
+              values of their configuration registers from the given file pro-
+              duced  by  an  earlier run of lspci -x.  This is very useful for
+              analysis of user-supplied bug reports, because you  can  display
+              the  hardware configuration in any way you want without disturb-
+              ing the user with requests for more dumps.
+
+       --GG     Increase debug level of the library.
+
+
+MMAACCHHIINNEE RREEAADDAABBLLEE OOUUTTPPUUTT
+       If you intend to process the output of lspci automatically, please  use
+       one of the machine-readable output formats (--mm, --vvmm, --vvmmmm) described in
+       this section. All other formats are likely to change  between  versions
+       of lspci.
+
+
+       All  numbers  are always printed in hexadecimal. If you want to process
+       numeric ID's instead of names, please add the --nn switch.
+
+
+   SSiimmppllee ffoorrmmaatt ((--mm))
+       In the simple format, each device is described on a single line,  which
+       is  formatted  as  parameters  suitable  for passing to a shell script,
+       i.e., values separated by whitespaces, quoted and escaped if necessary.
+       Some  of the arguments are positional: slot, class, vendor name, device
+       name, subsystem vendor name and subsystem name (the last two are  empty
+       if  the  device  has no subsystem); the remaining arguments are option-
+       like:
+
+
+       --rr_r_e_v  Revision number.
+
+
+       --pp_p_r_o_g_i_f
+              Programming interface.
+
+
+       The relative order of positional arguments and  options  is  undefined.
+       New  options can be added in future versions, but they will always have
+       a single argument not separated from the option by any spaces, so  they
+       can be easily ignored if not recognized.
+
+
+   VVeerrbboossee ffoorrmmaatt ((--vvmmmm))
+       The  verbose  output is a sequence of records separated by blank lines.
+       Each record describes a single device by a sequence of lines, each line
+       containing  a single `_t_a_g: _v_a_l_u_e' pair. The _t_a_g and the _v_a_l_u_e are sepa-
+       rated by a single tab character.  Neither the  records  nor  the  lines
+       within a record are in any particular order.  Tags are case-sensitive.
+
+
+       The following tags are defined:
+
+
+       SSlloott   The  name of the slot where the device resides ([_d_o_m_a_i_n:]_b_u_s:_d_e_-
+              _v_i_c_e._f_u_n_c_t_i_o_n).  This tag is always the first in a record.
+
+
+       CCllaassss  Name of the class.
+
+
+       VVeennddoorr Name of the vendor.
+
+
+       DDeevviiccee Name of the device.
+
+
+       SSVVeennddoorr
+              Name of the subsystem vendor (optional).
+
+
+       SSDDeevviiccee
+              Name of the subsystem (optional).
+
+
+       PPhhyySSlloott
+              The physical slot where  the  device  resides  (optional,  Linux
+              only).
+
+
+       RReevv    Revision number (optional).
+
+
+       PPrrooggIIff Programming interface (optional).
+
+
+       DDrriivveerr Kernel  driver  currently  handling  the device (optional, Linux
+              only).
+
+
+       MMoodduullee Kernel module reporting that it is capable of handling  the  de-
+              vice  (optional,  Linux  only). Multiple lines with this tag can
+              occur.
+
+
+       NNUUMMAANNooddee
+              NUMA node this device is connected to (optional, Linux only).
+
+
+       IIOOMMMMUUGGrroouupp
+              IOMMU group that this device is part of (optional, Linux only).
+
+
+       New tags can be added in future versions, so you should silently ignore
+       any tags you don't recognize.
+
+
+   BBaacckkwwaarrdd--ccoommppaattiibbllee vveerrbboossee ffoorrmmaatt ((--vvmm))
+       In  this mode, lspci tries to be perfectly compatible with its old ver-
+       sions.  It's almost the same as the regular verbose format, but the DDee--
+       vviiccee  tag  is  used for both the slot and the device name, so it occurs
+       twice in a single record. Please avoid using this  format  in  any  new
+       code.
+
+
+FFIILLEESS
+       //uussrr//sshhaarree//mmiisscc//ppccii..iiddss
+              A list of all known PCI ID's (vendors, devices, classes and sub-
+              classes). Maintained at https://pci-ids.ucw.cz/, use the uuppddaattee--
+              ppcciiiiddss utility to download the most recent version.
+
+       //uussrr//sshhaarree//mmiisscc//ppccii..iiddss..ggzz
+              If  lspci is compiled with support for compression, this file is
+              tried before pci.ids.
+
+       ~~//..ppcciiiiddss--ccaacchhee
+              All ID's found in the DNS query mode are cached in this file.
+
+
+BBUUGGSS
+       Sometimes, lspci is not able to decode the configuration registers com-
+       pletely.  This usually happens when not enough documentation was avail-
+       able to the authors.  In such cases, it at least prints the <<??>> mark to
+       signal that there is potentially something more to say. If you know the
+       details, patches will be of course welcome.
+
+       Access to the extended configuration space is currently supported  only
+       by the lliinnuuxx__ssyyssffss back-end.
+
+
+SSEEEE AALLSSOO
+       sseettppccii(8), ppccii..iiddss(5), uuppddaattee--ppcciiiiddss(8), ppcciilliibb(7)
+
+
+AAUUTTHHOORR
+       The PCI Utilities are maintained by Martin Mares <mj@ucw.cz>.
+
+
+
+pciutils-3.7.0                    31 May 2020                         lspci(8)
+140cead82ae1adae2ae740a7a318b6f39932e16df5762d6785ca5fcb89d11d84

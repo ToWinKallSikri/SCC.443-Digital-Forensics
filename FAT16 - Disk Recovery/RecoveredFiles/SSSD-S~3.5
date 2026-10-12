@@ -1,0 +1,150 @@
+SSSD-SUDO(5)             File Formats and Conventions             SSSD-SUDO(5)
+
+
+
+NNAAMMEE
+       sssd-sudo - Configuring sudo with the SSSD back end
+
+DDEESSCCRRIIPPTTIIOONN
+       This manual page describes how to configure ssuuddoo(8) to work with
+       ssssssdd(8) and how SSSD caches sudo rules.
+
+CCOONNFFIIGGUURRIINNGG SSUUDDOO TTOO CCOOOOPPEERRAATTEE WWIITTHH SSSSSSDD
+       To enable SSSD as a source for sudo rules, add _s_s_s to the _s_u_d_o_e_r_s entry
+       in nnsssswwiittcchh..ccoonnff(5).
+
+       For example, to configure sudo to first lookup rules in the standard
+       ssuuddooeerrss(5) file (which should contain rules that apply to local users)
+       and then in SSSD, the nsswitch.conf file should contain the following
+       line:
+
+           sudoers: files sss
+
+       More information about configuring the sudoers search order from the
+       nsswitch.conf file as well as information about the LDAP schema that is
+       used to store sudo rules in the directory can be found in
+       ssuuddooeerrss..llddaapp(5).
+
+       _N_o_t_e: in order to use netgroups or IPA hostgroups in sudo rules, you
+       also need to correctly set nniissddoommaaiinnnnaammee(1) to your NIS domain name
+       (which equals to IPA domain name when using hostgroups).
+
+CCOONNFFIIGGUURRIINNGG SSSSSSDD TTOO FFEETTCCHH SSUUDDOO RRUULLEESS
+       All configuration that is needed on SSSD side is to extend the list of
+       _s_e_r_v_i_c_e_s with "sudo" in [sssd] section of ssssssdd..ccoonnff(5). To speed up the
+       LDAP lookups, you can also set search base for sudo rules using
+       _l_d_a_p___s_u_d_o___s_e_a_r_c_h___b_a_s_e option.
+
+       The following example shows how to configure SSSD to download sudo
+       rules from an LDAP server.
+
+           [sssd]
+           config_file_version = 2
+           services = nss, pam, sudo
+           domains = EXAMPLE
+
+           [domain/EXAMPLE]
+           id_provider = ldap
+           sudo_provider = ldap
+           ldap_uri = ldap://example.com
+           ldap_sudo_search_base = ou=sudoers,dc=example,dc=com
+
+
+       It's important to note that on platforms where systemd is supported
+       there's no need to add the "sudo" provider to the list of services, as
+       it became optional. However, sssd-sudo.socket must be enabled instead.
+
+       When SSSD is configured to use IPA as the ID provider, the sudo
+       provider is automatically enabled. The sudo search base is configured
+       to use the IPA native LDAP tree (cn=sudo,$SUFFIX). If any other search
+       base is defined in sssd.conf, this value will be used instead. The
+       compat tree (ou=sudoers,$SUFFIX) is no longer required for IPA sudo
+       functionality.
+
+TTHHEE SSUUDDOO RRUULLEE CCAACCHHIINNGG MMEECCHHAANNIISSMM
+       The biggest challenge, when developing sudo support in SSSD, was to
+       ensure that running sudo with SSSD as the data source provides the same
+       user experience and is as fast as sudo but keeps providing the most
+       current set of rules as possible. To satisfy these requirements, SSSD
+       uses three kinds of updates. They are referred to as full refresh,
+       smart refresh and rules refresh.
+
+       The _s_m_a_r_t _r_e_f_r_e_s_h periodically downloads rules that are new or were
+       modified after the last update. Its primary goal is to keep the
+       database growing by fetching only small increments that do not generate
+       large amounts of network traffic.
+
+       The _f_u_l_l _r_e_f_r_e_s_h simply deletes all sudo rules stored in the cache and
+       replaces them with all rules that are stored on the server. This is
+       used to keep the cache consistent by removing every rule which was
+       deleted from the server. However, full refresh may produce a lot of
+       traffic and thus it should be run only occasionally depending on the
+       size and stability of the sudo rules.
+
+       The _r_u_l_e_s _r_e_f_r_e_s_h ensures that we do not grant the user more permission
+       than defined. It is triggered each time the user runs sudo. Rules
+       refresh will find all rules that apply to this user, check their
+       expiration time and redownload them if expired. In the case that any of
+       these rules are missing on the server, the SSSD will do an out of band
+       full refresh because more rules (that apply to other users) may have
+       been deleted.
+
+       If enabled, SSSD will store only rules that can be applied to this
+       machine. This means rules that contain one of the following values in
+       _s_u_d_o_H_o_s_t attribute:
+
+       +o   keyword ALL
+
+       +o   wildcard
+
+       +o   netgroup (in the form "+netgroup")
+
+       +o   hostname or fully qualified domain name of this machine
+
+       +o   one of the IP addresses of this machine
+
+       +o   one of the IP addresses of the network (in the form "address/mask")
+
+       There are many configuration options that can be used to adjust the
+       behavior. Please refer to "ldap_sudo_*" in ssssssdd--llddaapp(5) and "sudo_*" in
+       ssssssdd..ccoonnff(5).
+
+TTUUNNIINNGG TTHHEE PPEERRFFOORRMMAANNCCEE
+       SSSD uses different kinds of mechanisms with more or less complex LDAP
+       filters to keep the cached sudo rules up to date. The default
+       configuration is set to values that should satisfy most of our users,
+       but the following paragraphs contain few tips on how to fine- tune the
+       configuration to your requirements.
+
+       1.  _I_n_d_e_x _L_D_A_P _a_t_t_r_i_b_u_t_e_s. Make sure that following LDAP attributes are
+       indexed: objectClass, cn, entryUSN or modifyTimestamp.
+
+       2.  _S_e_t _l_d_a_p___s_u_d_o___s_e_a_r_c_h___b_a_s_e. Set the search base to the container
+       that holds the sudo rules to limit the scope of the lookup.
+
+       3.  _S_e_t _f_u_l_l _a_n_d _s_m_a_r_t _r_e_f_r_e_s_h _i_n_t_e_r_v_a_l. If your sudo rules do not
+       change often and you do not require quick update of cached rules on
+       your clients, you may consider increasing the
+       _l_d_a_p___s_u_d_o___f_u_l_l___r_e_f_r_e_s_h___i_n_t_e_r_v_a_l and _l_d_a_p___s_u_d_o___s_m_a_r_t___r_e_f_r_e_s_h___i_n_t_e_r_v_a_l.
+       You may also consider disabling the smart refresh by setting
+       _l_d_a_p___s_u_d_o___s_m_a_r_t___r_e_f_r_e_s_h___i_n_t_e_r_v_a_l _= _0.
+
+       4. If you have large number of clients, you may consider increasing the
+       value of _l_d_a_p___s_u_d_o___r_a_n_d_o_m___o_f_f_s_e_t to distribute the load on the server
+       better.
+
+SSEEEE AALLSSOO
+       ssssssdd(8), ssssssdd..ccoonnff(5), ssssssdd--llddaapp(5), ssssssdd--kkrrbb55(5), ssssssdd--ssiimmppllee(5),
+       ssssssdd--iippaa(5), ssssssdd--aadd(5), ssssssdd--ffiilleess(5), ssssssdd--ssuuddoo(5), ssssssdd--sseessssiioonn--
+       rreeccoorrddiinngg(5), ssssss__ccaacchhee(8), ssssss__ddeebbuugglleevveell(8), ssssss__oobbffuussccaattee(8),
+       ssssss__sseeeedd(8), ssssssdd__kkrrbb55__llooccaattoorr__pplluuggiinn(8), ssssss__sssshh__aauutthhoorriizzeeddkkeeyyss(8),
+       ssssss__sssshh__kknnoowwnnhhoossttsspprrooxxyy(8), ssssssdd--iiffpp(5), ppaamm__ssssss(8).  ssssss__rrppcciiddmmaappdd(5)
+       ssssssdd--ssyysstteemmttaapp(5)
+
+AAUUTTHHOORRSS
+       TThhee SSSSSSDD uuppssttrreeaamm -- hhttttppss::////ggiitthhuubb..ccoomm//SSSSSSDD//ssssssdd//
+
+
+
+SSSD                              10/04/2022                      SSSD-SUDO(5)
+cc31f957df53ba8b9b97ce9d38396079d10e076802f3dca2e435ee3c64d517bb

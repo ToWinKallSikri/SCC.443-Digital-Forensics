@@ -1,0 +1,99 @@
+SSSD-FILES(5)            File Formats and Conventions            SSSD-FILES(5)
+
+
+
+NNAAMMEE
+       sssd-files - SSSD files provider
+
+DDEESSCCRRIIPPTTIIOONN
+       This manual page describes the files provider for ssssssdd(8). For a
+       detailed syntax reference, refer to the "FILE FORMAT" section of the
+       ssssssdd..ccoonnff(5) manual page.
+
+       The files provider mirrors the content of the ppaasssswwdd(5) and ggrroouupp(5)
+       files. The purpose of the files provider is to make the users and
+       groups traditionally only accessible with NSS interfaces also available
+       through the SSSD interfaces such as ssssssdd--iiffpp(5).
+
+       Another reason is to provide efficient caching of local users and
+       groups.
+
+       Please note that some distributions enable the files domain
+       automatically, prepending the domain before any explicitly configured
+       domains. See enable_files_domain in ssssssdd..ccoonnff(5).
+
+       SSSD never handles resolution of user/group "root". Also resolution of
+       UID/GID 0 is not handled by SSSD. Such requests are passed to next NSS
+       module (usually files).
+
+       When SSSD is not running or responding, nss_sss returns the UNAVAIL
+       code which causes the request to be passed to the next module.
+
+CCOONNFFIIGGUURRAATTIIOONN OOPPTTIIOONNSS
+       In addition to the options listed below, generic SSSD domain options
+       can be set where applicable. Refer to the section "DOMAIN SECTIONS" of
+       the ssssssdd..ccoonnff(5) manual page for details on the configuration of an
+       SSSD domain. But the purpose of the files provider is to expose the
+       same data as the UNIX files, just through the SSSD interfaces.
+       Therefore not all generic domain options are supported. Likewise, some
+       global options, such as overriding the shell in the "nss" section for
+       all domains has no effect on the files domain unless explicitly
+       specified per-domain.
+
+       passwd_files (string)
+           Comma-separated list of one or multiple password filenames to be
+           read and enumerated by the files provider, inotify monitor watches
+           will be set on each file to detect changes dynamically.
+
+           Default: /etc/passwd
+
+       group_files (string)
+           Comma-separated list of one or multiple group filenames to be read
+           and enumerated by the files provider, inotify monitor watches will
+           be set on each file to detect changes dynamically.
+
+           Default: /etc/group
+
+       fallback_to_nss (boolean)
+           While updating the internal data SSSD will return an error and let
+           the client continue with the next NSS module. This helps to avoid
+           delays when using the default system files /etc/passwd and
+           /etc/group and the NSS configuration has 'sss' before 'files' for
+           the 'passwd' and 'group' maps.
+
+           If the files provider is configured to monitor other files it makes
+           sense to set this option to 'False' to avoid inconsistent behavior
+           because in general there would be no other NSS module which can be
+           used as a fallback.
+
+           Default: True
+
+EEXXAAMMPPLLEE
+       The following example assumes that SSSD is correctly configured and
+       files is one of the domains in the _[_s_s_s_d_] section.
+
+           [domain/files]
+           id_provider = files
+
+       To leverage caching of local users and groups by SSSD nss_sss module
+       must be listed before nss_files module in /etc/nsswitch.conf.
+
+           passwd:     sss files
+           group:      sss files
+
+
+SSEEEE AALLSSOO
+       ssssssdd(8), ssssssdd..ccoonnff(5), ssssssdd--llddaapp(5), ssssssdd--kkrrbb55(5), ssssssdd--ssiimmppllee(5),
+       ssssssdd--iippaa(5), ssssssdd--aadd(5), ssssssdd--ffiilleess(5), ssssssdd--ssuuddoo(5), ssssssdd--sseessssiioonn--
+       rreeccoorrddiinngg(5), ssssss__ccaacchhee(8), ssssss__ddeebbuugglleevveell(8), ssssss__oobbffuussccaattee(8),
+       ssssss__sseeeedd(8), ssssssdd__kkrrbb55__llooccaattoorr__pplluuggiinn(8), ssssss__sssshh__aauutthhoorriizzeeddkkeeyyss(8),
+       ssssss__sssshh__kknnoowwnnhhoossttsspprrooxxyy(8), ssssssdd--iiffpp(5), ppaamm__ssssss(8).  ssssss__rrppcciiddmmaappdd(5)
+       ssssssdd--ssyysstteemmttaapp(5)
+
+AAUUTTHHOORRSS
+       TThhee SSSSSSDD uuppssttrreeaamm -- hhttttppss::////ggiitthhuubb..ccoomm//SSSSSSDD//ssssssdd//
+
+
+
+SSSD                              10/04/2022                     SSSD-FILES(5)
+82889f89501ff3b476fa3a61974d1407f1de507a908601cd2f48736a6cf1f939

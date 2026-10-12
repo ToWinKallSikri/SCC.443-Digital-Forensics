@@ -1,0 +1,89 @@
+dpkg-mergechangelogs(1)           dpkg suite           dpkg-mergechangelogs(1)
+
+
+
+NNAAMMEE
+       dpkg-mergechangelogs - 3-way merge of debian/changelog files
+
+SSYYNNOOPPSSIISS
+       ddppkkgg--mmeerrggeecchhaannggeellooggss [_o_p_t_i_o_n...] _o_l_d _n_e_w_-_a _n_e_w_-_b [_o_u_t]
+
+DDEESSCCRRIIPPTTIIOONN
+       This program will use the 3 provided versions of the Debian changelog
+       to generate a merged changelog file. The resulting changelog is stored
+       in the file _o_u_t or output to the standard output if that parameter is
+       not given.
+
+       Each entry is identified by its version number and they are assumed to
+       be not conflicting, they are simply merged in the right order (by
+       decreasing version number). When ----mmeerrggee--pprreerreelleeaasseess is used, the part
+       of the version number after the last tilde is dropped so that
+       1.0-1~exp1 and 1.0-1~exp5 are considered to be the same entry. When the
+       same version is available in both _n_e_w_-_a and _n_e_w_-_b, a standard line-
+       based 3-way merge is attempted (provided that the module
+       Algorithm::Merge is available -- it's part of the package libalgorithm-
+       merge-perl -- otherwise you get a global conflict on the content of the
+       entry).
+
+OOPPTTIIOONNSS
+       ----mmeerrggee--uunnrreelleeaasseedd
+           Ignore the version number when the entries are marked as UUNNRREELLEEAASSEEDD
+           (since dpkg 1.21.0).
+
+           This is useful when you have diverging development for versions
+           that have not yet been released. For instance 2.1-1 is released,
+           then development happens for the new 2.2-1 and then for 2.3-1,
+           where it makes sense to just end with a coalesced entry for 2.3-1
+           including all the development done in 2.2-1.
+
+       --mm, ----mmeerrggee--pprreerreelleeaasseess
+           Drop the part after the last tilde in the version number when doing
+           version comparison to identify if two entries are supposed to be
+           the same or not.
+
+           This is useful when you keep using the same changelog entry but you
+           increase its version number regularly. For instance, you might have
+           2.3-1~exp1, 2.3-1~exp2, ... until the official release 2.3-1 and
+           they are all the same changelog entry that has evolved over time.
+
+       ----hheellpp
+           Show the usage message and exit.
+
+       ----vveerrssiioonn
+           Show the version and exit.
+
+EENNVVIIRROONNMMEENNTT
+       DDPPKKGG__CCOOLLOORRSS
+           Sets the color mode (since dpkg 1.18.5).  The currently accepted
+           values are: aauuttoo (default), aallwwaayyss and nneevveerr.
+
+       DDPPKKGG__NNLLSS
+           If set, it will be used to decide whether to activate Native
+           Language Support, also known as internationalization (or i18n)
+           support (since dpkg 1.19.0).  The accepted values are: 00 and 11
+           (default).
+
+LLIIMMIITTAATTIIOONNSS
+       Anything that is not parsed by Dpkg::Changelog is lost during the
+       merge.  This might include stuff like comments which were not supposed
+       to be there, etc.
+
+IINNTTEEGGRRAATTIIOONN WWIITTHH GGIITT
+       If you want to use this program to merge Debian changelog files in a
+       git repository, you have first to register a new merge driver in
+       ..ggiitt//ccoonnffiigg or ~~//..ggiittccoonnffiigg:
+
+        [merge "dpkg-mergechangelogs"]
+           name = debian/changelog merge driver
+           driver = dpkg-mergechangelogs -m %O %A %B %A
+
+       Then you have to setup the merge attribute for the debian/changelog
+       file either in ..ggiittaattttrriibbuutteess in the repository itself, or in
+       ..ggiitt//iinnffoo//aattttrriibbuutteess:
+
+        debian/changelog merge=dpkg-mergechangelogs
+
+
+
+1.21.1                            2022-05-25           dpkg-mergechangelogs(1)
+dd1bbcb20f0e3fbc447d9283b6cdf49c9f9cf8e970b1a625e03c2f7570cb79d5

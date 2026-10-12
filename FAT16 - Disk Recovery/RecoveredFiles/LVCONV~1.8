@@ -1,0 +1,1125 @@
+LVCONVERT(8)                System Manager's Manual               LVCONVERT(8)
+
+
+
+NNAAMMEE
+       lvconvert - Change logical volume layout
+
+SSYYNNOOPPSSIISS
+       llvvccoonnvveerrtt _o_p_t_i_o_n___a_r_g_s _p_o_s_i_t_i_o_n___a_r_g_s
+           [ _o_p_t_i_o_n___a_r_g_s ]
+           [ _p_o_s_i_t_i_o_n___a_r_g_s ]
+
+           ----aalllloocc ccoonnttiigguuoouuss|cclliinngg|cclliinngg__bbyy__ttaaggss|nnoorrmmaall|aannyywwhheerree|iinnhheerriitt
+        --bb|----bbaacckkggrroouunndd
+        --HH|----ccaacchhee
+           ----ccaacchheeddeevviiccee _P_V
+           ----ccaacchheemmeettaaddaattaaffoorrmmaatt aauuttoo|11|22
+           ----ccaacchheemmooddee wwrriitteetthhrroouugghh|wwrriitteebbaacckk|ppaasssstthhrroouugghh
+           ----ccaacchheeppoolliiccyy _S_t_r_i_n_g
+           ----ccaacchheeppooooll _L_V
+           ----ccaacchheesseettttiinnggss _S_t_r_i_n_g
+           ----ccaacchheessiizzee _S_i_z_e[m|UNIT]
+           ----ccaacchheevvooll _L_V
+        --cc|----cchhuunnkkssiizzee _S_i_z_e[k|UNIT]
+           ----ccoommmmaannddpprrooffiillee _S_t_r_i_n_g
+           ----ccoommpprreessssiioonn yy|nn
+           ----ccoonnffiigg _S_t_r_i_n_g
+        --dd|----ddeebbuugg
+           ----ddeedduupplliiccaattiioonn yy|nn
+           ----ddiissccaarrddss ppaassssddoowwnn|nnooppaassssddoowwnn|iiggnnoorree
+           ----ddrriivveerrllooaaddeedd yy|nn
+        --ff|----ffoorrccee
+        --hh|----hheellpp
+        --ii|----iinntteerrvvaall _N_u_m_b_e_r
+           ----lloocckkoopptt _S_t_r_i_n_g
+           ----lloonngghheellpp
+           ----mmeerrggee
+           ----mmeerrggeemmiirrrroorrss
+           ----mmeerrggeessnnaappsshhoott
+           ----mmeerrggeetthhiinn
+           ----mmeettaaddaattaapprrooffiillee _S_t_r_i_n_g
+           ----mmiirrrroorrlloogg ccoorree|ddiisskk
+        --mm|----mmiirrrroorrss [++|--]_N_u_m_b_e_r
+        --nn|----nnaammee _S_t_r_i_n_g
+           ----nnoolloocckkiinngg
+           ----nnoouuddeevvssyynncc
+           ----oorriiggiinnnnaammee _L_V
+           ----ppoooollmmeettaaddaattaa _L_V
+           ----ppoooollmmeettaaddaattaassiizzee _S_i_z_e[m|UNIT]
+           ----ppoooollmmeettaaddaattaassppaarree yy|nn
+           ----pprrooffiillee _S_t_r_i_n_g
+        --qq|----qquuiieett
+           ----rraaiiddiinntteeggrriittyy yy|nn
+           ----rraaiiddiinntteeggrriittyybblloocckkssiizzee _N_u_m_b_e_r
+           ----rraaiiddiinntteeggrriittyymmooddee _S_t_r_i_n_g
+        --rr|----rreeaaddaahheeaadd aauuttoo|nnoonnee|_N_u_m_b_e_r
+        --RR|----rreeggiioonnssiizzee _S_i_z_e[m|UNIT]
+           ----rreeppaaiirr
+           ----rreeppllaaccee _P_V
+        --ss|----ssnnaappsshhoott
+           ----sspplliittccaacchhee
+           ----sspplliittmmiirrrroorrss _N_u_m_b_e_r
+           ----sspplliittssnnaappsshhoott
+           ----ssttaarrttppoollll
+           ----ssttrriippeess _N_u_m_b_e_r
+        --II|----ssttrriippeessiizzee _S_i_z_e[k|UNIT]
+           ----sswwaappmmeettaaddaattaa
+        --tt|----tteesstt
+        --TT|----tthhiinn
+           ----tthhiinnppooooll _L_V
+           ----ttrraacckkcchhaannggeess
+           ----ttyyppee lliinneeaarr|ssttrriippeedd|ssnnaappsshhoott|mmiirr--
+       rroorr|rraaiidd|tthhiinn|ccaacchhee|vvddoo|tthhiinn--ppooooll|ccaacchhee--ppooooll|vvddoo--ppooooll
+           ----uunnccaacchhee
+           ----uusseeppoolliicciieess
+           ----vvddooppooooll _L_V
+        --vv|----vveerrbboossee
+           ----vveerrssiioonn
+        --VV|----vviirrttuuaallssiizzee _S_i_z_e[m|UNIT]
+        --yy|----yyeess
+        --ZZ|----zzeerroo yy|nn
+
+DDEESSCCRRIIPPTTIIOONN
+       lvconvert changes the LV type and includes utilities for LV data  main-
+       tenance.  The LV type controls data layout and redundancy.  The LV type
+       is also called the segment type or segtype.
+
+       To display the current LV type, run the command:
+
+       llvvss --oo nnaammee,,sseeggttyyppee _L_V
+
+       In some cases, an LV is a single device mapper (dm) layer above  physi-
+       cal  devices.   In other cases, hidden LVs (dm devices) are layered be-
+       tween the visible LV and physical devices.  LVs in  the  middle  layers
+       are  called  sub LVs.  A command run on a visible LV sometimes operates
+       on a sub LV rather than the specified LV.  In other  cases,  a  sub  LV
+       must be specified directly on the command line.
+
+       Sub LVs can be displayed with the command:
+
+       llvvss --aa
+
+       The  lliinneeaarr  type is equivalent to the ssttrriippeedd type when one stripe ex-
+       ists.  In that case, the types can sometimes be used interchangably.
+
+       In most cases, the mmiirrrroorr type is deprecated and the rraaiidd11 type  should
+       be used.  They are both implementations of mirroring.
+
+       Striped raid types are rraaiidd00//rraaiidd00__mmeettaa, rraaiidd55 (an alias for raid5_ls),
+       rraaiidd66 (an alias for raid6_zr) and rraaiidd1100 (an alias for raid10_near).
+
+       As opposed to mirroring, raid5 and raid6 stripe data and calculate par-
+       ity  blocks.  The  parity blocks can be used for data block recovery in
+       case devices fail. A maximum number of one device in  a  raid5  LV  may
+       fail, and two in case of raid6. Striped raid types typically rotate the
+       parity and data blocks for  performance  reasons,  thus  avoiding  con-
+       tention  on  a  single device. Specific arrangements of parity and data
+       blocks (layouts) can be used to optimize I/O performance, or to convert
+       between raid levels.  See llvvmmrraaiidd(7) for more information.
+
+       Layouts  of  raid5  rotating  parity  blocks  can  be:  left-asymmetric
+       (raid5_la), left-symmetric (raid5_ls with alias raid5),  right-asymmet-
+       ric  (raid5_ra),  right-symmetric (raid5_rs) and raid5_n, which doesn't
+       rotate parity blocks. Layouts of raid6 are: zero-restart (raid6_zr with
+       alias raid6), next-restart (raid6_nr), and next-continue (raid6_nc).
+
+       Layouts  including _n allow for conversion between raid levels (raid5_n
+       to raid6 or raid5_n to striped/raid0/raid0_meta). Additionally, special
+       raid6  layouts  for raid level conversions between raid5 and raid6 are:
+       raid6_ls_6, raid6_rs_6, raid6_la_6 and raid6_ra_6. Those correspond  to
+       their  raid5  counterparts  (e.g. raid5_rs can be directly converted to
+       raid6_rs_6 and vice-versa).
+
+       raid10 (an alias for raid10_near) is currently limited to one data copy
+       and  even number of sub LVs. This is a mirror group layout, thus a sin-
+       gle sub LV may fail per mirror group without data loss.
+
+       Striped raid types support converting the layout, their stripesize  and
+       their number of stripes.
+
+       The  striped  raid  types combined with raid1 allow for conversion from
+       linear-> striped/raid0/raid0_meta and vice-versa  by  e.g.  linear  <->
+       raid1 <-> raid5_n (then adding stripes) <-> striped/raid0/raid0_meta.
+
+UUSSAAGGEE
+       Convert LV to linear.
+
+       llvvccoonnvveerrtt ----ttyyppee lliinneeaarr _L_V
+           [ COMMON_OPTIONS ]
+           [ _P_V ... ]
+       -
+
+       Convert LV to striped.
+
+       llvvccoonnvveerrtt ----ttyyppee ssttrriippeedd _L_V
+           [ --II|----ssttrriippeessiizzee _S_i_z_e[k|UNIT] ]
+           [ --RR|----rreeggiioonnssiizzee _S_i_z_e[m|UNIT] ]
+           [ --ii|----iinntteerrvvaall _N_u_m_b_e_r ]
+           [    ----ssttrriippeess _N_u_m_b_e_r ]
+           [ COMMON_OPTIONS ]
+           [ _P_V ... ]
+       -
+
+       Convert LV to type mirror (also see type raid1),
+
+       llvvccoonnvveerrtt ----ttyyppee mmiirrrroorr _L_V
+           [ --mm|----mmiirrrroorrss [++|--]_N_u_m_b_e_r ]
+           [ --II|----ssttrriippeessiizzee _S_i_z_e[k|UNIT] ]
+           [ --RR|----rreeggiioonnssiizzee _S_i_z_e[m|UNIT] ]
+           [ --ii|----iinntteerrvvaall _N_u_m_b_e_r ]
+           [    ----ssttrriippeess _N_u_m_b_e_r ]
+           [    ----mmiirrrroorrlloogg ccoorree|ddiisskk ]
+           [ COMMON_OPTIONS ]
+           [ _P_V ... ]
+       -
+
+       Convert LV to raid or change raid layout
+       (a specific raid level must be used, e.g. raid1).
+
+       llvvccoonnvveerrtt ----ttyyppee rraaiidd _L_V
+           [ --mm|----mmiirrrroorrss [++|--]_N_u_m_b_e_r ]
+           [ --II|----ssttrriippeessiizzee _S_i_z_e[k|UNIT] ]
+           [ --RR|----rreeggiioonnssiizzee _S_i_z_e[m|UNIT] ]
+           [ --ii|----iinntteerrvvaall _N_u_m_b_e_r ]
+           [    ----ssttrriippeess _N_u_m_b_e_r ]
+           [ COMMON_OPTIONS ]
+           [ _P_V ... ]
+       -
+
+       Convert LV to raid1 or mirror, or change number of mirror images.
+
+       llvvccoonnvveerrtt --mm|----mmiirrrroorrss [++|--]_N_u_m_b_e_r _L_V
+           [ --RR|----rreeggiioonnssiizzee _S_i_z_e[m|UNIT] ]
+           [ --ii|----iinntteerrvvaall _N_u_m_b_e_r ]
+           [    ----mmiirrrroorrlloogg ccoorree|ddiisskk ]
+           [ COMMON_OPTIONS ]
+           [ _P_V ... ]
+       -
+
+       Convert raid LV to change number of stripe images.
+
+       llvvccoonnvveerrtt ----ssttrriippeess _N_u_m_b_e_r _L_V___r_a_i_d
+           [ --ii|----iinntteerrvvaall _N_u_m_b_e_r ]
+           [ --RR|----rreeggiioonnssiizzee _S_i_z_e[m|UNIT] ]
+           [ --II|----ssttrriippeessiizzee _S_i_z_e[k|UNIT] ]
+           [ COMMON_OPTIONS ]
+           [ _P_V ... ]
+       -
+
+       Convert raid LV to change the stripe size.
+
+       llvvccoonnvveerrtt --II|----ssttrriippeessiizzee _S_i_z_e[k|UNIT] _L_V___r_a_i_d
+           [ --ii|----iinntteerrvvaall _N_u_m_b_e_r ]
+           [ --RR|----rreeggiioonnssiizzee _S_i_z_e[m|UNIT] ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Split images from a raid1 or mirror LV and use them to create a new LV.
+
+       llvvccoonnvveerrtt ----sspplliittmmiirrrroorrss _N_u_m_b_e_r --nn|----nnaammee _L_V___n_e_w _L_V___c_a_c_h_e___m_i_r_r_o_r___r_a_i_d_1
+           [ COMMON_OPTIONS ]
+           [ _P_V ... ]
+       -
+
+       Split  images  from  a  raid1  LV and track changes to origin for later
+       merge.
+
+       llvvccoonnvveerrtt ----sspplliittmmiirrrroorrss _N_u_m_b_e_r ----ttrraacckkcchhaannggeess _L_V___c_a_c_h_e___r_a_i_d_1
+           [ COMMON_OPTIONS ]
+           [ _P_V ... ]
+       -
+
+       Merge LV images that were split from a raid1 LV.
+
+       llvvccoonnvveerrtt ----mmeerrggeemmiirrrroorrss _V_G|_L_V___l_i_n_e_a_r___r_a_i_d|_T_a_g ...
+           [ COMMON_OPTIONS ]
+       -
+
+       Convert LV to a thin LV, using the original LV as an external origin.
+
+       llvvccoonnvveerrtt ----ttyyppee tthhiinn ----tthhiinnppooooll _L_V _L_V___l_i_n_e_a_r___s_t_r_i_p_e_d___t_h_i_n___c_a_c_h_e___r_a_i_d
+           [ --TT|----tthhiinn ]
+           [ --rr|----rreeaaddaahheeaadd aauuttoo|nnoonnee|_N_u_m_b_e_r ]
+           [ --cc|----cchhuunnkkssiizzee _S_i_z_e[k|UNIT] ]
+           [ --ZZ|----zzeerroo yy|nn ]
+           [    ----oorriiggiinnnnaammee _L_V___n_e_w ]
+           [    ----ppoooollmmeettaaddaattaa _L_V ]
+           [    ----ppoooollmmeettaaddaattaassiizzee _S_i_z_e[m|UNIT] ]
+           [    ----ppoooollmmeettaaddaattaassppaarree yy|nn ]
+           [    ----mmeettaaddaattaapprrooffiillee _S_t_r_i_n_g ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Attach a cache pool to an LV, converts the LV to type cache.
+
+       llvvccoonnvveerrtt   ----ttyyppee   ccaacchhee   ----ccaacchheeppooooll   _L_V   _L_V___l_i_n_e_a_r___s_t_r_i_p_e_d___t_h_i_n_-
+       _p_o_o_l___v_d_o___v_d_o_p_o_o_l___v_d_o_p_o_o_l_d_a_t_a___r_a_i_d
+           [ --HH|----ccaacchhee ]
+           [ --ZZ|----zzeerroo yy|nn ]
+           [ --rr|----rreeaaddaahheeaadd aauuttoo|nnoonnee|_N_u_m_b_e_r ]
+           [ --cc|----cchhuunnkkssiizzee _S_i_z_e[k|UNIT] ]
+           [    ----ccaacchheemmeettaaddaattaaffoorrmmaatt aauuttoo|11|22 ]
+           [    ----ccaacchheemmooddee wwrriitteetthhrroouugghh|wwrriitteebbaacckk|ppaasssstthhrroouugghh ]
+           [    ----ccaacchheeppoolliiccyy _S_t_r_i_n_g ]
+           [    ----ccaacchheesseettttiinnggss _S_t_r_i_n_g ]
+           [    ----ppoooollmmeettaaddaattaa _L_V ]
+           [    ----ppoooollmmeettaaddaattaassiizzee _S_i_z_e[m|UNIT] ]
+           [    ----ppoooollmmeettaaddaattaassppaarree yy|nn ]
+           [    ----mmeettaaddaattaapprrooffiillee _S_t_r_i_n_g ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Attach a writecache to an LV, converts the LV to type writecache.
+
+       llvvccoonnvveerrtt ----ttyyppee wwrriitteeccaacchhee ----ccaacchheevvooll _L_V _L_V___l_i_n_e_a_r___s_t_r_i_p_e_d___r_a_i_d
+           [    ----ccaacchheesseettttiinnggss _S_t_r_i_n_g ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Attach a cache to an LV, converts the LV to type cache.
+
+       llvvccoonnvveerrtt ----ttyyppee ccaacchhee ----ccaacchheevvooll _L_V _L_V___l_i_n_e_a_r___s_t_r_i_p_e_d___t_h_i_n_p_o_o_l___r_a_i_d
+           [ --HH|----ccaacchhee ]
+           [ --ZZ|----zzeerroo yy|nn ]
+           [ --cc|----cchhuunnkkssiizzee _S_i_z_e[k|UNIT] ]
+           [    ----ccaacchheemmeettaaddaattaaffoorrmmaatt aauuttoo|11|22 ]
+           [    ----ccaacchheemmooddee wwrriitteetthhrroouugghh|wwrriitteebbaacckk|ppaasssstthhrroouugghh ]
+           [    ----ccaacchheeppoolliiccyy _S_t_r_i_n_g ]
+           [    ----ccaacchheesseettttiinnggss _S_t_r_i_n_g ]
+           [    ----ppoooollmmeettaaddaattaassiizzee _S_i_z_e[m|UNIT] ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Add a writecache to an LV, using a specified cache device.
+
+       llvvccoonnvveerrtt ----ttyyppee wwrriitteeccaacchhee ----ccaacchheeddeevviiccee _P_V _L_V___l_i_n_e_a_r___s_t_r_i_p_e_d___r_a_i_d
+           [    ----ccaacchheessiizzee _S_i_z_e[m|UNIT] ]
+           [    ----ccaacchheesseettttiinnggss _S_t_r_i_n_g ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Add a cache to an LV, using a specified cache device.
+
+       llvvccoonnvveerrtt ----ttyyppee ccaacchhee ----ccaacchheeddeevviiccee _P_V _L_V___l_i_n_e_a_r___s_t_r_i_p_e_d___t_h_i_n_p_o_o_l___r_a_i_d
+           [ --cc|----cchhuunnkkssiizzee _S_i_z_e[k|UNIT] ]
+           [    ----ccaacchheessiizzee _S_i_z_e[m|UNIT] ]
+           [    ----ccaacchheesseettttiinnggss _S_t_r_i_n_g ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Convert LV to type thin-pool.
+
+       llvvccoonnvveerrtt ----ttyyppee tthhiinn--ppooooll _L_V___l_i_n_e_a_r___s_t_r_i_p_e_d___c_a_c_h_e___r_a_i_d
+           [ --II|----ssttrriippeessiizzee _S_i_z_e[k|UNIT] ]
+           [ --rr|----rreeaaddaahheeaadd aauuttoo|nnoonnee|_N_u_m_b_e_r ]
+           [ --cc|----cchhuunnkkssiizzee _S_i_z_e[k|UNIT] ]
+           [ --ZZ|----zzeerroo yy|nn ]
+           [    ----ssttrriippeess _N_u_m_b_e_r ]
+           [    ----ddiissccaarrddss ppaassssddoowwnn|nnooppaassssddoowwnn|iiggnnoorree ]
+           [    ----ppoooollmmeettaaddaattaa _L_V ]
+           [    ----ppoooollmmeettaaddaattaassiizzee _S_i_z_e[m|UNIT] ]
+           [    ----ppoooollmmeettaaddaattaassppaarree yy|nn ]
+           [    ----mmeettaaddaattaapprrooffiillee _S_t_r_i_n_g ]
+           [ COMMON_OPTIONS ]
+           [ _P_V ... ]
+       -
+
+       Convert LV to type cache-pool.
+
+       llvvccoonnvveerrtt ----ttyyppee ccaacchhee--ppooooll _L_V___l_i_n_e_a_r___s_t_r_i_p_e_d___r_a_i_d
+           [ --ZZ|----zzeerroo yy|nn ]
+           [ --rr|----rreeaaddaahheeaadd aauuttoo|nnoonnee|_N_u_m_b_e_r ]
+           [ --cc|----cchhuunnkkssiizzee _S_i_z_e[k|UNIT] ]
+           [    ----ccaacchheemmeettaaddaattaaffoorrmmaatt aauuttoo|11|22 ]
+           [    ----ccaacchheemmooddee wwrriitteetthhrroouugghh|wwrriitteebbaacckk|ppaasssstthhrroouugghh ]
+           [    ----ccaacchheeppoolliiccyy _S_t_r_i_n_g ]
+           [    ----ccaacchheesseettttiinnggss _S_t_r_i_n_g ]
+           [    ----ppoooollmmeettaaddaattaa _L_V ]
+           [    ----ppoooollmmeettaaddaattaassiizzee _S_i_z_e[m|UNIT] ]
+           [    ----ppoooollmmeettaaddaattaassppaarree yy|nn ]
+           [    ----mmeettaaddaattaapprrooffiillee _S_t_r_i_n_g ]
+           [ COMMON_OPTIONS ]
+           [ _P_V ... ]
+       -
+
+       Convert LV to type vdopool.
+
+       llvvccoonnvveerrtt ----ttyyppee vvddoo--ppooooll _L_V___l_i_n_e_a_r___s_t_r_i_p_e_d___c_a_c_h_e___r_a_i_d
+           [ --nn|----nnaammee _L_V___n_e_w ]
+           [ --VV|----vviirrttuuaallssiizzee _S_i_z_e[m|UNIT] ]
+           [    ----ccoommpprreessssiioonn yy|nn ]
+           [    ----ddeedduupplliiccaattiioonn yy|nn ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Detach a cache from an LV.
+
+       llvvccoonnvveerrtt ----sspplliittccaacchhee _L_V___t_h_i_n_p_o_o_l___c_a_c_h_e___c_a_c_h_e_p_o_o_l___v_d_o_p_o_o_l___w_r_i_t_e_c_a_c_h_e
+           [    ----ccaacchheesseettttiinnggss _S_t_r_i_n_g ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Merge thin LV into its origin LV.
+
+       llvvccoonnvveerrtt ----mmeerrggeetthhiinn _L_V___t_h_i_n ...
+           [ COMMON_OPTIONS ]
+       -
+
+       Merge COW snapshot LV into its origin.
+
+       llvvccoonnvveerrtt ----mmeerrggeessnnaappsshhoott _L_V___s_n_a_p_s_h_o_t ...
+           [ --ii|----iinntteerrvvaall _N_u_m_b_e_r ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Combine a former COW snapshot (second arg) with a former
+       origin LV (first arg) to reverse a splitsnapshot command.
+
+       llvvccoonnvveerrtt ----ttyyppee ssnnaappsshhoott _L_V _L_V___l_i_n_e_a_r___s_t_r_i_p_e_d
+           [ --ss|----ssnnaappsshhoott ]
+           [ --cc|----cchhuunnkkssiizzee _S_i_z_e[k|UNIT] ]
+           [ --ZZ|----zzeerroo yy|nn ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Replace failed PVs in a raid or mirror LV.
+       Repair a thin pool.
+       Repair a cache pool.
+
+       llvvccoonnvveerrtt ----rreeppaaiirr _L_V___t_h_i_n_p_o_o_l___c_a_c_h_e___c_a_c_h_e_p_o_o_l___m_i_r_r_o_r___r_a_i_d
+           [ --ii|----iinntteerrvvaall _N_u_m_b_e_r ]
+           [    ----uusseeppoolliicciieess ]
+           [    ----ppoooollmmeettaaddaattaassppaarree yy|nn ]
+           [ COMMON_OPTIONS ]
+           [ _P_V ... ]
+       -
+
+       Replace specific PV(s) in a raid LV with another PV.
+
+       llvvccoonnvveerrtt ----rreeppllaaccee _P_V _L_V___r_a_i_d
+           [ COMMON_OPTIONS ]
+           [ _P_V ... ]
+       -
+
+       Poll LV to continue conversion.
+
+       llvvccoonnvveerrtt ----ssttaarrttppoollll _L_V___m_i_r_r_o_r___r_a_i_d
+           [ COMMON_OPTIONS ]
+       -
+
+       Add or remove data integrity checksums to raid images.
+
+       llvvccoonnvveerrtt ----rraaiiddiinntteeggrriittyy yy|nn _L_V___r_a_i_d
+           [    ----rraaiiddiinntteeggrriittyymmooddee _S_t_r_i_n_g ]
+           [    ----rraaiiddiinntteeggrriittyybblloocckkssiizzee _N_u_m_b_e_r ]
+           [ COMMON_OPTIONS ]
+           [ _P_V ... ]
+       -
+
+       Common options for command:
+           [ --bb|----bbaacckkggrroouunndd ]
+           [ --ff|----ffoorrccee ]
+           [    ----aalllloocc ccoonnttiigguuoouuss|cclliinngg|cclliinngg__bbyy__ttaaggss|nnoorrmmaall|aannyywwhheerree|iinnhheerriitt
+           ]
+           [    ----nnoouuddeevvssyynncc ]
+
+       Common options for lvm:
+           [ --dd|----ddeebbuugg ]
+           [ --hh|----hheellpp ]
+           [ --qq|----qquuiieett ]
+           [ --tt|----tteesstt ]
+           [ --vv|----vveerrbboossee ]
+           [ --yy|----yyeess ]
+           [    ----ccoommmmaannddpprrooffiillee _S_t_r_i_n_g ]
+           [    ----ccoonnffiigg _S_t_r_i_n_g ]
+           [    ----ddrriivveerrllooaaddeedd yy|nn ]
+           [    ----lloocckkoopptt _S_t_r_i_n_g ]
+           [    ----lloonngghheellpp ]
+           [    ----nnoolloocckkiinngg ]
+           [    ----pprrooffiillee _S_t_r_i_n_g ]
+           [    ----vveerrssiioonn ]
+
+OOPPTTIIOONNSS
+       ----aalllloocc ccoonnttiigguuoouuss|cclliinngg|cclliinngg__bbyy__ttaaggss|nnoorrmmaall|aannyywwhheerree|iinnhheerriitt
+              Determines the allocation policy when a command needs to allo-
+              cate Physical Extents (PEs) from the VG. Each VG and LV has an
+              allocation policy which can be changed with vgchange/lvchange,
+              or overriden on the command line.  nnoorrmmaall applies common sense
+              rules such as not placing parallel stripes on the same PV.  iinn--
+              hheerriitt applies the VG policy to an LV.  ccoonnttiigguuoouuss requires new
+              PEs be placed adjacent to existing PEs.  cclliinngg places new PEs on
+              the same PV as existing PEs in the same stripe of the LV.  If
+              there are sufficient PEs for an allocation, but normal does not
+              use them, aannyywwhheerree will use them even if it reduces performance,
+              e.g. by placing two stripes on the same PV.  Optional positional
+              PV args on the command line can also be used to limit which PVs
+              the command will use for allocation.  See llvvmm(8) for more infor-
+              mation about allocation.
+
+       --bb|----bbaacckkggrroouunndd
+              If the operation requires polling, this option causes the com-
+              mand to return before the operation is complete, and polling is
+              done in the background.
+
+       --HH|----ccaacchhee
+              Specifies the command is handling a cache LV or cache pool.  See
+              --type cache and --type cache-pool.  See llvvmmccaacchhee(7) for more
+              information about LVM caching.
+
+       ----ccaacchheeddeevviiccee _P_V
+              The name of a device to use for a cache.
+
+       ----ccaacchheemmeettaaddaattaaffoorrmmaatt aauuttoo|11|22
+              Specifies the cache metadata format used by cache target.
+
+       ----ccaacchheemmooddee wwrriitteetthhrroouugghh|wwrriitteebbaacckk|ppaasssstthhrroouugghh
+              Specifies when writes to a cache LV should be considered com-
+              plete.  wwrriitteebbaacckk considers a write complete as soon as it is
+              stored in the cache pool.  wwrriitteetthhoouugghh considers a write com-
+              plete only when it has been stored in both the cache pool and on
+              the origin LV.  While writethrough may be slower for writes, it
+              is more resilient if something should happen to a device associ-
+              ated with the cache pool LV. With ppaasssstthhrroouugghh, all reads are
+              served from the origin LV (all reads miss the cache) and all
+              writes are forwarded to the origin LV; additionally, write hits
+              cause cache block invalidates. See llvvmmccaacchhee(7) for more informa-
+              tion.
+
+       ----ccaacchheeppoolliiccyy _S_t_r_i_n_g
+              Specifies the cache policy for a cache LV.  See llvvmmccaacchhee(7) for
+              more information.
+
+       ----ccaacchheeppooooll _L_V
+              The name of a cache pool.
+
+       ----ccaacchheesseettttiinnggss _S_t_r_i_n_g
+              Specifies tunable values for a cache LV in "Key = Value" form.
+              Repeat this option to specify multiple values.  (The default
+              values should usually be adequate.)  The special string value
+              ddeeffaauulltt switches settings back to their default kernel values
+              and removes them from the list of settings stored in LVM meta-
+              data.  See llvvmmccaacchhee(7) for more information.
+
+       ----ccaacchheessiizzee _S_i_z_e[m|UNIT]
+              The size of cache to use.
+
+       ----ccaacchheevvooll _L_V
+              The name of a cache volume.
+
+       --cc|----cchhuunnkkssiizzee _S_i_z_e[k|UNIT]
+              The size of chunks in a snapshot, cache pool or thin pool.  For
+              snapshots, the value must be a power of 2 between 4KiB and
+              512KiB and the default value is 4.  For a cache pool the value
+              must be between 32KiB and 1GiB and the default value is 64.  For
+              a thin pool the value must be between 64KiB and 1GiB and the de-
+              fault value starts with 64 and scales up to fit the pool meta-
+              data size within 128MiB, if the pool metadata size is not speci-
+              fied.  The value must be a multiple of 64KiB.  See llvvmmtthhiinn(7)
+              and llvvmmccaacchhee(7) for more information.
+
+       ----ccoommmmaannddpprrooffiillee _S_t_r_i_n_g
+              The command profile to use for command configuration.  See
+              llvvmm..ccoonnff(5) for more information about profiles.
+
+       ----ccoommpprreessssiioonn yy|nn
+              Controls whether compression is enabled or disable for VDO vol-
+              ume.  See llvvmmvvddoo(7) for more information about VDO usage.
+
+       ----ccoonnffiigg _S_t_r_i_n_g
+              Config settings for the command. These override lvm.conf set-
+              tings.  The String arg uses the same format as lvm.conf, or may
+              use section/field syntax.  See llvvmm..ccoonnff(5) for more information
+              about config.
+
+       --dd|----ddeebbuugg ...
+              Set debug level. Repeat from 1 to 6 times to increase the detail
+              of messages sent to the log file and/or syslog (if configured).
+
+       ----ddeedduupplliiccaattiioonn yy|nn
+              Controls whether deduplication is enabled or disable for VDO
+              volume.  See llvvmmvvddoo(7) for more information about VDO usage.
+
+       ----ddiissccaarrddss ppaassssddoowwnn|nnooppaassssddoowwnn|iiggnnoorree
+              Specifies how the device-mapper thin pool layer in the kernel
+              should handle discards.  iiggnnoorree causes the thin pool to ignore
+              discards.  nnooppaassssddoowwnn causes the thin pool to process discards
+              itself to allow reuse of unneeded extents in the thin pool.
+              ppaassssddoowwnn causes the thin pool to process discards itself (like
+              nopassdown) and pass the discards to the underlying device.  See
+              llvvmmtthhiinn(7) for more information.
+
+       ----ddrriivveerrllooaaddeedd yy|nn
+              If set to no, the command will not attempt to use device-mapper.
+              For testing and debugging.
+
+       --ff|----ffoorrccee ...
+              Override various checks, confirmations and protections.  Use
+              with extreme caution.
+
+       --hh|----hheellpp
+              Display help text.
+
+       --ii|----iinntteerrvvaall _N_u_m_b_e_r
+              Report progress at regular intervals.
+
+       ----lloocckkoopptt _S_t_r_i_n_g
+              Used to pass options for special cases to lvmlockd.  See llvvmm--
+              lloocckkdd(8) for more information.
+
+       ----lloonngghheellpp
+              Display long help text.
+
+       ----mmeerrggee
+              An alias for --mergethin, --mergemirrors, or --mergesnapshot,
+              depending on the type of LV.
+
+       ----mmeerrggeemmiirrrroorrss
+              Merge LV images that were split from a raid1 LV.  See --split-
+              mirrors with --trackchanges.
+
+       ----mmeerrggeessnnaappsshhoott
+              Merge COW snapshot LV into its origin.  When merging a snapshot,
+              if both the origin and snapshot LVs are not open, the merge will
+              start immediately. Otherwise, the merge will start the first
+              time either the origin or snapshot LV are activated and both are
+              closed. Merging a snapshot into an origin that cannot be closed,
+              for example a root filesystem, is deferred until the next time
+              the origin volume is activated. When merging starts, the result-
+              ing LV will have the origin's name, minor number and UUID. While
+              the merge is in progress, reads or writes to the origin appear
+              as being directed to the snapshot being merged. When the merge
+              finishes, the merged snapshot is removed.  Multiple snapshots
+              may be specified on the command line or a @tag may be used to
+              specify multiple snapshots be merged to their respective origin.
+
+       ----mmeerrggeetthhiinn
+              Merge thin LV into its origin LV.  The origin thin LV takes the
+              content of the thin snapshot, and the thin snapshot LV is re-
+              moved.  See llvvmmtthhiinn(7) for more information.
+
+       ----mmeettaaddaattaapprrooffiillee _S_t_r_i_n_g
+              The metadata profile to use for command configuration.  See
+              llvvmm..ccoonnff(5) for more information about profiles.
+
+       ----mmiirrrroorrlloogg ccoorree|ddiisskk
+              Specifies the type of mirror log for LVs with the "mirror" type
+              (does not apply to the "raid1" type.)  ddiisskk is a persistent log
+              and requires a small amount of storage space, usually on a sepa-
+              rate device from the data being mirrored.  ccoorree is not persis-
+              tent; the log is kept only in memory.  In this case, the mirror
+              must be synchronized (by copying LV data from the first device
+              to others) each time the LV is activated, e.g. after reboot.
+              mmiirrrroorreedd is a persistent log that is itself mirrored, but should
+              be avoided. Instead, use the raid1 type for log redundancy.
+
+       --mm|----mmiirrrroorrss [++|--]_N_u_m_b_e_r
+              Specifies the number of mirror images in addition to the origi-
+              nal LV image, e.g. --mirrors 1 means there are two images of the
+              data, the original and one mirror image.  Optional positional PV
+              args on the command line can specify the devices the images
+              should be placed on.  There are two mirroring implementations:
+              "raid1" and "mirror".  These are the names of the corresponding
+              LV types, or "segment types".  Use the --type option to specify
+              which to use (raid1 is default, and mirror is legacy) Use
+              lvm.conf global/mirror_segtype_default and global/raid10_seg-
+              type_default to configure the default types.  The plus prefix ++
+              can be used, in which case the number is added to the current
+              number of images, or the minus prefix -- can be used, in which
+              case the number is subtracted from the current number of images.
+              See llvvmmrraaiidd(7) for more information.
+
+       --nn|----nnaammee _S_t_r_i_n_g
+              Specifies the name of a new LV.  When unspecified, a default
+              name of "lvol#" is generated, where # is a number generated by
+              LVM.
+
+       ----nnoolloocckkiinngg
+              Disable locking.
+
+       ----nnoouuddeevvssyynncc
+              Disables udev synchronisation. The process will not wait for no-
+              tification from udev. It will continue irrespective of any pos-
+              sible udev processing in the background. Only use this if udev
+              is not running or has rules that ignore the devices LVM creates.
+
+       ----oorriiggiinnnnaammee _L_V
+              Specifies the name to use for the external origin LV when con-
+              verting an LV to a thin LV. The LV being converted becomes a
+              read-only external origin with this name.
+
+       ----ppoooollmmeettaaddaattaa _L_V
+              The name of a an LV to use for storing pool metadata.
+
+       ----ppoooollmmeettaaddaattaassiizzee _S_i_z_e[m|UNIT]
+              Specifies the size of the new pool metadata LV.
+
+       ----ppoooollmmeettaaddaattaassppaarree yy|nn
+              Enable or disable the automatic creation and management of a
+              spare pool metadata LV in the VG. A spare metadata LV is re-
+              served space that can be used when repairing a pool.
+
+       ----pprrooffiillee _S_t_r_i_n_g
+              An alias for --commandprofile or --metadataprofile, depending on
+              the command.
+
+       --qq|----qquuiieett ...
+              Suppress output and log messages. Overrides --debug and --ver-
+              bose.  Repeat once to also suppress any prompts with answer
+              'no'.
+
+       ----rraaiiddiinntteeggrriittyy yy|nn
+              Enable or disable data integrity checksums for raid images.
+
+       ----rraaiiddiinntteeggrriittyybblloocckkssiizzee _N_u_m_b_e_r
+              The block size to use for dm-integrity on raid images.  The in-
+              tegrity block size should usually match the device logical block
+              size, or the file system block size.  It may be less than the
+              file system block size, but not less than the device logical
+              block size.  Possible values: 512, 1024, 2048, 4096.
+
+       ----rraaiiddiinntteeggrriittyymmooddee _S_t_r_i_n_g
+              Use a journal (default) or bitmap for keeping integrity check-
+              sums consistent in case of a crash. The bitmap areas are recal-
+              culated after a crash, so corruption in those areas would not be
+              detected. A journal does not have this problem.  The journal
+              mode doubles writes to storage, but can improve performance for
+              scattered writes packed into a single journal write.  bitmap
+              mode can in theory achieve full write throughput of the device,
+              but would not benefit from the potential scattered write opti-
+              mization.
+
+       --rr|----rreeaaddaahheeaadd aauuttoo|nnoonnee|_N_u_m_b_e_r
+              Sets read ahead sector count of an LV.  aauuttoo is the default
+              which allows the kernel to choose a suitable value automati-
+              cally.  nnoonnee is equivalent to zero.
+
+       --RR|----rreeggiioonnssiizzee _S_i_z_e[m|UNIT]
+              Size of each raid or mirror synchronization region.  lvm.conf
+              activation/raid_region_size can be used to configure a default.
+
+       ----rreeppaaiirr
+              Replace failed PVs in a raid or mirror LV, or run a repair util-
+              ity on a thin pool. See llvvmmrraaiidd(7) and llvvmmtthhiinn(7) for more in-
+              formation.
+
+       ----rreeppllaaccee _P_V
+              Replace a specific PV in a raid LV with another PV.  The new PV
+              to use can be optionally specified after the LV.  Multiple PVs
+              can be replaced by repeating this option.  See llvvmmrraaiidd(7) for
+              more information.
+
+       --ss|----ssnnaappsshhoott
+              Combine a former COW snapshot LV with a former origin LV to re-
+              verse a previous --splitsnapshot command.
+
+       ----sspplliittccaacchhee
+              Separates a cache pool from a cache LV, and keeps the unused
+              cache pool LV.  Before the separation, the cache is flushed.
+              Also see --uncache.
+
+       ----sspplliittmmiirrrroorrss _N_u_m_b_e_r
+              Splits the specified number of images from a raid1 or mirror LV
+              and uses them to create a new LV. If --trackchanges is also
+              specified, changes to the raid1 LV are tracked while the split
+              LV remains detached.  If --name is specified, then the images
+              are permanently split from the original LV and changes are not
+              tracked.
+
+       ----sspplliittssnnaappsshhoott
+              Separates a COW snapshot from its origin LV. The LV that is
+              split off contains the chunks that differ from the origin LV
+              along with metadata describing them. This LV can be wiped and
+              then destroyed with lvremove.
+
+       ----ssttaarrttppoollll
+              Start polling an LV to continue processing a conversion.
+
+       ----ssttrriippeess _N_u_m_b_e_r
+              Specifies the number of stripes in a striped LV. This is the
+              number of PVs (devices) that a striped LV is spread across. Data
+              that appears sequential in the LV is spread across multiple de-
+              vices in units of the stripe size (see --stripesize). This does
+              not apply to existing allocated space, only newly allocated
+              space can be striped.
+
+       --II|----ssttrriippeessiizzee _S_i_z_e[k|UNIT]
+              The amount of data that is written to one device before moving
+              to the next in a striped LV.
+
+       ----sswwaappmmeettaaddaattaa
+              Extracts the metadata LV from a pool and replaces it with an-
+              other specified LV.  The extracted LV is preserved and given the
+              name of the LV that replaced it.  Use for repair only. When the
+              metadata LV is swapped out of the pool, it can be activated di-
+              rectly and used with thin provisioning tools: ccaacchhee__dduummpp(8),
+              ccaacchhee__rreeppaaiirr(8), ccaacchhee__rreessttoorree(8), tthhiinn__dduummpp(8), tthhiinn__rreeppaaiirr(8),
+              tthhiinn__rreessttoorree(8).
+
+       --tt|----tteesstt
+              Run in test mode. Commands will not update metadata.  This is
+              implemented by disabling all metadata writing but nevertheless
+              returning success to the calling function. This may lead to un-
+              usual error messages in multi-stage operations if a tool relies
+              on reading back metadata it believes has changed but hasn't.
+
+       --TT|----tthhiinn
+              Specifies the command is handling a thin LV or thin pool.  See
+              --type thin, --type thin-pool, and --virtualsize.  See
+              llvvmmtthhiinn(7) for more information about LVM thin provisioning.
+
+       ----tthhiinnppooooll _L_V
+              The name of a thin pool LV.
+
+       ----ttrraacckkcchhaannggeess
+              Can be used with --splitmirrors on a raid1 LV. This causes
+              changes to the original raid1 LV to be tracked while the split
+              images remain detached. This is a temporary state that allows
+              the read-only detached image to be merged efficiently back into
+              the raid1 LV later.  Only the regions with changed data are
+              resynchronized during merge.  While a raid1 LV is tracking
+              changes, operations on it are limited to merging the split image
+              (see --mergemirrors) or permanently splitting the image (see
+              --splitmirrors with --name.
+
+       ----ttyyppee lliinneeaarr|ssttrriippeedd|ssnnaappsshhoott|mmiirr--
+              rroorr|rraaiidd|tthhiinn|ccaacchhee|vvddoo|tthhiinn--ppooooll|ccaacchhee--ppooooll|vvddoo--ppooooll
+              The LV type, also known as "segment type" or "segtype".  See us-
+              age descriptions for the specific ways to use these types.  For
+              more information about redundancy and performance (rraaiidd<N>, mmiirr--
+              rroorr, ssttrriippeedd, lliinneeaarr) see llvvmmrraaiidd(7).  For thin provisioning
+              (tthhiinn, tthhiinn--ppooooll) see llvvmmtthhiinn(7).  For performance caching
+              (ccaacchhee, ccaacchhee--ppooooll) see llvvmmccaacchhee(7).  For copy-on-write snap-
+              shots (ssnnaappsshhoott) see usage definitions.  For VDO (vvddoo) see
+              llvvmmvvddoo(7).  Several commands omit an explicit type option be-
+              cause the type is inferred from other options or shortcuts (e.g.
+              --stripes, --mirrors, --snapshot, --virtualsize, --thin,
+              --cache, --vdo).  Use inferred types with care because it can
+              lead to unexpected results.
+
+       ----uunnccaacchhee
+              Separates a cache pool from a cache LV, and deletes the unused
+              cache pool LV.  Before the separation, the cache is flushed.
+              Also see --splitcache.
+
+       ----uusseeppoolliicciieess
+              Perform an operation according to the policy configured in
+              lvm.conf or a profile.
+
+       ----vvddooppooooll _L_V
+              The name of a VDO pool LV.  See llvvmmvvddoo(7) for more information
+              about VDO usage.
+
+       --vv|----vveerrbboossee ...
+              Set verbose level. Repeat from 1 to 4 times to increase the de-
+              tail of messages sent to stdout and stderr.
+
+       ----vveerrssiioonn
+              Display version information.
+
+       --VV|----vviirrttuuaallssiizzee _S_i_z_e[m|UNIT]
+              The virtual size of a new thin LV.  See llvvmmtthhiinn(7) for more in-
+              formation about LVM thin provisioning.  Using virtual size (-V)
+              and actual size (-L) together creates a sparse LV.  lvm.conf
+              global/sparse_segtype_default determines the default segment
+              type used to create a sparse LV.  Anything written to a sparse
+              LV will be returned when reading from it.  Reading from other
+              areas of the LV will return blocks of zeros.  When using a snap-
+              shot to create a sparse LV, a hidden virtual device is created
+              using the zero target, and the LV has the suffix _vorigin.
+              Snapshots are less efficient than thin provisioning when creat-
+              ing large sparse LVs (GiB).
+
+       --yy|----yyeess
+              Do not prompt for confirmation interactively but always assume
+              the answer yes. Use with extreme caution.  (For automatic no,
+              see -qq.)
+
+       --ZZ|----zzeerroo yy|nn
+              For snapshots, this controls zeroing of the first 4KiB of data
+              in the snapshot. If the LV is read-only, the snapshot will not
+              be zeroed.  For thin pools, this controls zeroing of provisioned
+              blocks.  Provisioning of large zeroed chunks negatively impacts
+              performance.
+
+VVAARRIIAABBLLEESS
+       _V_G
+              Volume Group name.  See llvvmm(8) for valid names.
+
+       _L_V
+              Logical  Volume  name.  See llvvmm(8) for valid names.  An LV posi-
+              tional arg generally includes the VG  name  and  LV  name,  e.g.
+              VG/LV.  LV followed by _<type> indicates that an LV of the given
+              type is required. (raid represents raid<N> type)
+
+       _P_V
+              Physical Volume name, a device path under  /dev.   For  commands
+              managing physical extents, a PV positional arg generally accepts
+              a suffix indicating a range (or multiple ranges) of physical ex-
+              tents  (PEs).  When  the first PE is omitted, it defaults to the
+              start of the device, and when the last PE is omitted it defaults
+              to  end.   Start and end range (inclusive): _P_V[::_P_E--_P_E]...  Start
+              and length range (counting from 0): _P_V[::_P_E++_P_E]...
+
+       _T_a_g
+              Tag name.  See llvvmm(8) for information about tag names and  using
+              tags in place of a VG, LV or PV.
+
+       _S_t_r_i_n_g
+              See the option description for information about the string con-
+              tent.
+
+       _S_i_z_e[UNIT]
+              Size is an input number that accepts an  optional  unit.   Input
+              units are always treated as base two values, regardless of capi-
+              talization, e.g. 'k' and 'K' both refer to  1024.   The  default
+              input unit is specified by letter, followed by |UNIT.  UNIT rep-
+              resents other possible input units:  bbBBssSSkkKKmmMMggGGttTTppPPeeEE.   b|B  is
+              bytes,  s|S is sectors of 512 bytes, k|K is KiB, m|M is MiB, g|G
+              is GiB, t|T is TiB, p|P is PiB, e|E is EiB.  (This should not be
+              confused  with the output control --units, where capital letters
+              mean multiple of 1000.)
+
+EENNVVIIRROONNMMEENNTT VVAARRIIAABBLLEESS
+       See llvvmm(8) for information about environment  variables  used  by  lvm.
+       For example, LVM_VG_NAME can generally be substituted for a required VG
+       parameter.
+
+AADDVVAANNCCEEDD UUSSAAGGEE
+       Alternate command forms, advanced command usage,  and  listing  of  all
+       valid syntax for completeness.
+
+       Change the region size of an LV.
+
+       llvvccoonnvveerrtt --RR|----rreeggiioonnssiizzee _S_i_z_e[m|UNIT] _L_V___r_a_i_d
+           [ COMMON_OPTIONS ]
+       -
+
+       Change the type of mirror log used by a mirror LV.
+
+       llvvccoonnvveerrtt ----mmiirrrroorrlloogg ccoorree|ddiisskk _L_V___m_i_r_r_o_r
+           [ COMMON_OPTIONS ]
+           [ _P_V ... ]
+       -
+
+       Convert LV to a thin LV, using the original LV as an external origin
+       (infers --type thin).
+
+       llvvccoonnvveerrtt --TT|----tthhiinn ----tthhiinnppooooll _L_V _L_V___l_i_n_e_a_r___s_t_r_i_p_e_d___t_h_i_n___c_a_c_h_e___r_a_i_d
+           [ --rr|----rreeaaddaahheeaadd aauuttoo|nnoonnee|_N_u_m_b_e_r ]
+           [ --cc|----cchhuunnkkssiizzee _S_i_z_e[k|UNIT] ]
+           [ --ZZ|----zzeerroo yy|nn ]
+           [    ----ttyyppee tthhiinn ]
+           [    ----oorriiggiinnnnaammee _L_V___n_e_w ]
+           [    ----ppoooollmmeettaaddaattaa _L_V ]
+           [    ----ppoooollmmeettaaddaattaassiizzee _S_i_z_e[m|UNIT] ]
+           [    ----ppoooollmmeettaaddaattaassppaarree yy|nn ]
+           [    ----mmeettaaddaattaapprrooffiillee _S_t_r_i_n_g ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Attach a cache pool to an LV (infers --type cache).
+
+       llvvccoonnvveerrtt    --HH|----ccaacchhee    ----ccaacchheeppooooll    _L_V    _L_V___l_i_n_e_a_r___s_t_r_i_p_e_d___t_h_i_n_-
+       _p_o_o_l___v_d_o___v_d_o_p_o_o_l___v_d_o_p_o_o_l_d_a_t_a___r_a_i_d
+           [ --ZZ|----zzeerroo yy|nn ]
+           [ --rr|----rreeaaddaahheeaadd aauuttoo|nnoonnee|_N_u_m_b_e_r ]
+           [ --cc|----cchhuunnkkssiizzee _S_i_z_e[k|UNIT] ]
+           [    ----ttyyppee ccaacchhee ]
+           [    ----ccaacchheemmeettaaddaattaaffoorrmmaatt aauuttoo|11|22 ]
+           [    ----ccaacchheemmooddee wwrriitteetthhrroouugghh|wwrriitteebbaacckk|ppaasssstthhrroouugghh ]
+           [    ----ccaacchheeppoolliiccyy _S_t_r_i_n_g ]
+           [    ----ccaacchheesseettttiinnggss _S_t_r_i_n_g ]
+           [    ----ppoooollmmeettaaddaattaa _L_V ]
+           [    ----ppoooollmmeettaaddaattaassiizzee _S_i_z_e[m|UNIT] ]
+           [    ----ppoooollmmeettaaddaattaassppaarree yy|nn ]
+           [    ----mmeettaaddaattaapprrooffiillee _S_t_r_i_n_g ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Attach a cache to an LV, converts the LV to type cache.
+
+       llvvccoonnvveerrtt --HH|----ccaacchhee ----ccaacchheevvooll _L_V _L_V___l_i_n_e_a_r___s_t_r_i_p_e_d___t_h_i_n_p_o_o_l___r_a_i_d
+           [ --ZZ|----zzeerroo yy|nn ]
+           [ --cc|----cchhuunnkkssiizzee _S_i_z_e[k|UNIT] ]
+           [    ----ccaacchheemmeettaaddaattaaffoorrmmaatt aauuttoo|11|22 ]
+           [    ----ccaacchheemmooddee wwrriitteetthhrroouugghh|wwrriitteebbaacckk|ppaasssstthhrroouugghh ]
+           [    ----ccaacchheeppoolliiccyy _S_t_r_i_n_g ]
+           [    ----ccaacchheesseettttiinnggss _S_t_r_i_n_g ]
+           [    ----ppoooollmmeettaaddaattaassiizzee _S_i_z_e[m|UNIT] ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Convert LV to type vdopool.
+
+       llvvccoonnvveerrtt ----vvddooppooooll _L_V___l_i_n_e_a_r___s_t_r_i_p_e_d___c_a_c_h_e___r_a_i_d
+           [ --nn|----nnaammee _L_V___n_e_w ]
+           [ --VV|----vviirrttuuaallssiizzee _S_i_z_e[m|UNIT] ]
+           [    ----ttyyppee vvddoo--ppooooll ]
+           [    ----ccoommpprreessssiioonn yy|nn ]
+           [    ----ddeedduupplliiccaattiioonn yy|nn ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Detach and delete a cache from an LV.
+
+       llvvccoonnvveerrtt ----uunnccaacchhee _L_V___t_h_i_n_p_o_o_l___c_a_c_h_e___v_d_o_p_o_o_l___w_r_i_t_e_c_a_c_h_e
+           [    ----ccaacchheesseettttiinnggss _S_t_r_i_n_g ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Swap metadata LV in a thin pool or cache pool (for repair only).
+
+       llvvccoonnvveerrtt ----sswwaappmmeettaaddaattaa ----ppoooollmmeettaaddaattaa _L_V _L_V___t_h_i_n_p_o_o_l___c_a_c_h_e_p_o_o_l
+           [ --cc|----cchhuunnkkssiizzee _S_i_z_e[k|UNIT] ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Merge LV that was split from a mirror (variant, use --mergemirrors).
+       Merge thin LV into its origin LV (variant, use --mergethin).
+       Merge COW snapshot LV into its origin (variant, use --mergesnapshot).
+
+       llvvccoonnvveerrtt ----mmeerrggee _V_G|_L_V___l_i_n_e_a_r___s_t_r_i_p_e_d___s_n_a_p_s_h_o_t___t_h_i_n___r_a_i_d|_T_a_g ...
+           [ --ii|----iinntteerrvvaall _N_u_m_b_e_r ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Separate a COW snapshot from its origin LV.
+
+       llvvccoonnvveerrtt ----sspplliittssnnaappsshhoott _L_V___s_n_a_p_s_h_o_t
+           [ COMMON_OPTIONS ]
+       -
+
+       Combine a former COW snapshot (second arg) with a former
+       origin LV (first arg) to reverse a splitsnapshot command.
+
+       llvvccoonnvveerrtt --ss|----ssnnaappsshhoott _L_V _L_V___l_i_n_e_a_r___s_t_r_i_p_e_d
+           [ --cc|----cchhuunnkkssiizzee _S_i_z_e[k|UNIT] ]
+           [ --ZZ|----zzeerroo yy|nn ]
+           [    ----ttyyppee ssnnaappsshhoott ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Poll LV to continue conversion (also see --startpoll)
+       or waits till conversion/mirror syncing is finished
+
+       llvvccoonnvveerrtt _L_V___m_i_r_r_o_r___r_a_i_d
+           [ COMMON_OPTIONS ]
+       -
+
+
+NNOOTTEESS
+       This previous command syntax would perform two different operations:
+       llvvccoonnvveerrtt ----tthhiinnppooooll _L_V_1 ----ppoooollmmeettaaddaattaa _L_V_2
+       If LV1 was not a thin pool, the command would convert  LV1  to  a  thin
+       pool,  optionally  using  a specified LV for metadata.  But, if LV1 was
+       already a thin pool, the command would swap  the  current  metadata  LV
+       with LV2 (for repair purposes.)
+
+       In the same way, this previous command syntax would perform two differ-
+       ent operations:
+       llvvccoonnvveerrtt ----ccaacchheeppooooll _L_V_1 ----ppoooollmmeettaaddaattaa _L_V_2
+       If LV1 was not a cache pool, the command would convert LV1 to  a  cache
+       pool,  optionally  using  a specified LV for metadata.  But, if LV1 was
+       already a cache pool, the command would swap the  current  metadata  LV
+       with LV2 (for repair purposes.)
+
+EEXXAAMMPPLLEESS
+       Convert a linear LV to a two-way mirror LV.
+       llvvccoonnvveerrtt ----ttyyppee mmiirrrroorr ----mmiirrrroorrss 11 vvgg//llvvooll11
+
+       Convert a linear LV to a two-way RAID1 LV.
+       llvvccoonnvveerrtt ----ttyyppee rraaiidd11 ----mmiirrrroorrss 11 vvgg//llvvooll11
+
+       Convert a mirror LV to use an in-memory log.
+       llvvccoonnvveerrtt ----mmiirrrroorrlloogg ccoorree vvgg//llvvooll11
+
+       Convert a mirror LV to use a disk log.
+       llvvccoonnvveerrtt ----mmiirrrroorrlloogg ddiisskk vvgg//llvvooll11
+
+       Convert a mirror or raid1 LV to a linear LV.
+       llvvccoonnvveerrtt ----ttyyppee lliinneeaarr vvgg//llvvooll11
+
+       Convert a mirror LV to a raid1 LV with the same number of images.
+       llvvccoonnvveerrtt ----ttyyppee rraaiidd11 vvgg//llvvooll11
+
+       Convert a linear LV to a two-way mirror LV, allocating new extents from
+       specific PV ranges.
+       llvvccoonnvveerrtt ----mmiirrrroorrss 11 vvgg//llvvooll11 //ddeevv//ssddaa::00--1155 //ddeevv//ssddbb::00--1155
+
+       Convert a mirror LV to a linear LV, freeing  physical  extents  from  a
+       specific PV.
+       llvvccoonnvveerrtt ----ttyyppee lliinneeaarr vvgg//llvvooll11 //ddeevv//ssddaa
+
+       Split one image from a mirror or raid1 LV, making it a new LV.
+       llvvccoonnvveerrtt ----sspplliittmmiirrrroorrss 11 ----nnaammee llvv__sspplliitt vvgg//llvvooll11
+
+       Split one image from a raid1 LV, and track changes made to the raid1 LV
+       while the split image remains detached.
+       llvvccoonnvveerrtt ----sspplliittmmiirrrroorrss 11 ----ttrraacckkcchhaannggeess vvgg//llvvooll11
+
+       Merge an image (that was previously  created  with  --splitmirrors  and
+       --trackchanges) back into the original raid1 LV.
+       llvvccoonnvveerrtt ----mmeerrggeemmiirrrroorrss vvgg//llvvooll11__rriimmaaggee__11
+
+       Replace PV /dev/sdb1 with PV /dev/sdf1 in a raid1/4/5/6/10 LV.
+       llvvccoonnvveerrtt ----rreeppllaaccee //ddeevv//ssddbb11 vvgg//llvvooll11 //ddeevv//ssddff11
+
+       Replace 3 PVs /dev/sd[b-d]1 with PVs /dev/sd[f-h]1 in a raid1 LV.
+       llvvccoonnvveerrtt ----rreeppllaaccee //ddeevv//ssddbb11 ----rreeppllaaccee //ddeevv//ssddcc11 ----rreeppllaaccee //ddeevv//ssdddd11
+              vvgg//llvvooll11 //ddeevv//ssdd[[ffgghh]]11
+
+       Replace  the  maximum  of 2 PVs /dev/sd[bc]1 with PVs /dev/sd[gh]1 in a
+       raid6 LV.
+       llvvccoonnvveerrtt ----rreeppllaaccee //ddeevv//ssddbb11 ----rreeppllaaccee //ddeevv//ssddcc11 vvgg//llvvooll11 //ddeevv//ssdd[[gghh]]11
+
+       Convert an LV into a thin LV in the specified thin pool.  The  existing
+       LV is used as an external read-only origin for the new thin LV.
+       llvvccoonnvveerrtt ----ttyyppee tthhiinn ----tthhiinnppooooll vvgg//ttppooooll11 vvgg//llvvooll11
+
+       Convert  an LV into a thin LV in the specified thin pool.  The existing
+       LV is used as an external read-only origin for the new thin LV, and  is
+       renamed "external".
+       llvvccoonnvveerrtt ----ttyyppee tthhiinn ----tthhiinnppooooll vvgg//ttppooooll11
+              ----oorriiggiinnnnaammee eexxtteerrnnaall vvgg//llvvooll11
+
+       Convert  an  LV to a cache pool LV using another specified LV for cache
+       pool metadata.
+       llvvccoonnvveerrtt ----ttyyppee ccaacchhee--ppooooll ----ppoooollmmeettaaddaattaa vvgg//ppoooollmmeettaa11 vvgg//llvvooll11
+
+       Convert an LV to a cache LV using the specified cache  pool  and  chunk
+       size.
+       llvvccoonnvveerrtt ----ttyyppee ccaacchhee ----ccaacchheeppooooll vvgg//ccppooooll11 --cc 112288 vvgg//llvvooll11
+
+       Detach and keep the cache pool from a cache LV.
+       llvvccoonnvveerrtt ----sspplliittccaacchhee vvgg//llvvooll11
+
+       Detach and remove the cache pool from a cache LV.
+       llvvccoonnvveerrtt ----uunnccaacchhee vvgg//llvvooll11
+
+SSEEEE AALLSSOO
+       llvvmm(8) llvvmm..ccoonnff(5) llvvmmccoonnffiigg(8)
+
+       ppvvcchhaannggee(8)  ppvvcckk(8)  ppvvccrreeaattee(8)  ppvvddiissppllaayy(8)  ppvvmmoovvee(8)  ppvvrreemmoovvee(8)
+       ppvvrreessiizzee(8) ppvvss(8) ppvvssccaann(8)
+
+       vvggccffggbbaacckkuupp(8) vvggccffggrreessttoorree(8) vvggcchhaannggee(8) vvggcckk(8)  vvggccrreeaattee(8)  vvggccoonn--
+       vveerrtt(8)  vvggddiissppllaayy(8)  vvggeexxppoorrtt(8)  vvggeexxtteenndd(8)  vvggiimmppoorrtt(8)  vvggiimmppoorrtt--
+       cclloonnee(8) vvggmmeerrggee(8) vvggmmkknnooddeess(8)  vvggrreedduuccee(8)  vvggrreemmoovvee(8)  vvggrreennaammee(8)
+       vvggss(8) vvggssccaann(8) vvggsspplliitt(8)
+
+       llvvccrreeaattee(8)  llvvcchhaannggee(8)  llvvccoonnvveerrtt(8)  llvvddiissppllaayy(8)  llvveexxtteenndd(8) llvvrree--
+       dduuccee(8) llvvrreemmoovvee(8) llvvrreennaammee(8) llvvrreessiizzee(8) llvvss(8) llvvssccaann(8)
+
+       llvvmm--ffuullllrreeppoorrtt(8) llvvmm--llvvppoollll(8) llvvmm22--aaccttiivvaattiioonn--ggeenneerraattoorr(8) bbllkkddeeaaccttii--
+       vvaattee(8) llvvmmdduummpp(8)
+
+       ddmmeevveennttdd(8)  llvvmmppoolllldd(8)  llvvmmlloocckkdd(8)  llvvmmlloocckkccttll(8)  ccmmiirrrroorrdd(8) llvvmmdd--
+       bbuussdd(8)
+
+       llvvmmssyysstteemmiidd(7) llvvmmrreeppoorrtt(7) llvvmmrraaiidd(7) llvvmmtthhiinn(7) llvvmmccaacchhee(7)
+
+
+
+Red Hat, Inc.          LVM TOOLS 2.03.11(2) (2021-01-08)          LVCONVERT(8)
+521b5b197262dc661507925cd21fb150b74b9dc88d86bc9278f571ae2296ce6c

@@ -1,0 +1,395 @@
+SYSTEMD-BOOT(7)                  systemd-boot                  SYSTEMD-BOOT(7)
+
+
+
+NNAAMMEE
+       systemd-boot, sd-boot - A simple UEFI boot manager
+
+DDEESSCCRRIIPPTTIIOONN
+       ssyysstteemmdd--bboooott (short: ssdd--bboooott) is a simple UEFI boot manager. It
+       provides a graphical menu to select the entry to boot and an editor for
+       the kernel command line.  ssyysstteemmdd--bboooott supports systems with UEFI
+       firmware only.
+
+       ssyysstteemmdd--bboooott loads boot entry information from the EFI system partition
+       (ESP), usually mounted at /efi/, /boot/, or /boot/efi/ during OS
+       runtime, as well as from the Extended Boot Loader partition if it
+       exists (usually mounted to /boot/). Configuration file fragments,
+       kernels, initrds and other EFI images to boot generally need to reside
+       on the ESP or the Extended Boot Loader partition. Linux kernels must be
+       built with CCOONNFFIIGG__EEFFII__SSTTUUBB to be able to be directly executed as an EFI
+       image. During boot ssyysstteemmdd--bboooott automatically assembles a list of boot
+       entries from the following sources:
+
+       +o   Boot entries defined with BBoooott LLooaaddeerr SSppeecciiffiiccaattiioonn[1] description
+           files located in /loader/entries/ on the ESP and the Extended Boot
+           Loader Partition. These usually describe Linux kernel images with
+           associated initrd images, but alternatively may also describe
+           arbitrary other EFI executables.
+
+       +o   Unified kernel images following the BBoooott LLooaaddeerr SSppeecciiffiiccaattiioonn[1],
+           as executable EFI binaries in /EFI/Linux/ on the ESP and the
+           Extended Boot Loader Partition.
+
+       +o   The Microsoft Windows EFI boot manager, if installed
+
+       +o   The Apple macOS boot manager, if installed
+
+       +o   The EFI Shell binary, if installed
+
+       +o   A reboot into the UEFI firmware setup option, if supported by the
+           firmware
+
+       ssyysstteemmdd--bboooott supports the following features:
+
+       +o   Basic boot manager configuration changes (such as timeout
+           configuration, default boot entry selection, ...) may be made
+           directly from the boot loader UI at boot-time, as well as during
+           system runtime with EFI variables.
+
+       +o   The boot manager integrates with the ssyysstteemmccttll command to implement
+           features such as ssyysstteemmccttll rreebboooott ----bboooott--llooaaddeerr--eennttrryy==......  (for
+           rebooting into a specific boot menu entry, i.e. "reboot into
+           Windows") and ssyysstteemmccttll rreebboooott ----bboooott--llooaaddeerr--mmeennuu==......  (for
+           rebooting into the boot loader menu), by implementing the BBoooott
+           LLooaaddeerr IInntteerrffaaccee[2]. See ssyysstteemmccttll(1) for details.
+
+       +o   An EFI variable set by the boot loader informs the OS about the EFI
+           System Partition used during boot. This is then used to
+           automatically mount the correct EFI System Partition to /efi/ or
+           /boot/ during OS runtime. See ssyysstteemmdd--ggpptt--aauuttoo--ggeenneerraattoorr(8) for
+           details.
+
+       +o   The boot manager provides information about the boot time spent in
+           UEFI firmware using the BBoooott LLooaaddeerr IInntteerrffaaccee[2]. This information
+           can be displayed using ssyysstteemmdd--aannaallyyzzee(1).
+
+       +o   The boot manager implements boot counting and automatic fallback to
+           older, working boot entries on failure. See AAuuttoommaattiicc BBoooott
+           AAsssseessssmmeenntt[3].
+
+       +o   The boot manager optionally reads a random seed from the ESP
+           partition, combines it with a 'system token' stored in a persistent
+           EFI variable and derives a random seed to use by the OS as entropy
+           pool initialization, providing a full entropy pool during early
+           boot.
+
+       bboooottccttll(1) may be used from a running system to locate the ESP and the
+       Extended Boot Loader Partition, list available entries, and install
+       ssyysstteemmdd--bboooott itself.
+
+       kkeerrnneell--iinnssttaallll(8) may be used to copy kernel images onto the ESP or the
+       Extended Boot Loader Partition and to generate description files
+       compliant with the Boot Loader Specification.
+
+KKEEYY BBIINNDDIINNGGSS
+       The following keys may be used in the boot menu:
+
+        (Up),  (Down), j, k, PageUp, PageDown, Home, End
+           Navigate up/down in the entry list
+
+        (Enter),  (Right)
+           Boot selected entry
+
+       d
+           Make selected entry the default
+
+       e
+           Edit the kernel command line for selected entry
+
+       +, t
+           Increase the timeout before default entry is booted
+
+       -, T
+           Decrease the timeout
+
+       v
+           Show systemd-boot, UEFI, and firmware versions
+
+       P
+           Print status
+
+       Q
+           Quit
+
+       h, ?, F1
+           Show a help screen
+
+       Ctrl+l
+           Reprint the screen
+
+       The following keys may be pressed during bootup or in the boot menu to
+       directly boot a specific entry:
+
+       l
+           Linux
+
+       w
+           Windows
+
+       a
+           macOS
+
+       s
+           EFI shell
+
+       1, 2, 3, 4, 5, 6, 7, 8, 9
+           Boot entry number 1 ... 9
+
+       The boot menu is shown when a non-zero menu timeout has been
+       configured. If the menu timeout has been set to zero, it is sufficient
+       to press any key -- before the boot loader initializes -- to bring up
+       the boot menu, except for the keys listed immediately above as they
+       directly boot into the selected boot menu item. Note that depending on
+       the firmware implementation the time window where key presses are
+       accepted before the boot loader initializes might be short. If the
+       window is missed, reboot and try again, possibly pressing a suitable
+       key (e.g. the space bar) continuously; on most systems it should be
+       possible to hit the time window after a few attempts. To avoid this
+       problem, consider setting a non-zero timeout, thus showing the boot
+       menu unconditionally. Some desktop environments might offer an option
+       to directly boot into the boot menu, to avoid the problem altogether.
+       Alternatively, use the command line ssyysstteemmccttll rreebboooott
+       ----bboooott--llooaaddeerr--mmeennuu==00 from the shell.
+
+       In the editor, most keys simply insert themselves, but the following
+       keys may be used to perform additional actions:
+
+        (Left),  (Right), Home, End
+           Navigate left/right
+
+       Esc
+           Abort the edit and quit the editor
+
+       Ctrl+k
+           Clear the command line
+
+       Ctrl+w, Alt+Backspace
+           Delete word backwards
+
+       Alt+d
+           Delete word forwards
+
+        (Enter)
+           Boot entry with the edited command line
+
+       Note that unless configured otherwise in the UEFI firmware,
+       systemd-boot will use t'
+
+
+
+SYSTEMD-BOOT(7)                  systemd-boot                  SYSTEMD-BOOT(7)
+
+
+
+NNAAMMEE
+       systemd-boot, sd-boot - A simple UEFI boot manager
+
+DDEESSCCRRIIPPTTIIOONN
+       ssyysstteemmdd--bboooott (short: ssdd--bboooott) is a simple UEFI boot manager. It
+       provides a graphical menu to select the entry to boot and an editor for
+       the kernel command line.  ssyysstteemmdd--bboooott supports systems with UEFI
+       firmware only.
+
+       ssyysstteemmdd--bboooott loads boot entry information from the EFI system partition
+       (ESP), usually mounted at /efi/, /boot/, or /boot/efi/ during OS
+       runtime, as well as from the Extended Boot Loader partition if it
+       exists (usually mounted to /boot/). Configuration file fragments,
+       kernels, initrds and other EFI images to boot generally need to reside
+       on the ESP or the Extended Boot Loader partition. Linux kernels must be
+       built with CCOONNFFIIGG__EEFFII__SSTTUUBB to be able to be directly executed as an EFI
+       image. During boot ssyysstteemmdd--bboooott automatically assembles a list of boot
+       entries from the following sources:
+
+       +o   Boot entries defined with BBoooott LLooaaddeerr SSppeecciiffiiccaattiioonn[1] description
+           files located in /loader/entries/ on the ESP and the Extended Boot
+           Loader Partition. These usually describe Linux kernel images with
+           associated initrd images, but alternatively may also describe
+           arbitrary other EFI executables.
+
+       +o   Unified kernel images following the BBoooott LLooaaddeerr SSppeecciiffiiccaattiioonn[1],
+           as executable EFI binaries in /EFI/Linux/ on the ESP and the
+           Extended Boot Loader Partition.
+
+       +o   The Microsoft Windows EFI boot manager, if installed
+
+       +o   The Apple macOS boot manager, if installed
+
+       +o   The EFI Shell binary, if installed
+
+       +o   A reboot into the UEFI firmware setup option, if supported by the
+           firmware
+
+       ssyysstteemmdd--bboooott supports the following features:
+
+       +o   Basic boot manager configuration changes (such as timeout
+           configuration, default boot entry selection, ...) may be made
+           directly from the boot loader UI at boot-time, as well as during
+           system runtime with EFI variables.
+
+       +o   The boot manager integrates with the ssyysstteemmccttll command to implement
+           features such as ssyysstteemmccttll rreebboooott ----bboooott--llooaaddeerr--eennttrryy==......  (for
+           rebooting into a specific boot menu entry, i.e. "reboot into
+           Windows") and ssyysstteemmccttll rreebboooott ----bboooott--llooaaddeerr--mmeennuu==......  (for
+           rebooting into the boot loader menu), by implementing the BBoooott
+           LLooaaddeerr IInntteerrffaaccee[2]. See ssyysstteemmccttll(1) for details.
+
+       +o   An EFI variable set by the boot loader informs the OS about the EFI
+           System Partition used during boot. This is then used to
+           automatically mount the correct EFI System Partition to /efi/ or
+           /boot/ during OS runtime. See ssyysstteemmdd--ggpptt--aauuttoo--ggeenneerraattoorr(8) for
+           details.
+
+       +o   The boot manager provides information about the boot time spent in
+           UEFI firmware using the BBoooott LLooaaddeerr IInntteerrffaaccee[2]. This information
+           can be displayed using ssyysstteemmdd--aannaallyyzzee(1).
+
+       +o   The boot manager implements boot counting and automatic fallback to
+           older, working boot entries on failure. See AAuuttoommaattiicc BBoooott
+           AAsssseessssmmeenntt[3].
+
+       +o   The boot manager optionally reads a random seed from the ESP
+           partition, combines it with a 'system token' stored in a persistent
+           EFI variable and derives a random seed to use by the OS as entropy
+           pool initialization, providing a full entropy pool during early
+           boot.
+
+       bboooottccttll(1) may be used from a running system to locate the ESP and the
+       Extended Boot Loader Partition, list available entries, and install
+       ssyysstteemmdd--bboooott itself.
+
+       kkeerrnneell--iinnssttaallll(8) may be used to copy kernel images onto the ESP or the
+       Extended Boot Loader Partition and to generate description files
+       compliant with the Boot Loader Specification.
+
+KKEEYY BBIINNDDIINNGGSS
+       The following keys may be used in the boot menu:
+
+        (Up),  (Down), j, k, PageUp, PageDown, Home, End
+           Navigate up/down in the entry list
+
+        (Enter),  (Right)
+           Boot selected entry
+
+       d
+           Make selected entry the default
+
+       e
+           Edit the kernel command line for selected entry
+
+       +, t
+           Increase the timeout before default entry is booted
+
+       -, T
+           Decrease the timeout
+
+       v
+           Show systemd-boot, UEFI, and firmware versions
+
+       P
+           Print status
+
+       Q
+           Quit
+
+       h, ?, F1
+           Show a help screen
+
+       Ctrl+l
+           Reprint the screen
+
+       The following keys may be pressed during bootup or in the boot menu to
+       directly boot a specific entry:
+
+       l
+           Linux
+
+       w
+           Windows
+
+       a
+           macOS
+
+       s
+           EFI shell
+
+       1, 2, 3, 4, 5, 6, 7, 8, 9
+           Boot entry number 1 ... 9
+
+       The boot menu is shown when a non-zero menu timeout has been
+       configured. If the menu timeout has been set to zero, it is sufficient
+       to press any key -- before the boot loader initializes -- to bring up
+       the boot menu, except for the keys listed immediately above as they
+       directly boot into the selected boot menu item. Note that depending on
+       the firmware implementation the time window where key presses are
+       accepted before the boot loader initializes might be short. If the
+       window is missed, reboot and try again, possibly pressing a suitable
+       key (e.g. the space bar) continuously; on most systems it should be
+       possible to hit the time window after a few attempts. To avoid this
+       problem, consider setting a non-zero timeout, thus showing the boot
+       menu unconditionally. Some desktop environments might offer an option
+       to directly boot into the boot menu, to avoid the problem altogether.
+       Alternatively, use the command line ssyysstteemmccttll rreebboooott
+       ----bboooott--llooaaddeerr--mmeennuu==00 from the shell.
+
+       In the editor, most keys simply insert themselves, but the following
+       keys may be used to perform additional actions:
+
+        (Left),  (Right), Home, End
+           Navigate left/right
+
+       Esc
+           Abort the edit and quit the editor
+
+       Ctrl+k
+           Clear the command line
+
+       Ctrl+w, Alt+Backspace
+           Delete word backwards
+
+       Alt+d
+           Delete word forwards
+
+        (Enter)
+           Boot entry with the edited command line
+
+       Note that unless configured otherwise in the UEFI firmware,
+       systemd-boot will use t'
+
+
+
+SYSTEMD-BOOT(7)                  systemd-boot                  SYSTEMD-BOOT(7)
+
+
+
+NNAAMMEE
+       systemd-boot, sd-boot - A simple UEFI boot manager
+
+DDEESSCCRRIIPPTTIIOONN
+       ssyysstteemmdd--bboooott (short: ssdd--bboooott) is a simple UEFI boot manager. It
+       provides a graphical menu to select the entry to boot and an editor for
+       the kernel command line.  ssyysstteemmdd--bboooott supports systems with UEFI
+       firmware only.
+
+       ssyysstteemmdd--bboooott loads boot entry information from the EFI system partition
+       (ESP), usually mounted at /efi/, /boot/, or /boot/efi/ during OS
+       runtime, as well as from the Extended Boot Loader partition if it
+       exists (usually mounted to /boot/). Configuration file fragments,
+       kernels, initrds and other EFI images to boot generally need to reside
+       on the ESP or the Extended Boot Loader partition. Linux kernels must be
+       built with CCOONNFFIIGG__EEFFII__SSTTUUBB to be able to be directly executed as an EFI
+       image. During boot ssyysstteemmdd--bboooott automatically assembles a list of boot
+       entries from the following sources:
+
+       +o   Boot entries defined with BBoooott LLooaaddeerr SSppeecciiffiiccaattiioonn[1] description
+           files located in /loader/entries/ on the ESP and the Extended Boot
+           Loader Partition. These usually describe Linux kernel images with
+           associated initrd images, but alternatively may also describe
+           arbitrary other EFI executables.
+
+       +o
+
+
+
+systemd 249                                                    SYSTEMD-BOOT(7)
+2752730b92d6a4bdd712365ab6322e69668694de9f5834ce24b489f925ee5186

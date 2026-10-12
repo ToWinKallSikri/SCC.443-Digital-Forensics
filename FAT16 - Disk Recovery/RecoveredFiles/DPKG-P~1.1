@@ -1,0 +1,197 @@
+dpkg-parsechangelog(1)            dpkg suite            dpkg-parsechangelog(1)
+
+
+
+NNAAMMEE
+       dpkg-parsechangelog - parse Debian changelog files
+
+SSYYNNOOPPSSIISS
+       ddppkkgg--ppaarrsseecchhaannggeelloogg [_o_p_t_i_o_n...]
+
+DDEESSCCRRIIPPTTIIOONN
+       ddppkkgg--ppaarrsseecchhaannggeelloogg reads and parses the changelog of an unpacked
+       Debian source tree and outputs the information in it to standard output
+       in a machine-readable form.
+
+OOPPTTIIOONNSS
+       --ll, ----ffiillee _c_h_a_n_g_e_l_o_g_-_f_i_l_e
+           Specifies the changelog file to read information from.  A '-' can
+           be used to specify reading from standard input.  The default is
+           ddeebbiiaann//cchhaannggeelloogg.
+
+       --FF _c_h_a_n_g_e_l_o_g_-_f_o_r_m_a_t
+           Specifies the format of the changelog. By default the format is
+           read from a special line near the bottom of the changelog or
+           failing that defaults to the ddeebbiiaann standard format. See also
+           CCHHAANNGGEELLOOGG FFOORRMMAATTSS.
+
+       --LL _l_i_b_d_i_r
+           Obsolete option without effect (since dpkg 1.18.8).  Setting the
+           perl environment variables PPEERRLL55LLIIBB or PPEERRLLLLIIBB has a similar effect
+           when looking for the parser perl modules.
+
+       --SS, ----sshhooww--ffiieelldd _f_i_e_l_d
+           Specifies the name of the field to show (since dpkg 1.17.0).  The
+           field name is not printed, only its value.
+
+       --??, ----hheellpp
+           Show the usage message and exit.
+
+       ----vveerrssiioonn
+           Show the version and exit.
+
+   PPaarrsseerr OOppttiioonnss
+       The following options can be used to influence the output of the
+       changelog parser, e.g. the range of entries or the format of the
+       output.
+
+       ----ffoorrmmaatt _o_u_t_p_u_t_-_f_o_r_m_a_t
+           Set the output format. Currently supported values are ddppkkgg and
+           rrffcc882222.  ddppkkgg is the classic output format (from before this option
+           existed) and the default. It consists of one paragraph in Debian
+           control format (see ddeebb--ccoonnttrrooll(5)). If more than one entry is
+           requested, then most fields are taken from the first entry (usually
+           the most recent entry), except otherwise stated:
+
+           SSoouurrccee:: _p_k_g_-_n_a_m_e
+           VVeerrssiioonn:: _v_e_r_s_i_o_n
+           DDiissttrriibbuuttiioonn:: _t_a_r_g_e_t_-_d_i_s_t_r_i_b_u_t_i_o_n
+           UUrrggeennccyy:: _u_r_g_e_n_c_y
+               The highest urgency of all included entries is used, followed
+               by the concatenated (space-separated) comments from all the
+               versions requested.
+
+           MMaaiinnttaaiinneerr:: _a_u_t_h_o_r
+           DDaattee:: _d_a_t_e
+               The date of the entry as a string, as it appears in the
+               changelog.  With a ssttrrppttiimmee(3) format "%%aa,, %%dd %%bb %%YY %%TT %%zz", but
+               where the day of the week might not actually correspond to the
+               real day obtained from the rest of the date string.  If you
+               need a more accurate representation of the date, use the
+               TTiimmeessttaammpp field, but take into account it might not be possible
+               to map it back to the exact value in this field.
+
+           TTiimmeessttaammpp:: _t_i_m_e_s_t_a_m_p
+               The date of the entry as a timestamp in seconds since the epoch
+               (since dpkg 1.18.8).
+
+           CClloosseess:: _b_u_g_-_n_u_m_b_e_r
+               The Closes fields of all included entries are merged.
+
+           CChhaannggeess:: _c_h_a_n_g_e_l_o_g_-_e_n_t_r_i_e_s
+               The text of all changelog entries is concatenated. To make this
+               field a valid Debian control format multiline field empty lines
+               are replaced with a single full stop and all lines is intended
+               by one space character. The exact content depends on the
+               changelog format.
+
+           The VVeerrssiioonn, DDiissttrriibbuuttiioonn, UUrrggeennccyy, MMaaiinnttaaiinneerr and CChhaannggeess fields
+           are mandatory.
+
+           There might be additional user-defined fields present.
+
+           The rrffcc882222 format uses the same fields but outputs a separate
+           paragraph for each changelog entry so that all metadata for each
+           entry is preserved.
+
+       ----rreevveerrssee
+           Include all changes in reverse order (since dpkg 1.19.1).
+
+           NNoottee:: For the ddppkkgg format the first entry will be the most ancient
+           entry.
+
+       ----aallll
+           Include all changes.  NNoottee:: Other options have no effect when this
+           is in use.
+
+       --ss, ----ssiinnccee _v_e_r_s_i_o_n
+       --vv _v_e_r_s_i_o_n
+           Include all changes later than _v_e_r_s_i_o_n.
+
+       --uu, ----uunnttiill _v_e_r_s_i_o_n
+           Include all changes earlier than _v_e_r_s_i_o_n.
+
+       --ff, ----ffrroomm _v_e_r_s_i_o_n
+           Include all changes equal or later than _v_e_r_s_i_o_n.
+
+       --tt, ----ttoo _v_e_r_s_i_o_n
+           Include all changes up to or equal than _v_e_r_s_i_o_n.
+
+       --cc, ----ccoouunntt _n_u_m_b_e_r
+       --nn _n_u_m_b_e_r
+           Include _n_u_m_b_e_r entries from the top (or the tail if _n_u_m_b_e_r is lower
+           than 0).
+
+       --oo, ----ooffffsseett _n_u_m_b_e_r
+           Change the starting point for ----ccoouunntt, counted from the top (or the
+           tail if _n_u_m_b_e_r is lower than 0).
+
+CCHHAANNGGEELLOOGG FFOORRMMAATTSS
+       It is possible to use a different format to the standard one, by
+       providing a parser for that alternative format.
+
+       In order to have ddppkkgg--ppaarrsseecchhaannggeelloogg run the new parser, a line must be
+       included within the last 40 lines of the changelog file, matching the
+       Perl regular expression: "\\sscchhaannggeelloogg--ffoorrmmaatt::\\ss++(([[00--99aa--zz]]++))\\WW".  The
+       part in parentheses should be the name of the format. For example:
+
+           @@@ changelog-format: _o_t_h_e_r_f_o_r_m_a_t @@@
+
+       Changelog format names are non-empty strings of lowercase alphanumerics
+       ("a-z0-9").
+
+       If such a line exists then ddppkkgg--ppaarrsseecchhaannggeelloogg will look for the parser
+       as a DDppkkgg::::CChhaannggeelloogg::::_O_t_h_e_r_f_o_r_m_a_t perl module; it is an error for it
+       not being present.  The parser name in the perl module will be
+       automatically capitalized.  The default changelog format is ddeebbiiaann, and
+       a parser for it is provided by default.
+
+       The parser should be derived from the Dpkg::Changelog class and
+       implement the required documented interface.
+
+       If the changelog format which is being parsed always or almost always
+       leaves a blank line between individual change notes, these blank lines
+       should be stripped out, so as to make the resulting output compact.
+
+       If the changelog format does not contain date or package name
+       information this information should be omitted from the output. The
+       parser should not attempt to synthesize it or find it from other
+       sources.
+
+       If the changelog does not have the expected format the parser should
+       error out, rather than trying to muddle through and possibly generating
+       incorrect output.
+
+       A changelog parser may not interact with the user at all.
+
+NNOOTTEESS
+       All PPaarrsseerr OOppttiioonnss except for --vv are only supported since dpkg 1.14.16.
+
+       Short option parsing with non-bundled values available only since dpkg
+       1.18.0.
+
+EENNVVIIRROONNMMEENNTT
+       DDPPKKGG__CCOOLLOORRSS
+           Sets the color mode (since dpkg 1.18.5).  The currently accepted
+           values are: aauuttoo (default), aallwwaayyss and nneevveerr.
+
+       DDPPKKGG__NNLLSS
+           If set, it will be used to decide whether to activate Native
+           Language Support, also known as internationalization (or i18n)
+           support (since dpkg 1.19.0).  The accepted values are: 00 and 11
+           (default).
+
+FFIILLEESS
+       ddeebbiiaann//cchhaannggeelloogg
+           The changelog file, used to obtain version-dependent information
+           about the source package, such as the urgency and distribution of
+           an upload, the changes made since a particular release, and the
+           source version number itself.
+
+SSEEEE AALLSSOO
+       ddeebb--cchhaannggeelloogg(5).
+
+
+
+1.21.1                            2022-05-25            dpkg-parsechangelog(1)
+d9fbc816c2d01e4aa3413d6bd161c9c5445fef4dbad619bcbfa58195a1fed95e

@@ -1,0 +1,134 @@
+dpkg-genbuildinfo(1)              dpkg suite              dpkg-genbuildinfo(1)
+
+
+
+NNAAMMEE
+       dpkg-genbuildinfo - generate Debian .buildinfo files
+
+SSYYNNOOPPSSIISS
+       ddppkkgg--ggeennbbuuiillddiinnffoo [_o_p_t_i_o_n...]
+
+DDEESSCCRRIIPPTTIIOONN
+       ddppkkgg--ggeennbbuuiillddiinnffoo reads information from an unpacked and built Debian
+       source tree and from the files it has generated and generates a Debian
+       control file describing the build environment and the build artifacts
+       (..bbuuiillddiinnffoo file).
+
+       This command was introduced in dpkg 1.18.11.
+
+OOPPTTIIOONNSS
+       ----bbuuiilldd==_t_y_p_e
+           Specifies the build _t_y_p_e from a comma-separated list of components.
+
+           The allowed values are:
+
+           aannyy Generate build information including unqualified build
+               dependencies (BBuuiilldd--DDeeppeennddss) and architecture specific build
+               dependencies (BBuuiilldd--DDeeppeennddss--AArrcchh).
+
+           aallll Generate build information including unqualified build
+               dependencies (BBuuiilldd--DDeeppeennddss) and architecture independent build
+               dependencies (BBuuiilldd--DDeeppeennddss--IInnddeepp).
+
+           ssoouurrccee
+               Effectively ignored; generate build information with just the
+               unqualified build dependencies (BBuuiilldd--DDeeppeennddss).
+
+           bbiinnaarryy
+               Generate build information with all three types of build
+               dependencies.  This is an alias for aannyy,,aallll.
+
+           ffuullll
+               Generate build information with all three types of build
+               dependencies.  This is an alias for aannyy,,aallll,,ssoouurrccee, and the
+               same as the default case when no build option is specified.
+
+       --cc_c_o_n_t_r_o_l_f_i_l_e
+           Specifies the main source control file to read information from.
+           The default is ddeebbiiaann//ccoonnttrrooll.
+
+       --ll_c_h_a_n_g_e_l_o_g_-_f_i_l_e
+           Specifies the changelog file to read information from. The default
+           is ddeebbiiaann//cchhaannggeelloogg.
+
+       --ff_f_i_l_e_s_-_l_i_s_t_-_f_i_l_e
+           Specifies where is the list of files that have been produced by the
+           build, rather than using ddeebbiiaann//ffiilleess.
+
+       --FF_c_h_a_n_g_e_l_o_g_-_f_o_r_m_a_t
+           Specifies the format of the changelog. See ddppkkgg--ppaarrsseecchhaannggeelloogg(1)
+           for information about alternative formats.
+
+       --OO[_f_i_l_e_n_a_m_e]
+           Print the buildinfo file to standard output (or _f_i_l_e_n_a_m_e if
+           specified) rather than to _d_i_r//_s_o_u_r_c_e_-_n_a_m_e___b_i_n_a_r_y_-
+           _v_e_r_s_i_o_n___a_r_c_h..bbuuiillddiinnffoo (where _d_i_r is .... by default or _u_p_l_o_a_d_-_f_i_l_e_s_-
+           _d_i_r if --uu was used).
+
+       --uu_u_p_l_o_a_d_-_f_i_l_e_s_-_d_i_r
+           Look for the files to be uploaded in _u_p_l_o_a_d_-_f_i_l_e_s_-_d_i_r rather than
+           ....  (ddppkkgg--ggeennbbuuiillddiinnffoo needs to find these files so that it can
+           include their sizes and checksums in the ..bbuuiillddiinnffoo file).
+
+       ----aallwwaayyss--iinncclluuddee--kkeerrnneell
+           By default, the BBuuiilldd--KKeerrnneell--VVeerrssiioonn field will not be written out.
+
+           Specify this option (since dpkg 1.19.0) to always write a BBuuiilldd--
+           KKeerrnneell--VVeerrssiioonn field when generating the ..bbuuiillddiinnffoo.
+
+       ----aallwwaayyss--iinncclluuddee--ppaatthh
+           By default, the BBuuiilldd--PPaatthh field will only be written if the
+           current directory starts with an allowed pattern.
+
+           On Debian and derivatives the pattern matches on //bbuuiilldd// at the
+           start of the pathname.
+
+           Specify this option to always write a BBuuiilldd--PPaatthh field when
+           generating the ..bbuuiillddiinnffoo.
+
+       ----aaddmmiinnddiirr==_d_i_r
+           Change the location of the ddppkkgg database. The default location is
+           _/_v_a_r_/_l_i_b_/_d_p_k_g.
+
+       --qq  ddppkkgg--ggeennbbuuiillddiinnffoo might produce informative messages on standard
+           error.  --qq suppresses these messages.
+
+       --??, ----hheellpp
+           Show the usage message and exit.
+
+       ----vveerrssiioonn
+           Show the version and exit.
+
+EENNVVIIRROONNMMEENNTT
+       DDEEBB__BBUUIILLDD__OOPPTTIIOONNSS
+           This variable can be used to enable or disable various features
+           that affect the information included in the .buildinfo file, via
+           the bbuuiillddiinnffoo option (since dpkg 1.18.19).  This option contains a
+           comma-separated list of features, prefixed with the '++' or '--'
+           modifiers, to denote whether to enable or disable them.  The
+           special feature "aallll" can be used to enable or disable all other
+           features.  The feature "ppaatthh" controls whether to unconditionally
+           include the BBuuiilldd--PPaatthh field.
+
+       DDPPKKGG__CCOOLLOORRSS
+           Sets the color mode (since dpkg 1.18.5).  The currently accepted
+           values are: aauuttoo (default), aallwwaayyss and nneevveerr.
+
+       DDPPKKGG__NNLLSS
+           If set, it will be used to decide whether to activate Native
+           Language Support, also known as internationalization (or i18n)
+           support (since dpkg 1.19.0).  The accepted values are: 00 and 11
+           (default).
+
+FFIILLEESS
+       ddeebbiiaann//ffiilleess
+           The list of generated files.  ddppkkgg--ggeennbbuuiillddiinnffoo reads the data here
+           when producing a ..bbuuiillddiinnffoo file.
+
+SSEEEE AALLSSOO
+       ddeebb--bbuuiillddiinnffoo(5).
+
+
+
+1.21.1                            2022-05-25              dpkg-genbuildinfo(1)
+40a7d1f82ee265f0bd36b7fe5c9a7c2cdcc75c16a4b108615acd0e3fa11a3848

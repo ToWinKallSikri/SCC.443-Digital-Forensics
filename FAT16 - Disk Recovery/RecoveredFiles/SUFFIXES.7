@@ -1,0 +1,200 @@
+SUFFIXES(7)                Linux Programmer's Manual               SUFFIXES(7)
+
+
+
+NNAAMMEE
+       suffixes - list of file suffixes
+
+DDEESSCCRRIIPPTTIIOONN
+       It  is  customary to indicate the contents of a file with the file suf-
+       fix, which (typically) consists of a period, followed by  one  or  more
+       letters.   Many standard utilities, such as compilers, use this to rec-
+       ognize the type of file they are dealing with.  The mmaakkee(1) utility  is
+       driven by rules based on file suffix.
+
+       Following is a list of suffixes which are likely to be found on a Linux
+       system.
+                     |
+       Suffix        | File type
+       --------------+-----------------------------------------------------
+        _,_v           | files for RCS (Revision Control System)
+        _-            | backup file
+        _._C           | C++ source code, equivalent to _._c_c
+        _._F           | Fortran source with ccpppp(1) directives
+                     | or file compressed using freeze
+        _._S           | assembler source with ccpppp(1) directives
+        _._Y           | file compressed using yabba
+        _._Z           | file compressed using ccoommpprreessss(1)
+        _._[_0_-_9_]_+_g_f    | TeX generic font files
+        _._[_0_-_9_]_+_p_k    | TeX packed font files
+        _._[_1_-_9_]       | manual page for the corresponding section
+        _._[_1_-_9_]_[_a_-_z_]  | manual page for section plus subsection
+        _._a           | static object code library
+        _._a_d          | X application default resource file
+        _._a_d_a         | Ada source (may be body, spec, or combination)
+        _._a_d_b         | Ada body source
+        _._a_d_s         | Ada spec source
+        _._a_f_m         | PostScript font metrics
+        _._a_l          | Perl autoload file
+        _._a_m          | aauuttoommaakkee(1) input file
+        _._a_r_c         | aarrcc(1) archive
+        _._a_r_j         | aarrjj(1) archive
+        _._a_s_c         | PGP ASCII-armored data
+        _._a_s_m         | (GNU) assembler source file
+        _._a_u          | Audio sound file
+        _._a_u_x         | LaTeX auxiliary file
+        _._a_v_i         | (msvideo) movie
+        _._a_w_k         | AWK language program
+        _._b           | LILO boot loader image
+        _._b_a_k         | backup file
+        _._b_a_s_h        | bbaasshh(1) shell script
+        _._b_b          | basic block list data produced by
+                     | gcc -ftest-coverage
+        _._b_b_g         | basic block graph data produced by
+                     | gcc -ftest-coverage
+        _._b_b_l         | BibTeX output
+        _._b_d_f         | X font file
+        _._b_i_b         | TeX bibliographic database, BibTeX input
+        _._b_m          | bitmap source
+        _._b_m_p         | bitmap
+        _._b_z_2         | file compressed using bbzziipp22(1)
+        _._c           | C source
+        _._c_a_t         | message catalog files
+        _._c_c          | C++ source
+        _._c_f          | configuration file
+        _._c_f_g         | configuration file
+        _._c_g_i         | WWW content generating script or program
+        _._c_l_s         | LaTeX Class definition
+        _._c_l_a_s_s       | Java compiled byte-code
+        _._c_o_n_f        | configuration file
+        _._c_o_n_f_i_g      | configuration file
+        _._c_p_p         | equivalent to _._c_c
+        _._c_s_h         | ccsshh(1) shell script
+        _._c_x_x         | equivalent to _._c_c
+        _._d_a_t         | data file
+        _._d_e_b         | Debian software package
+        _._d_e_f         | Modula-2 source for definition modules
+        _._d_e_f         | other definition files
+        _._d_e_s_c        | initial part of mail message unpacked with
+                     | mmuunnppaacckk(1)
+        _._d_i_f_f        | file differences (ddiiffff(1) command output)
+        _._d_i_r         | dbm data base directory file
+        _._d_o_c         | documentation file
+        _._d_s_c         | Debian Source Control (source package)
+        _._d_t_x         | LaTeX package source file
+        _._d_v_i         | TeX's device independent output
+        _._e_l          | Emacs-Lisp source
+        _._e_l_c         | compiled Emacs-Lisp source
+        _._e_p_s         | encapsulated PostScript
+        _._e_x_p         | Expect source code
+        _._f           | Fortran source
+        _._f_7_7         | Fortran 77 source
+        _._f_9_0         | Fortran 90 source
+        _._f_a_s         | precompiled Common-Lisp
+        _._f_i          | Fortran include files
+        _._f_i_g         | FIG image file (used by xxffiigg(1))
+        _._f_m_t         | TeX format file
+        _._g_i_f         | Compuserve Graphics Image File format
+        _._g_m_o         | GNU format message catalog
+        _._g_s_f         | Ghostscript fonts
+        _._g_z          | file compressed using ggzziipp(1)
+        _._h           | C or C++ header files
+        _._h_e_l_p        | help file
+        _._h_f          | equivalent to _._h_e_l_p
+        _._h_l_p         | equivalent to _._h_e_l_p
+        _._h_t_m         | poor man's _._h_t_m_l
+        _._h_t_m_l        | HTML document used with the World Wide Web
+        _._h_q_x         | 7-bit encoded Macintosh file
+        _._i           | C source after preprocessing
+        _._i_c_o_n        | bitmap source
+        _._i_d_x         | reference or datum-index file for hypertext
+                     | or database system
+        _._i_m_a_g_e       | bitmap source
+        _._i_n          | configuration template, especially for GNU Autoconf
+        _._i_n_f_o        | files for the Emacs info browser
+        _._i_n_f_o_-_[_0_-_9_]_+ | split info files
+        _._i_n_s         | LaTeX package install file for docstrip
+        _._i_t_c_l        | itcl source code;
+                     | itcl ([incr Tcl]) is an OO extension of tcl
+        _._j_a_v_a        | a Java source file
+        _._j_p_e_g        | Joint Photographic Experts Group format
+        _._j_p_g         | poor man's _._j_p_e_g
+        _._k_m_a_p        | llyyxx(1) keymap
+        _._l           | equivalent to _._l_e_x or _._l_i_s_p
+        _._l_e_x         | lleexx(1) or fflleexx(1) files
+        _._l_h_a         | lharc archive
+        _._l_i_b         | Common-Lisp library
+        _._l_i_s_p        | Lisp source
+        _._l_n          | files for use with lliinntt(1)
+        _._l_o_g         | log file, in particular produced by TeX
+        _._l_s_m         | Linux Software Map entry
+        _._l_s_p         | Common-Lisp source
+        _._l_z_h         | lharc archive
+        _._m           | Objective-C source code
+        _._m_4          | mm44(1) source
+        _._m_a_c         | macro files for various programs
+        _._m_a_n         | manual page (usually source rather than formatted)
+        _._m_a_p         | map files for various programs
+        _._m_e          | Nroff source using the me macro package
+        _._m_f          | Metafont (font generator for TeX) source
+        _._m_g_p         | MagicPoint file
+        _._m_m          | sources for ggrrooffff(1) in mm - format
+        _._m_o          | Message catalog binary file
+        _._m_o_d         | Modula-2 source for implementation modules
+        _._m_o_v         | (quicktime) movie
+        _._m_p          | Metapost source
+        _._m_p_2         | MPEG Layer 2 (audio) file
+        _._m_p_3         | MPEG Layer 3 (audio) file
+        _._m_p_e_g        | movie file
+        _._o           | object file
+        _._o_l_d         | old or backup file
+        _._o_r_i_g        | backup (original) version of a file, from ppaattcchh(1)
+        _._o_u_t         | output file, often executable program (a.out)
+        _._p           | Pascal source
+        _._p_a_g         | dbm data base data file
+        _._p_a_t_c_h       | file differences for ppaattcchh(1)
+        _._p_b_m         | portable bitmap format
+        _._p_c_f         | X11 font files
+        _._p_d_f         | Adobe Portable Data Format
+                     | (use Acrobat/aaccrroorreeaadd or xxppddff)
+        _._p_e_r_l        | Perl source (see .ph, .pl and .pm)
+        _._p_f_a         | PostScript font definition files, ASCII format
+        _._p_f_b         | PostScript font definition files, binary format
+        _._p_g_m         | portable greymap format
+        _._p_g_p         | PGP binary data
+        _._p_h          | Perl header file
+        _._p_h_p         | PHP program file
+        _._p_h_p_3        | PHP3 program file
+        _._p_i_d         | File to store daemon PID (e.g., crond.pid)
+        _._p_l          | TeX property list file or Perl library file
+        _._p_m          | Perl module
+        _._p_n_g         | Portable Network Graphics file
+        _._p_o          | Message catalog source
+        _._p_o_d         | ppeerrllddoocc(1) file
+        _._p_p_m         | portable pixmap format
+        _._p_r          | bitmap source
+        _._p_s          | PostScript file
+        _._p_y          | Python source
+        _._p_y_c         | compiled python
+        _._q_t          | quicktime movie
+        _._r           | RATFOR source (obsolete)
+        _._r_e_j         | patches that ppaattcchh(1) couldn't apply
+        _._r_p_m         | RPM software package
+        _._r_t_f         | Rich Text Format file
+        _._r_u_l_e_s       | rules for something
+        _._s           | assembler source
+        _._s_a          | stub libraries for a.out shared libraries
+        _._s_c          | sscc(1) spreadsheet commands
+        _._s_c_m         | Scheme source code
+        _._s_e_d         | sed source file
+        _._s_g_m_l        | SGML source file
+        _._s_h          | sshh(1) scripts
+        _._s_h_a_r        | archive created by the sshhaarr(1) utility
+        _._s_o          | Shared library or dynamically loadable object
+        _._s_q_l         | SQL source
+        _.            |
+
+
+
+Linux                             2020-08-13                       SUFFIXES(7)
+4e90d9e3fe54820ffc446eb7985e5478d68312f31316594b6b74ceea996989ea

@@ -1,0 +1,307 @@
+LVDISPLAY(8)                System Manager's Manual               LVDISPLAY(8)
+
+
+
+NNAAMMEE
+       lvdisplay - Display information about a logical volume
+
+SSYYNNOOPPSSIISS
+       llvvddiissppllaayy
+           [ _o_p_t_i_o_n___a_r_g_s ]
+           [ _p_o_s_i_t_i_o_n___a_r_g_s ]
+
+DDEESSCCRRIIPPTTIIOONN
+       lvdisplay  shows  the  attributes of LVs, like size, read/write status,
+       snapshot information, etc.
+
+       llvvss(8) is a preferred alternative that shows the same  information  and
+       more, using a more compact and configurable output format.
+
+UUSSAAGGEE
+       llvvddiissppllaayy
+           [ --aa|----aallll ]
+           [ --cc|----ccoolloonn ]
+           [ --CC|----ccoolluummnnss ]
+           [ --HH|----hhiissttoorryy ]
+           [ --mm|----mmaappss ]
+           [ --oo|----ooppttiioonnss _S_t_r_i_n_g ]
+           [ --OO|----ssoorrtt _S_t_r_i_n_g ]
+           [ --SS|----sseelleecctt _S_t_r_i_n_g ]
+           [    ----aalliiggnneedd ]
+           [    ----bbiinnaarryy ]
+           [    ----ccoonnffiiggrreeppoorrtt lloogg|vvgg|llvv|ppvv|ppvvsseegg|sseegg ]
+           [    ----ffoorreeiiggnn ]
+           [    ----iiggnnoorreelloocckkiinnggffaaiilluurree ]
+           [    ----llooggoonnllyy ]
+           [    ----nnoohheeaaddiinnggss ]
+           [    ----nnoossuuffffiixx ]
+           [    ----rreeaaddoonnllyy ]
+           [    ----rreeppoorrttffoorrmmaatt bbaassiicc|jjssoonn ]
+           [    ----sseeggmmeennttss ]
+           [    ----sseeppaarraattoorr _S_t_r_i_n_g ]
+           [    ----sshhaarreedd ]
+           [    ----uunnbbuuffffeerreedd ]
+           [    ----uunniittss rr|RR|hh|HH|bb|BB|ss|SS|kk|KK|mm|MM|gg|GG|tt|TT|pp|PP|ee|EE ]
+           [ COMMON_OPTIONS ]
+           [ _V_G|_L_V|_T_a_g ... ]
+
+       Common options for lvm:
+           [ --dd|----ddeebbuugg ]
+           [ --hh|----hheellpp ]
+           [ --qq|----qquuiieett ]
+           [ --tt|----tteesstt ]
+           [ --vv|----vveerrbboossee ]
+           [ --yy|----yyeess ]
+           [    ----ccoommmmaannddpprrooffiillee _S_t_r_i_n_g ]
+           [    ----ccoonnffiigg _S_t_r_i_n_g ]
+           [    ----ddrriivveerrllooaaddeedd yy|nn ]
+           [    ----lloocckkoopptt _S_t_r_i_n_g ]
+           [    ----lloonngghheellpp ]
+           [    ----nnoolloocckkiinngg ]
+           [    ----pprrooffiillee _S_t_r_i_n_g ]
+           [    ----vveerrssiioonn ]
+
+OOPPTTIIOONNSS
+       ----aalliiggnneedd
+              Use with --separator to align the output columns
+
+       --aa|----aallll
+              Show information about internal LVs.  These are components of
+              normal LVs, such as mirrors, which are not independently acces-
+              sible, e.g. not mountable.
+
+       ----bbiinnaarryy
+              Use binary values "0" or "1" instead of descriptive literal val-
+              ues for columns that have exactly two valid values to report
+              (not counting the "unknown" value which denotes that the value
+              could not be determined).
+
+       --cc|----ccoolloonn
+              Generate colon separated output for easier parsing in scripts or
+              programs.  Also see vvggss(8) which provides considerably more con-
+              trol over the output.
+
+       --CC|----ccoolluummnnss
+              Display output in columns, the equivalent of vvggss(8).  Options
+              listed are the same as options given in vvggss(8).
+
+       ----ccoommmmaannddpprrooffiillee _S_t_r_i_n_g
+              The command profile to use for command configuration.  See
+              llvvmm..ccoonnff(5) for more information about profiles.
+
+       ----ccoonnffiigg _S_t_r_i_n_g
+              Config settings for the command. These override lvm.conf set-
+              tings.  The String arg uses the same format as lvm.conf, or may
+              use section/field syntax.  See llvvmm..ccoonnff(5) for more information
+              about config.
+
+       ----ccoonnffiiggrreeppoorrtt lloogg|vvgg|llvv|ppvv|ppvvsseegg|sseegg
+              See llvvmmrreeppoorrtt(7).
+
+       --dd|----ddeebbuugg ...
+              Set debug level. Repeat from 1 to 6 times to increase the detail
+              of messages sent to the log file and/or syslog (if configured).
+
+       ----ddrriivveerrllooaaddeedd yy|nn
+              If set to no, the command will not attempt to use device-mapper.
+              For testing and debugging.
+
+       ----ffoorreeiiggnn
+              Report/display foreign VGs that would otherwise be skipped.  See
+              llvvmmssyysstteemmiidd(7) for more information about foreign VGs.
+
+       --hh|----hheellpp
+              Display help text.
+
+       --HH|----hhiissttoorryy
+              Include historical LVs in the output.  (This has no effect un-
+              less LVs were removed while lvm.conf metadata/record_lvs_history
+              was enabled.
+
+       ----iiggnnoorreelloocckkiinnggffaaiilluurree
+              Allows a command to continue with read-only metadata operations
+              after locking failures.
+
+       ----lloocckkoopptt _S_t_r_i_n_g
+              Used to pass options for special cases to lvmlockd.  See llvvmm--
+              lloocckkdd(8) for more information.
+
+       ----llooggoonnllyy
+              Suppress command report and display only log report.
+
+       ----lloonngghheellpp
+              Display long help text.
+
+       --mm|----mmaappss
+              Display the mapping of logical extents to PVs and physical ex-
+              tents.  To map physical extents to logical extents use: pvs
+              --segments -o+lv_name,seg_start_pe,segtype
+
+       ----nnoohheeaaddiinnggss
+              Suppress the headings line that is normally the first line of
+              output.  Useful if grepping the output.
+
+       ----nnoolloocckkiinngg
+              Disable locking.
+
+       ----nnoossuuffffiixx
+              Suppress the suffix on output sizes. Use with --units (except h
+              and H) if processing the output.
+
+       --oo|----ooppttiioonnss _S_t_r_i_n_g
+              Comma-separated, ordered list of fields to display in columns.
+              String arg syntax is: [+|-|#]Field1[,Field2 ...]  The prefix ++
+              will append the specified fields to the default fields, -- will
+              remove the specified fields from the default fields, and ## will
+              compact specified fields (removing them when empty for all
+              rows.)  Use --oo hheellpp to view the list of all available fields.
+              Use separate lists of fields to add, remove or compact by re-
+              peating the -o option: -o+field1,field2 -o-field3,field4
+              -o#field5.  These lists are evaluated from left to right.  Use
+              field name llvv__aallll to view all LV fields, vvgg__aallll all VG fields,
+              ppvv__aallll all PV fields, ppvvsseegg__aallll all PV segment fields, sseegg__aallll
+              all LV segment fields, and ppvvsseegg__aallll all PV segment columns.
+              See the lvm.conf report section for more config options.  See
+              llvvmmrreeppoorrtt(7) for more information about reporting.
+
+       ----pprrooffiillee _S_t_r_i_n_g
+              An alias for --commandprofile or --metadataprofile, depending on
+              the command.
+
+       --qq|----qquuiieett ...
+              Suppress output and log messages. Overrides --debug and --ver-
+              bose.  Repeat once to also suppress any prompts with answer
+              'no'.
+
+       ----rreeaaddoonnllyy
+              Run the command in a special read-only mode which will read on-
+              disk metadata without needing to take any locks. This can be
+              used to peek inside metadata used by a virtual machine image
+              while the virtual machine is running. No attempt will be made to
+              communicate with the device-mapper kernel driver, so this option
+              is unable to report whether or not LVs are actually in use.
+
+       ----rreeppoorrttffoorrmmaatt bbaassiicc|jjssoonn
+              Overrides current output format for reports which is defined
+              globally by the report/output_format setting in lvm.conf.  bbaassiicc
+              is the original format with columns and rows.  If there is more
+              than one report per command, each report is prefixed with the
+              report name for identification. jjssoonn produces report output in
+              JSON format. See llvvmmrreeppoorrtt(7) for more information.
+
+       ----sseeggmmeennttss
+
+       --SS|----sseelleecctt _S_t_r_i_n_g
+              Select objects for processing and reporting based on specified
+              criteria.  The criteria syntax is described by ----sseelleecctt hheellpp and
+              llvvmmrreeppoorrtt(7).  For reporting commands, one row is displayed for
+              each object matching the criteria.  See ----ooppttiioonnss hheellpp for se-
+              lectable object fields.  Rows can be displayed with an addi-
+              tional "selected" field (-o selected) showing 1 if the row
+              matches the selection and 0 otherwise.  For non-reporting com-
+              mands which process LVM entities, the selection is used to
+              choose items to process.
+
+       ----sseeppaarraattoorr _S_t_r_i_n_g
+              String to use to separate each column. Useful if grepping the
+              output.
+
+       ----sshhaarreedd
+              Report/display shared VGs that would otherwise be skipped when
+              lvmlockd is not being used on the host.  See llvvmmlloocckkdd(8) for
+              more information about shared VGs.
+
+       --OO|----ssoorrtt _S_t_r_i_n_g
+              Comma-separated ordered list of columns to sort by. Replaces the
+              default selection. Precede any column with -- for a reverse sort
+              on that column.
+
+       --tt|----tteesstt
+              Run in test mode. Commands will not update metadata.  This is
+              implemented by disabling all metadata writing but nevertheless
+              returning success to the calling function. This may lead to un-
+              usual error messages in multi-stage operations if a tool relies
+              on reading back metadata it believes has changed but hasn't.
+
+       ----uunnbbuuffffeerreedd
+              Produce output immediately without sorting or aligning the col-
+              umns properly.
+
+       ----uunniittss rr|RR|hh|HH|bb|BB|ss|SS|kk|KK|mm|MM|gg|GG|tt|TT|pp|PP|ee|EE
+              All sizes are output in these units: human-(r)eadable with '<'
+              rounding indicator, (h)uman-readable, (b)ytes, (s)ectors,
+              (k)ilobytes, (m)egabytes, (g)igabytes, (t)erabytes, (p)etabytes,
+              (e)xabytes.  Capitalise to use multiples of 1000 (S.I.) instead
+              of 1024.  Custom units can be specified, e.g. --units 3M.
+
+       --vv|----vveerrbboossee ...
+              Set verbose level. Repeat from 1 to 4 times to increase the de-
+              tail of messages sent to stdout and stderr.
+
+       ----vveerrssiioonn
+              Display version information.
+
+       --yy|----yyeess
+              Do not prompt for confirmation interactively but always assume
+              the answer yes. Use with extreme caution.  (For automatic no,
+              see -qq.)
+
+VVAARRIIAABBLLEESS
+       _V_G
+              Volume Group name.  See llvvmm(8) for valid names.
+
+       _L_V
+              Logical  Volume  name.  See llvvmm(8) for valid names.  An LV posi-
+              tional arg generally includes the VG  name  and  LV  name,  e.g.
+              VG/LV.
+
+       _T_a_g
+              Tag  name.  See llvvmm(8) for information about tag names and using
+              tags in place of a VG, LV or PV.
+
+       _S_t_r_i_n_g
+              See the option description for information about the string con-
+              tent.
+
+       _S_i_z_e[UNIT]
+              Size  is  an  input number that accepts an optional unit.  Input
+              units are always treated as base two values, regardless of capi-
+              talization,  e.g.  'k'  and 'K' both refer to 1024.  The default
+              input unit is specified by letter, followed by |UNIT.  UNIT rep-
+              resents  other  possible  input units: bbBBssSSkkKKmmMMggGGttTTppPPeeEE.  b|B is
+              bytes, s|S is sectors of 512 bytes, k|K is KiB, m|M is MiB,  g|G
+              is GiB, t|T is TiB, p|P is PiB, e|E is EiB.  (This should not be
+              confused with the output control --units, where capital  letters
+              mean multiple of 1000.)
+
+EENNVVIIRROONNMMEENNTT VVAARRIIAABBLLEESS
+       See  llvvmm(8)  for  information  about environment variables used by lvm.
+       For example, LVM_VG_NAME can generally be substituted for a required VG
+       parameter.
+
+SSEEEE AALLSSOO
+       llvvmm(8) llvvmm..ccoonnff(5) llvvmmccoonnffiigg(8)
+
+       ppvvcchhaannggee(8)  ppvvcckk(8)  ppvvccrreeaattee(8)  ppvvddiissppllaayy(8)  ppvvmmoovvee(8)  ppvvrreemmoovvee(8)
+       ppvvrreessiizzee(8) ppvvss(8) ppvvssccaann(8)
+
+       vvggccffggbbaacckkuupp(8) vvggccffggrreessttoorree(8) vvggcchhaannggee(8) vvggcckk(8)  vvggccrreeaattee(8)  vvggccoonn--
+       vveerrtt(8)  vvggddiissppllaayy(8)  vvggeexxppoorrtt(8)  vvggeexxtteenndd(8)  vvggiimmppoorrtt(8)  vvggiimmppoorrtt--
+       cclloonnee(8) vvggmmeerrggee(8) vvggmmkknnooddeess(8)  vvggrreedduuccee(8)  vvggrreemmoovvee(8)  vvggrreennaammee(8)
+       vvggss(8) vvggssccaann(8) vvggsspplliitt(8)
+
+       llvvccrreeaattee(8)  llvvcchhaannggee(8)  llvvccoonnvveerrtt(8)  llvvddiissppllaayy(8)  llvveexxtteenndd(8) llvvrree--
+       dduuccee(8) llvvrreemmoovvee(8) llvvrreennaammee(8) llvvrreessiizzee(8) llvvss(8) llvvssccaann(8)
+
+       llvvmm--ffuullllrreeppoorrtt(8) llvvmm--llvvppoollll(8) llvvmm22--aaccttiivvaattiioonn--ggeenneerraattoorr(8) bbllkkddeeaaccttii--
+       vvaattee(8) llvvmmdduummpp(8)
+
+       ddmmeevveennttdd(8)  llvvmmppoolllldd(8)  llvvmmlloocckkdd(8)  llvvmmlloocckkccttll(8)  ccmmiirrrroorrdd(8) llvvmmdd--
+       bbuussdd(8)
+
+       llvvmmssyysstteemmiidd(7) llvvmmrreeppoorrtt(7) llvvmmrraaiidd(7) llvvmmtthhiinn(7) llvvmmccaacchhee(7)
+
+
+
+Red Hat, Inc.          LVM TOOLS 2.03.11(2) (2021-01-08)          LVDISPLAY(8)
+01d181b6d9c2deb1862e146071b7bf4cd0f9dbd27c056cde3bb896b247241e51

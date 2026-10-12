@@ -1,0 +1,632 @@
+LVCHANGE(8)                 System Manager's Manual                LVCHANGE(8)
+
+
+
+NNAAMMEE
+       lvchange - Change the attributes of logical volume(s)
+
+SSYYNNOOPPSSIISS
+       llvvcchhaannggee _o_p_t_i_o_n___a_r_g_s _p_o_s_i_t_i_o_n___a_r_g_s
+           [ _o_p_t_i_o_n___a_r_g_s ]
+
+        --aa|----aaccttiivvaattee yy|nn|aayy
+           ----aaccttiivvaattiioonnmmooddee ppaarrttiiaall|ddeeggrraaddeedd|ccoommpplleettee
+           ----aaddddttaagg _T_a_g
+           ----aalllloocc ccoonnttiigguuoouuss|cclliinngg|cclliinngg__bbyy__ttaaggss|nnoorrmmaall|aannyywwhheerree|iinnhheerriitt
+        --AA|----aauuttoobbaacckkuupp yy|nn
+           ----ccaacchheemmooddee wwrriitteetthhrroouugghh|wwrriitteebbaacckk|ppaasssstthhrroouugghh
+           ----ccaacchheeppoolliiccyy _S_t_r_i_n_g
+           ----ccaacchheesseettttiinnggss _S_t_r_i_n_g
+           ----ccoommmmaannddpprrooffiillee _S_t_r_i_n_g
+           ----ccoommpprreessssiioonn yy|nn
+           ----ccoonnffiigg _S_t_r_i_n_g
+        --CC|----ccoonnttiigguuoouuss yy|nn
+        --dd|----ddeebbuugg
+           ----ddeedduupplliiccaattiioonn yy|nn
+           ----ddeellttaagg _T_a_g
+           ----ddeettaacchhpprrooffiillee
+           ----ddiissccaarrddss ppaassssddoowwnn|nnooppaassssddoowwnn|iiggnnoorree
+           ----ddrriivveerrllooaaddeedd yy|nn
+           ----eerrrroorrwwhheennffuullll yy|nn
+        --ff|----ffoorrccee
+        --hh|----hheellpp
+        --KK|----iiggnnoorreeaaccttiivvaattiioonnsskkiipp
+           ----iiggnnoorreelloocckkiinnggffaaiilluurree
+           ----iiggnnoorreemmoonniittoorriinngg
+           ----lloocckkoopptt _S_t_r_i_n_g
+           ----lloonngghheellpp
+        --jj|----mmaajjoorr _N_u_m_b_e_r
+           ----[[rraaiidd]]mmaaxxrreeccoovveerryyrraattee _S_i_z_e[k|UNIT]
+           ----mmeettaaddaattaapprrooffiillee _S_t_r_i_n_g
+           ----mmiinnoorr _N_u_m_b_e_r
+           ----[[rraaiidd]]mmiinnrreeccoovveerryyrraattee _S_i_z_e[k|UNIT]
+           ----mmoonniittoorr yy|nn
+           ----nnoolloocckkiinngg
+           ----nnoouuddeevvssyynncc
+        --PP|----ppaarrttiiaall
+        --pp|----ppeerrmmiissssiioonn rrww|rr
+        --MM|----ppeerrssiisstteenntt yy|nn
+           ----ppoollll yy|nn
+           ----pprrooffiillee _S_t_r_i_n_g
+        --qq|----qquuiieett
+        --rr|----rreeaaddaahheeaadd aauuttoo|nnoonnee|_N_u_m_b_e_r
+           ----rreeaaddoonnllyy
+           ----rreebbuuiilldd _P_V
+           ----rreeffrreesshh
+           ----rreeppoorrttffoorrmmaatt bbaassiicc|jjssoonn
+           ----rreessyynncc
+        --SS|----sseelleecctt _S_t_r_i_n_g
+        --kk|----sseettaaccttiivvaattiioonnsskkiipp yy|nn
+           ----[[rraaiidd]]ssyynnccaaccttiioonn cchheecckk|rreeppaaiirr
+           ----ssyyssiinniitt
+        --tt|----tteesstt
+        --vv|----vveerrbboossee
+           ----vveerrssiioonn
+           ----[[rraaiidd]]wwrriitteebbeehhiinndd _N_u_m_b_e_r
+           ----[[rraaiidd]]wwrriitteemmoossttllyy _P_V[::tt|nn|yy]
+        --yy|----yyeess
+        --ZZ|----zzeerroo yy|nn
+
+DDEESSCCRRIIPPTTIIOONN
+       lvchange  changes LV attributes in the VG, changes LV activation in the
+       kernel, and includes other utilities for LV maintenance.
+
+UUSSAAGGEE
+       Change a general LV attribute.
+       For options listed in parentheses, any one is
+       required, after which the others are optional.
+
+       llvvcchhaannggee
+           ( --CC|----ccoonnttiigguuoouuss yy|nn,
+             --pp|----ppeerrmmiissssiioonn rrww|rr,
+             --rr|----rreeaaddaahheeaadd aauuttoo|nnoonnee|_N_u_m_b_e_r,
+             --kk|----sseettaaccttiivvaattiioonnsskkiipp yy|nn,
+             --ZZ|----zzeerroo yy|nn,
+             --MM|----ppeerrssiisstteenntt nn,
+                ----aaddddttaagg _T_a_g,
+                ----ddeellttaagg _T_a_g,
+                ----aalllloocc ccoonnttiigguuoouuss|cclliinngg|cclliinngg__bbyy__ttaaggss|nnoorrmmaall|aannyywwhheerree|iinn--
+           hheerriitt,
+                ----ccoommpprreessssiioonn yy|nn,
+                ----ddeedduupplliiccaattiioonn yy|nn,
+                ----ddeettaacchhpprrooffiillee,
+                ----mmeettaaddaattaapprrooffiillee _S_t_r_i_n_g,
+                ----pprrooffiillee _S_t_r_i_n_g,
+                ----eerrrroorrwwhheennffuullll yy|nn,
+                ----ddiissccaarrddss ppaassssddoowwnn|nnooppaassssddoowwnn|iiggnnoorree,
+                ----ccaacchheemmooddee wwrriitteetthhrroouugghh|wwrriitteebbaacckk|ppaasssstthhrroouugghh,
+                ----ccaacchheeppoolliiccyy _S_t_r_i_n_g,
+                ----ccaacchheesseettttiinnggss _S_t_r_i_n_g,
+                ----[[rraaiidd]]mmiinnrreeccoovveerryyrraattee _S_i_z_e[k|UNIT],
+                ----[[rraaiidd]]mmaaxxrreeccoovveerryyrraattee _S_i_z_e[k|UNIT],
+                ----[[rraaiidd]]wwrriitteebbeehhiinndd _N_u_m_b_e_r,
+                ----[[rraaiidd]]wwrriitteemmoossttllyy _P_V[::tt|nn|yy] )
+            _V_G|_L_V|_T_a_g|_S_e_l_e_c_t ...
+           [ --aa|----aaccttiivvaattee yy|nn|aayy ]
+           [    ----ppoollll yy|nn ]
+           [    ----mmoonniittoorr yy|nn ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Resyncronize a mirror or raid LV.
+       Use to reset 'R' attribute on a not initially synchronized LV.
+
+       llvvcchhaannggee ----rreessyynncc _V_G|_L_V___m_i_r_r_o_r___r_a_i_d|_T_a_g|_S_e_l_e_c_t ...
+           [ --aa|----aaccttiivvaattee yy|nn|aayy ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Resynchronize or check a raid LV.
+
+       llvvcchhaannggee ----ssyynnccaaccttiioonn cchheecckk|rreeppaaiirr _V_G|_L_V___r_a_i_d|_T_a_g|_S_e_l_e_c_t ...
+           [ COMMON_OPTIONS ]
+       -
+
+       Reconstruct data on specific PVs of a raid LV.
+
+       llvvcchhaannggee ----rreebbuuiilldd _P_V _V_G|_L_V___r_a_i_d|_T_a_g|_S_e_l_e_c_t ...
+           [ COMMON_OPTIONS ]
+       -
+
+       Activate or deactivate an LV.
+
+       llvvcchhaannggee --aa|----aaccttiivvaattee yy|nn|aayy _V_G|_L_V|_T_a_g|_S_e_l_e_c_t ...
+           [ --PP|----ppaarrttiiaall ]
+           [ --KK|----iiggnnoorreeaaccttiivvaattiioonnsskkiipp ]
+           [    ----aaccttiivvaattiioonnmmooddee ppaarrttiiaall|ddeeggrraaddeedd|ccoommpplleettee ]
+           [    ----ppoollll yy|nn ]
+           [    ----mmoonniittoorr yy|nn ]
+           [    ----iiggnnoorreelloocckkiinnggffaaiilluurree ]
+           [    ----ssyyssiinniitt ]
+           [    ----rreeaaddoonnllyy ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Reactivate an LV using the latest metadata.
+
+       llvvcchhaannggee ----rreeffrreesshh _V_G|_L_V|_T_a_g|_S_e_l_e_c_t ...
+           [ --PP|----ppaarrttiiaall ]
+           [    ----aaccttiivvaattiioonnmmooddee ppaarrttiiaall|ddeeggrraaddeedd|ccoommpplleettee ]
+           [    ----ppoollll yy|nn ]
+           [    ----mmoonniittoorr yy|nn ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Start or stop monitoring an LV from dmeventd.
+
+       llvvcchhaannggee ----mmoonniittoorr yy|nn _V_G|_L_V|_T_a_g|_S_e_l_e_c_t ...
+           [ COMMON_OPTIONS ]
+       -
+
+       Start or stop processing an LV conversion.
+
+       llvvcchhaannggee ----ppoollll yy|nn _V_G|_L_V|_T_a_g|_S_e_l_e_c_t ...
+           [    ----mmoonniittoorr yy|nn ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Make the minor device number persistent for an LV.
+
+       llvvcchhaannggee --MM|----ppeerrssiisstteenntt yy ----mmiinnoorr _N_u_m_b_e_r _L_V
+           [ --jj|----mmaajjoorr _N_u_m_b_e_r ]
+           [ --aa|----aaccttiivvaattee yy|nn|aayy ]
+           [    ----ppoollll yy|nn ]
+           [    ----mmoonniittoorr yy|nn ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Common options for command:
+           [ --AA|----aauuttoobbaacckkuupp yy|nn ]
+           [ --ff|----ffoorrccee ]
+           [ --SS|----sseelleecctt _S_t_r_i_n_g ]
+           [    ----iiggnnoorreemmoonniittoorriinngg ]
+           [    ----nnoouuddeevvssyynncc ]
+           [    ----rreeppoorrttffoorrmmaatt bbaassiicc|jjssoonn ]
+
+       Common options for lvm:
+           [ --dd|----ddeebbuugg ]
+           [ --hh|----hheellpp ]
+           [ --qq|----qquuiieett ]
+           [ --tt|----tteesstt ]
+           [ --vv|----vveerrbboossee ]
+           [ --yy|----yyeess ]
+           [    ----ccoommmmaannddpprrooffiillee _S_t_r_i_n_g ]
+           [    ----ccoonnffiigg _S_t_r_i_n_g ]
+           [    ----ddrriivveerrllooaaddeedd yy|nn ]
+           [    ----lloocckkoopptt _S_t_r_i_n_g ]
+           [    ----lloonngghheellpp ]
+           [    ----nnoolloocckkiinngg ]
+           [    ----pprrooffiillee _S_t_r_i_n_g ]
+           [    ----vveerrssiioonn ]
+
+OOPPTTIIOONNSS
+       --aa|----aaccttiivvaattee yy|nn|aayy
+              Change the active state of LVs.  An active LV can be used
+              through a block device, allowing data on the LV to be accessed.
+              yy makes LVs active, or available.  nn makes LVs inactive, or un-
+              available.  The block device for the LV is added or removed from
+              the system using device-mapper in the kernel.  A symbolic link
+              /dev/VGName/LVName pointing to the device node is also added/re-
+              moved.  All software and scripts should access the device
+              through the symbolic link and present this as the name of the
+              device.  The location and name of the underlying device node may
+              depend on the distribution, configuration (e.g. udev), or re-
+              lease version.  aayy specifies autoactivation, in which case an LV
+              is activated only if it matches an item in lvm.conf activa-
+              tion/auto_activation_volume_list.  If the list is not set, all
+              LVs are considered to match, and if if the list is set but
+              empty, no LVs match.  Autoactivation should be used during sys-
+              tem boot to make it possible to select which LVs should be auto-
+              matically activated by the system.  See llvvmmlloocckkdd(8) for more in-
+              formation about activation options eeyy and ssyy for shared VGs.
+
+       ----aaccttiivvaattiioonnmmooddee ppaarrttiiaall|ddeeggrraaddeedd|ccoommpplleettee
+              Determines if LV activation is allowed when PVs are missing,
+              e.g. because of a device failure.  ccoommpplleettee only allows LVs with
+              no missing PVs to be activated, and is the most restrictive
+              mode.  ddeeggrraaddeedd allows RAID LVs with missing PVs to be acti-
+              vated.  (This does not include the "mirror" type, see "raid1"
+              instead.)  ppaarrttiiaall allows any LV with missing PVs to be acti-
+              vated, and should only be used for recovery or repair.  For de-
+              fault, see lvm.conf/activation_mode.  See llvvmmrraaiidd(7) for more
+              information.
+
+       ----aaddddttaagg _T_a_g
+              Adds a tag to a PV, VG or LV. This option can be repeated to add
+              multiple tags at once. See llvvmm(8) for information about tags.
+
+       ----aalllloocc ccoonnttiigguuoouuss|cclliinngg|cclliinngg__bbyy__ttaaggss|nnoorrmmaall|aannyywwhheerree|iinnhheerriitt
+              Determines the allocation policy when a command needs to allo-
+              cate Physical Extents (PEs) from the VG. Each VG and LV has an
+              allocation policy which can be changed with vgchange/lvchange,
+              or overriden on the command line.  nnoorrmmaall applies common sense
+              rules such as not placing parallel stripes on the same PV.  iinn--
+              hheerriitt applies the VG policy to an LV.  ccoonnttiigguuoouuss requires new
+              PEs be placed adjacent to existing PEs.  cclliinngg places new PEs on
+              the same PV as existing PEs in the same stripe of the LV.  If
+              there are sufficient PEs for an allocation, but normal does not
+              use them, aannyywwhheerree will use them even if it reduces performance,
+              e.g. by placing two stripes on the same PV.  Optional positional
+              PV args on the command line can also be used to limit which PVs
+              the command will use for allocation.  See llvvmm(8) for more infor-
+              mation about allocation.
+
+       --AA|----aauuttoobbaacckkuupp yy|nn
+              Specifies if metadata should be backed up automatically after a
+              change.  Enabling this is strongly advised! See vvggccffggbbaacckkuupp(8)
+              for more information.
+
+       ----ccaacchheemmooddee wwrriitteetthhrroouugghh|wwrriitteebbaacckk|ppaasssstthhrroouugghh
+              Specifies when writes to a cache LV should be considered com-
+              plete.  wwrriitteebbaacckk considers a write complete as soon as it is
+              stored in the cache pool.  wwrriitteetthhoouugghh considers a write com-
+              plete only when it has been stored in both the cache pool and on
+              the origin LV.  While writethrough may be slower for writes, it
+              is more resilient if something should happen to a device associ-
+              ated with the cache pool LV. With ppaasssstthhrroouugghh, all reads are
+              served from the origin LV (all reads miss the cache) and all
+              writes are forwarded to the origin LV; additionally, write hits
+              cause cache block invalidates. See llvvmmccaacchhee(7) for more informa-
+              tion.
+
+       ----ccaacchheeppoolliiccyy _S_t_r_i_n_g
+              Specifies the cache policy for a cache LV.  See llvvmmccaacchhee(7) for
+              more information.
+
+       ----ccaacchheesseettttiinnggss _S_t_r_i_n_g
+              Specifies tunable values for a cache LV in "Key = Value" form.
+              Repeat this option to specify multiple values.  (The default
+              values should usually be adequate.)  The special string value
+              ddeeffaauulltt switches settings back to their default kernel values
+              and removes them from the list of settings stored in LVM meta-
+              data.  See llvvmmccaacchhee(7) for more information.
+
+       ----ccoommmmaannddpprrooffiillee _S_t_r_i_n_g
+              The command profile to use for command configuration.  See
+              llvvmm..ccoonnff(5) for more information about profiles.
+
+       ----ccoommpprreessssiioonn yy|nn
+              Controls whether compression is enabled or disable for VDO vol-
+              ume.  See llvvmmvvddoo(7) for more information about VDO usage.
+
+       ----ccoonnffiigg _S_t_r_i_n_g
+              Config settings for the command. These override lvm.conf set-
+              tings.  The String arg uses the same format as lvm.conf, or may
+              use section/field syntax.  See llvvmm..ccoonnff(5) for more information
+              about config.
+
+       --CC|----ccoonnttiigguuoouuss yy|nn
+              Sets or resets the contiguous allocation policy for LVs.  De-
+              fault is no contiguous allocation based on a next free princi-
+              ple.  It is only possible to change a non-contiguous allocation
+              policy to contiguous if all of the allocated physical extents in
+              the LV are already contiguous.
+
+       --dd|----ddeebbuugg ...
+              Set debug level. Repeat from 1 to 6 times to increase the detail
+              of messages sent to the log file and/or syslog (if configured).
+
+       ----ddeedduupplliiccaattiioonn yy|nn
+              Controls whether deduplication is enabled or disable for VDO
+              volume.  See llvvmmvvddoo(7) for more information about VDO usage.
+
+       ----ddeellttaagg _T_a_g
+              Deletes a tag from a PV, VG or LV. This option can be repeated
+              to delete multiple tags at once. See llvvmm(8) for information
+              about tags.
+
+       ----ddeettaacchhpprrooffiillee
+              Detaches a metadata profile from a VG or LV.  See llvvmm..ccoonnff(5)
+              for more information about profiles.
+
+       ----ddiissccaarrddss ppaassssddoowwnn|nnooppaassssddoowwnn|iiggnnoorree
+              Specifies how the device-mapper thin pool layer in the kernel
+              should handle discards.  iiggnnoorree causes the thin pool to ignore
+              discards.  nnooppaassssddoowwnn causes the thin pool to process discards
+              itself to allow reuse of unneeded extents in the thin pool.
+              ppaassssddoowwnn causes the thin pool to process discards itself (like
+              nopassdown) and pass the discards to the underlying device.  See
+              llvvmmtthhiinn(7) for more information.
+
+       ----ddrriivveerrllooaaddeedd yy|nn
+              If set to no, the command will not attempt to use device-mapper.
+              For testing and debugging.
+
+       ----eerrrroorrwwhheennffuullll yy|nn
+              Specifies thin pool behavior when data space is exhausted.  When
+              yes, device-mapper will immediately return an error when a thin
+              pool is full and an I/O request requires space.  When no, de-
+              vice-mapper will queue these I/O requests for a period of time
+              to allow the thin pool to be extended.  Errors are returned if
+              no space is available after the timeout.  (Also see dm-thin-pool
+              kernel module option no_space_timeout.)  See llvvmmtthhiinn(7) for more
+              information.
+
+       --ff|----ffoorrccee ...
+              Override various checks, confirmations and protections.  Use
+              with extreme caution.
+
+       --hh|----hheellpp
+              Display help text.
+
+       --KK|----iiggnnoorreeaaccttiivvaattiioonnsskkiipp
+              Ignore the "activation skip" LV flag during activation to allow
+              LVs with the flag set to be activated.
+
+       ----iiggnnoorreelloocckkiinnggffaaiilluurree
+              Allows a command to continue with read-only metadata operations
+              after locking failures.
+
+       ----iiggnnoorreemmoonniittoorriinngg
+              Do not interact with dmeventd unless --monitor is specified.  Do
+              not use this if dmeventd is already monitoring a device.
+
+       ----lloocckkoopptt _S_t_r_i_n_g
+              Used to pass options for special cases to lvmlockd.  See llvvmm--
+              lloocckkdd(8) for more information.
+
+       ----lloonngghheellpp
+              Display long help text.
+
+       --jj|----mmaajjoorr _N_u_m_b_e_r
+              Sets the major number of an LV block device.
+
+       ----[[rraaiidd]]mmaaxxrreeccoovveerryyrraattee _S_i_z_e[k|UNIT]
+              Sets the maximum recovery rate for a RAID LV.  The rate value is
+              an amount of data per second for each device in the array.  Set-
+              ting the rate to 0 means it will be unbounded.  See llvvmmrraaiidd(7)
+              for more information.
+
+       ----mmeettaaddaattaapprrooffiillee _S_t_r_i_n_g
+              The metadata profile to use for command configuration.  See
+              llvvmm..ccoonnff(5) for more information about profiles.
+
+       ----mmiinnoorr _N_u_m_b_e_r
+              Sets the minor number of an LV block device.
+
+       ----[[rraaiidd]]mmiinnrreeccoovveerryyrraattee _S_i_z_e[k|UNIT]
+              Sets the minimum recovery rate for a RAID LV.  The rate value is
+              an amount of data per second for each device in the array.  Set-
+              ting the rate to 0 means it will be unbounded.  See llvvmmrraaiidd(7)
+              for more information.
+
+       ----mmoonniittoorr yy|nn
+              Start (yes) or stop (no) monitoring an LV with dmeventd.
+              dmeventd monitors kernel events for an LV, and performs auto-
+              mated maintenance for the LV in reponse to specific events.  See
+              ddmmeevveennttdd(8) for more information.
+
+       ----nnoolloocckkiinngg
+              Disable locking.
+
+       ----nnoouuddeevvssyynncc
+              Disables udev synchronisation. The process will not wait for no-
+              tification from udev. It will continue irrespective of any pos-
+              sible udev processing in the background. Only use this if udev
+              is not running or has rules that ignore the devices LVM creates.
+
+       --PP|----ppaarrttiiaall
+              Commands will do their best to activate LVs with missing PV ex-
+              tents.  Missing extents may be replaced with error or zero seg-
+              ments according to the lvm.conf missing_stripe_filler setting.
+              Metadata may not be changed with this option.
+
+       --pp|----ppeerrmmiissssiioonn rrww|rr
+              Set access permission to read only rr or read and write rrww.
+
+       --MM|----ppeerrssiisstteenntt yy|nn
+              When yes, makes the specified minor number persistent.
+
+       ----ppoollll yy|nn
+              When yes, start the background transformation of an LV.  An in-
+              complete transformation, e.g. pvmove or lvconvert interrupted by
+              reboot or crash, can be restarted from the last checkpoint with
+              --poll y.  When no, background transformation of an LV will not
+              occur, and the transformation will not complete. It may not be
+              appropriate to immediately poll an LV after activation, in which
+              case --poll n can be used to defer polling until a later --poll
+              y command.
+
+       ----pprrooffiillee _S_t_r_i_n_g
+              An alias for --commandprofile or --metadataprofile, depending on
+              the command.
+
+       --qq|----qquuiieett ...
+              Suppress output and log messages. Overrides --debug and --ver-
+              bose.  Repeat once to also suppress any prompts with answer
+              'no'.
+
+       --rr|----rreeaaddaahheeaadd aauuttoo|nnoonnee|_N_u_m_b_e_r
+              Sets read ahead sector count of an LV.  aauuttoo is the default
+              which allows the kernel to choose a suitable value automati-
+              cally.  nnoonnee is equivalent to zero.
+
+       ----rreeaaddoonnllyy
+              Run the command in a special read-only mode which will read on-
+              disk metadata without needing to take any locks. This can be
+              used to peek inside metadata used by a virtual machine image
+              while the virtual machine is running. No attempt will be made to
+              communicate with the device-mapper kernel driver, so this option
+              is unable to report whether or not LVs are actually in use.
+
+       ----rreebbuuiilldd _P_V
+              Selects a PV to rebuild in a raid LV. Multiple PVs can be re-
+              built by repeating this option.  Use this option in place of
+              --resync or --syncaction repair when the PVs with corrupted data
+              are known, and their data should be reconstructed rather than
+              reconstructing default (rotating) data.  See llvvmmrraaiidd(7) for more
+              information.
+
+       ----rreeffrreesshh
+              If the LV is active, reload its metadata.  This is not necessary
+              in normal operation, but may be useful if something has gone
+              wrong, or if some form of manual LV sharing is being used.
+
+       ----rreeppoorrttffoorrmmaatt bbaassiicc|jjssoonn
+              Overrides current output format for reports which is defined
+              globally by the report/output_format setting in lvm.conf.  bbaassiicc
+              is the original format with columns and rows.  If there is more
+              than one report per command, each report is prefixed with the
+              report name for identification. jjssoonn produces report output in
+              JSON format. See llvvmmrreeppoorrtt(7) for more information.
+
+       ----rreessyynncc
+              Initiates mirror synchronization. Synchronization generally hap-
+              pens automatically, but this option forces it to run.  Also see
+              --rebuild to synchronize a specific PV.  During synchronization,
+              data is read from the primary mirror device and copied to the
+              others. This can take considerable time, during which the LV is
+              without a complete redundant copy of the data.  See llvvmmrraaiidd(7)
+              for more information.
+
+       --SS|----sseelleecctt _S_t_r_i_n_g
+              Select objects for processing and reporting based on specified
+              criteria.  The criteria syntax is described by ----sseelleecctt hheellpp and
+              llvvmmrreeppoorrtt(7).  For reporting commands, one row is displayed for
+              each object matching the criteria.  See ----ooppttiioonnss hheellpp for se-
+              lectable object fields.  Rows can be displayed with an addi-
+              tional "selected" field (-o selected) showing 1 if the row
+              matches the selection and 0 otherwise.  For non-reporting com-
+              mands which process LVM entities, the selection is used to
+              choose items to process.
+
+       --kk|----sseettaaccttiivvaattiioonnsskkiipp yy|nn
+              Persistently sets (yes) or clears (no) the "activation skip"
+              flag on an LV.  An LV with this flag set is not activated unless
+              the --ignoreactivationskip option is used by the activation com-
+              mand.  This flag is set by default on new thin snapshot LVs.
+              The flag is not applied to deactivation.  The current value of
+              the flag is indicated in the lvs lv_attr bits.
+
+       ----[[rraaiidd]]ssyynnccaaccttiioonn cchheecckk|rreeppaaiirr
+              Initiate different types of RAID synchronization.  This causes
+              the RAID LV to read all data and parity blocks in the array and
+              check for discrepancies (mismatches between mirrors or incorrect
+              parity values).  cchheecckk will count but not correct discrepancies.
+              rreeppaaiirr will correct discrepancies.  See lvs for reporting dis-
+              crepancies found or repaired.
+
+       ----ssyyssiinniitt
+              Indicates that vgchange/lvchange is being invoked from early
+              system initialisation scripts (e.g. rc.sysinit or an initrd),
+              before writable filesystems are available. As such, some func-
+              tionality needs to be disabled and this option acts as a short-
+              cut which selects an appropriate set of options. Currently, this
+              is equivalent to using --ignorelockingfailure, --ignoremonitor-
+              ing, --poll n, and setting env var LVM_SUPPRESS_LOCKING_FAIL-
+              URE_MESSAGES.  vgchange/lvchange skip autoactivation, and defer
+              to pvscan autoactivation.
+
+       --tt|----tteesstt
+              Run in test mode. Commands will not update metadata.  This is
+              implemented by disabling all metadata writing but nevertheless
+              returning success to the calling function. This may lead to un-
+              usual error messages in multi-stage operations if a tool relies
+              on reading back metadata it believes has changed but hasn't.
+
+       --vv|----vveerrbboossee ...
+              Set verbose level. Repeat from 1 to 4 times to increase the de-
+              tail of messages sent to stdout and stderr.
+
+       ----vveerrssiioonn
+              Display version information.
+
+       ----[[rraaiidd]]wwrriitteebbeehhiinndd _N_u_m_b_e_r
+              The maximum number of outstanding writes that are allowed to de-
+              vices in a RAID1 LV that is marked write-mostly.  Once this
+              value is exceeded, writes become synchronous (i.e. all writes to
+              the constituent devices must complete before the array signals
+              the write has completed). Setting the value to zero clears the
+              preference and allows the system to choose the value arbitrar-
+              ily.
+
+       ----[[rraaiidd]]wwrriitteemmoossttllyy _P_V[::tt|nn|yy]
+              Mark a device in a RAID1 LV as write-mostly.  All reads to these
+              drives will be avoided unless absolutely necessary. This keeps
+              the number of I/Os to the drive to a minimum. The default behav-
+              ior is to set the write-mostly attribute for the specified PV.
+              It is also possible to remove the write-mostly flag by adding
+              the suffix ::nn at the end of the PV name, or to toggle the value
+              with the suffix ::tt. Repeat this option to change the attribute
+              on multiple PVs.
+
+       --yy|----yyeess
+              Do not prompt for confirmation interactively but always assume
+              the answer yes. Use with extreme caution.  (For automatic no,
+              see -qq.)
+
+       --ZZ|----zzeerroo yy|nn
+              Set zeroing mode for thin pool. Note: already provisioned blocks
+              from pool in non-zero mode are not cleared in unwritten parts
+              when setting --zero y.
+
+VVAARRIIAABBLLEESS
+       _V_G
+              Volume Group name.  See llvvmm(8) for valid names.
+
+       _L_V
+              Logical Volume name.  See llvvmm(8) for valid names.  An  LV  posi-
+              tional  arg  generally  includes  the  VG name and LV name, e.g.
+              VG/LV.  LV followed by _<type> indicates that an LV of the given
+              type is required. (raid represents raid<N> type)
+
+       _T_a_g
+              Tag  name.  See llvvmm(8) for information about tag names and using
+              tags in place of a VG, LV or PV.
+
+       _S_e_l_e_c_t
+              Select indicates that a required  positional  parameter  can  be
+              omitted  if the ----sseelleecctt option is used.  No arg appears in this
+              position.
+
+       _S_t_r_i_n_g
+              See the option description for information about the string con-
+              tent.
+
+       _S_i_z_e[UNIT]
+              Size  is  an  input number that accepts an optional unit.  Input
+              units are always treated as base two values, regardless of capi-
+              talization,  e.g.  'k'  and 'K' both refer to 1024.  The default
+              input unit is specified by letter, followed by |UNIT.  UNIT rep-
+              resents  other  possible  input units: bbBBssSSkkKKmmMMggGGttTTppPPeeEE.  b|B is
+              bytes, s|S is sectors of 512 bytes, k|K is KiB, m|M is MiB,  g|G
+              is GiB, t|T is TiB, p|P is PiB, e|E is EiB.  (This should not be
+              confused with the output control --units, where capital  letters
+              mean multiple of 1000.)
+
+EENNVVIIRROONNMMEENNTT VVAARRIIAABBLLEESS
+       See  llvvmm(8)  for  information  about environment variables used by lvm.
+       For example, LVM_VG_NAME can generally be substituted for a required VG
+       parameter.
+
+EEXXAAMMPPLLEESS
+       Change LV permission to read-only:
+
+       llvvcchhaannggee --pprr vvgg0000//llvvooll11
+
+SSEEEE AALLSSOO
+       llvvmm(8) llvvmm..ccoonnff(5) llvvmmccoonnffiigg(8)
+
+       ppvvcchhaannggee(8)  ppvvcckk(8)  ppvvccrreeaattee(8)  ppvvddiissppllaayy(8)  ppvvmmoovvee(8)  ppvvrreemmoovvee(8)
+       ppvvrreessiizzee(8) ppvvss(8) ppvvssccaann(8)
+
+       vvggccffggbbaacckkuupp(8) vvggccffggrreessttoorree(8) vvggcchhaannggee(8) vvggcckk(8)  vvggccrreeaattee(8)  vvggccoonn--
+       vveerrtt(8)  vvggddiissppllaayy(8)  vvggeexxppoorrtt(8)  vvggeexxtteenndd(8)  vvggiimmppoorrtt(8)  vvggiimmppoorrtt--
+       cclloonnee(8) vvggmmeerrggee(8) vvggmmkknnooddeess(8)  vvggrreedduuccee(8)  vvggrreemmoovvee(8)  vvggrreennaammee(8)
+       vvggss(8) vvggssccaann(8) vvggsspplliitt(8)
+
+       llvvccrreeaattee(8)  llvvcchhaannggee(8)  llvvccoonnvveerrtt(8)  llvvddiissppllaayy(8)  llvveexxtteenndd(8) llvvrree--
+       dduuccee(8) llvvrreemmoovvee(8) llvvrreennaammee(8) llvvrreessiizzee(8) llvvss(8) llvvssccaann(8)
+
+       llvvmm--ffuullllrreeppoorrtt(8) llvvmm--llvvppoollll(8) llvvmm22--aaccttiivvaattiioonn--ggeenneerraattoorr(8) bbllkkddeeaaccttii--
+       vvaattee(8) llvvmmdduummpp(8)
+
+       ddmmeevveennttdd(8)  llvvmmppoolllldd(8)  llvvmmlloocckkdd(8)  llvvmmlloocckkccttll(8)  ccmmiirrrroorrdd(8) llvvmmdd--
+       bbuussdd(8)
+
+       llvvmmssyysstteemmiidd(7) llvvmmrreeppoorrtt(7) llvvmmrraaiidd(7) llvvmmtthhiinn(7) llvvmmccaacchhee(7)
+
+
+
+Red Hat, Inc.          LVM TOOLS 2.03.11(2) (2021-01-08)           LVCHANGE(8)
+a7f89380301bd182b4d4e9b8a5f0555660b84bd27e95621c6e9c4634b2d36b67

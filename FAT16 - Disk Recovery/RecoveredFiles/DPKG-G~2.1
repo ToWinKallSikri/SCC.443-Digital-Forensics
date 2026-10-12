@@ -1,0 +1,161 @@
+dpkg-genchanges(1)                dpkg suite                dpkg-genchanges(1)
+
+
+
+NNAAMMEE
+       dpkg-genchanges - generate Debian .changes files
+
+SSYYNNOOPPSSIISS
+       ddppkkgg--ggeenncchhaannggeess [_o_p_t_i_o_n...]
+
+DDEESSCCRRIIPPTTIIOONN
+       ddppkkgg--ggeenncchhaannggeess reads information from an unpacked and built Debian
+       source tree and from the files it has generated and generates a Debian
+       upload control file (..cchhaannggeess file).
+
+OOPPTTIIOONNSS
+       ----bbuuiilldd==_t_y_p_e
+           Specifies the build _t_y_p_e from a comma-separated list of components
+           (since dpkg 1.18.5).
+
+           The allowed values are:
+
+           ssoouurrccee
+               Upload the source package.
+
+           aannyy Upload the architecture specific binary packages.
+
+           aallll Upload the architecture independent binary packages.
+
+           bbiinnaarryy
+               Upload the architecture specific and independent binary
+               packages.  This is an alias for aannyy,,aallll.
+
+           ffuullll
+               Upload everything.  This is alias for ssoouurrccee,,aannyy,,aallll, and the
+               same as the default case when no build option is specified.
+
+       --gg  Equivalent to ----bbuuiilldd==ssoouurrccee,,aallll (since dpkg 1.17.11).
+
+       --GG  Equivalent to ----bbuuiilldd==ssoouurrccee,,aannyy (since dpkg 1.17.11).
+
+       --bb  Equivalent to ----bbuuiilldd==bbiinnaarryy or ----bbuuiilldd==aannyy,,aallll.
+
+       --BB  Equivalent to ----bbuuiilldd==aannyy.
+
+       --AA  Equivalent to ----bbuuiilldd==aallll.
+
+       --SS  Equivalent to ----bbuuiilldd==ssoouurrccee.
+
+       The --ss_x options control whether the original source archive is included
+       in the upload if any source is being generated (i.e.  --bb or --BB haven't
+       been used).
+
+       --ssii By default, or if specified, the original source will be included
+           only if the upstream version number (the version without epoch and
+           without Debian revision) differs from the upstream version number
+           of the previous changelog entry.
+
+       --ssaa Forces the inclusion of the original source.
+
+       --ssdd Forces the exclusion of the original source and includes only the
+           diff.
+
+       --vv_v_e_r_s_i_o_n
+           Causes changelog information from all versions strictly later than
+           _v_e_r_s_i_o_n to be used.
+
+       --CC_c_h_a_n_g_e_s_-_d_e_s_c_r_i_p_t_i_o_n
+           Read the description of the changes from the file _c_h_a_n_g_e_s_-
+           _d_e_s_c_r_i_p_t_i_o_n rather than using the information from the source
+           tree's changelog file.
+
+       --mm_m_a_i_n_t_a_i_n_e_r_-_a_d_d_r_e_s_s
+           Use _m_a_i_n_t_a_i_n_e_r_-_a_d_d_r_e_s_s as the name and email address of the
+           maintainer for this package, rather than using the information from
+           the source tree's control file.
+
+       --ee_m_a_i_n_t_a_i_n_e_r_-_a_d_d_r_e_s_s
+           Use _m_a_i_n_t_a_i_n_e_r_-_a_d_d_r_e_s_s as the name and email address of the
+           maintainer for this upload, rather than using the information from
+           the source tree's changelog.
+
+       --VV_n_a_m_e==_v_a_l_u_e
+           Set an output substitution variable.  See ddeebb--ssuubbssttvvaarrss(5) for a
+           discussion of output substitution.
+
+       --TT_s_u_b_s_t_v_a_r_s_-_f_i_l_e
+           Read substitution variables in _s_u_b_s_t_v_a_r_s_-_f_i_l_e; the default is
+           ddeebbiiaann//ssuubbssttvvaarrss.  No variable substitution is done on any of the
+           fields that are output, except for the contents extracted from each
+           binary package DDeessccrriippttiioonn field (since dpkg 1.19.0), however the
+           special variable _F_o_r_m_a_t will override the field of the same name.
+           This option can be used multiple times to read substitution
+           variables from multiple files (since dpkg 1.15.6).
+
+       --DD_f_i_e_l_d==_v_a_l_u_e
+           Override or add an output control file field.
+
+       --UU_f_i_e_l_d
+           Remove an output control file field.
+
+       --cc_c_o_n_t_r_o_l_f_i_l_e
+           Specifies the main source control file to read information from.
+           The default is ddeebbiiaann//ccoonnttrrooll.
+
+       --ll_c_h_a_n_g_e_l_o_g_-_f_i_l_e
+           Specifies the changelog file to read information from. The default
+           is ddeebbiiaann//cchhaannggeelloogg.
+
+       --ff_f_i_l_e_s_-_l_i_s_t_-_f_i_l_e
+           Read the list of files to be uploaded here, rather than using
+           ddeebbiiaann//ffiilleess.
+
+       --FF_c_h_a_n_g_e_l_o_g_-_f_o_r_m_a_t
+           Specifies the format of the changelog. See ddppkkgg--ppaarrsseecchhaannggeelloogg(1)
+           for information about alternative formats.
+
+       --uu_u_p_l_o_a_d_-_f_i_l_e_s_-_d_i_r
+           Look for the files to be uploaded in _u_p_l_o_a_d_-_f_i_l_e_s_-_d_i_r rather than
+           ....  (ddppkkgg--ggeenncchhaannggeess needs to find these files so that it can
+           include their sizes and checksums in the ..cchhaannggeess file).
+
+       --qq  Usually ddppkkgg--ggeenncchhaannggeess will produce informative messages on
+           standard error, for example about how many of the package's source
+           files are being uploaded.  --qq suppresses these messages.
+
+       --OO[_f_i_l_e_n_a_m_e]
+           Print the changes file to standard output (the default) or to
+           _f_i_l_e_n_a_m_e if specified (since dpkg 1.18.5).
+
+       --??, ----hheellpp
+           Show the usage message and exit.
+
+       ----vveerrssiioonn
+           Show the version and exit.
+
+EENNVVIIRROONNMMEENNTT
+       DDPPKKGG__CCOOLLOORRSS
+           Sets the color mode (since dpkg 1.18.5).  The currently accepted
+           values are: aauuttoo (default), aallwwaayyss and nneevveerr.
+
+       DDPPKKGG__NNLLSS
+           If set, it will be used to decide whether to activate Native
+           Language Support, also known as internationalization (or i18n)
+           support (since dpkg 1.19.0).  The accepted values are: 00 and 11
+           (default).
+
+FFIILLEESS
+       ddeebbiiaann//ffiilleess
+           The list of generated files which are part of the upload being
+           prepared.  ddppkkgg--ggeenncchhaannggeess reads the data here when producing a
+           ..cchhaannggeess file.
+
+SSEEEE AALLSSOO
+       ddeebb--ssuubbssttvvaarrss(5), ddeebb--ssrrcc--ccoonnttrrooll(5), ddeebb--ssrrcc--ffiilleess(5), ddeebb--
+       cchhaannggeelloogg(5), ddeebb--cchhaannggeess(5).
+
+
+
+1.21.1                            2022-05-25                dpkg-genchanges(1)
+5bd24b21a6b21c51dafa023562c2ee73cf2022015b16eb16e344aa9be5e82d52

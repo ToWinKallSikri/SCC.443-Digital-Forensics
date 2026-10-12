@@ -1,0 +1,395 @@
+LVEXTEND(8)                 System Manager's Manual                LVEXTEND(8)
+
+
+
+NNAAMMEE
+       lvextend - Add space to a logical volume
+
+SSYYNNOOPPSSIISS
+       llvveexxtteenndd _o_p_t_i_o_n___a_r_g_s _p_o_s_i_t_i_o_n___a_r_g_s
+           [ _o_p_t_i_o_n___a_r_g_s ]
+           [ _p_o_s_i_t_i_o_n___a_r_g_s ]
+
+           ----aalllloocc ccoonnttiigguuoouuss|cclliinngg|cclliinngg__bbyy__ttaaggss|nnoorrmmaall|aannyywwhheerree|iinnhheerriitt
+        --AA|----aauuttoobbaacckkuupp yy|nn
+           ----ccoommmmaannddpprrooffiillee _S_t_r_i_n_g
+           ----ccoonnffiigg _S_t_r_i_n_g
+        --dd|----ddeebbuugg
+           ----ddrriivveerrllooaaddeedd yy|nn
+        --ll|----eexxtteennttss [++]_N_u_m_b_e_r[PERCENT]
+        --ff|----ffoorrccee
+        --hh|----hheellpp
+           ----lloocckkoopptt _S_t_r_i_n_g
+           ----lloonngghheellpp
+        --mm|----mmiirrrroorrss _N_u_m_b_e_r
+        --nn|----nnooffsscckk
+           ----nnoolloocckkiinngg
+           ----nnoossyynncc
+           ----nnoouuddeevvssyynncc
+           ----ppoooollmmeettaaddaattaassiizzee [++]_S_i_z_e[m|UNIT]
+           ----pprrooffiillee _S_t_r_i_n_g
+        --qq|----qquuiieett
+           ----rreeppoorrttffoorrmmaatt bbaassiicc|jjssoonn
+        --rr|----rreessiizzeeffss
+        --LL|----ssiizzee [++]_S_i_z_e[m|UNIT]
+        --ii|----ssttrriippeess _N_u_m_b_e_r
+        --II|----ssttrriippeessiizzee _S_i_z_e[k|UNIT]
+        --tt|----tteesstt
+           ----ttyyppee lliinneeaarr|ssttrriippeedd|ssnnaappsshhoott|mmiirr--
+       rroorr|rraaiidd|tthhiinn|ccaacchhee|vvddoo|tthhiinn--ppooooll|ccaacchhee--ppooooll|vvddoo--ppooooll
+           ----uusseeppoolliicciieess
+        --vv|----vveerrbboossee
+           ----vveerrssiioonn
+        --yy|----yyeess
+
+DDEESSCCRRIIPPTTIIOONN
+       lvextend extends the size of an LV. This  requires  allocating  logical
+       extents  from  the  VG's free physical extents. If the extension adds a
+       new LV segment, the new segment will use the existing segment  type  of
+       the LV.
+
+       Extending a copy-on-write snapshot LV adds space for COW blocks.
+
+       Use  llvvccoonnvveerrtt(8) to change the number of data images in a RAID or mir-
+       rored LV.
+
+       In the usage section below, ----ssiizzee _S_i_z_e can be replaced with  ----eexxtteennttss
+       _N_u_m_b_e_r.  See both descriptions the options section.
+
+UUSSAAGGEE
+       Extend an LV by a specified size.
+
+       llvveexxtteenndd --LL|----ssiizzee [++]_S_i_z_e[m|UNIT] _L_V
+           [ --ll|----eexxtteennttss [++]_N_u_m_b_e_r[PERCENT] ]
+           [ --rr|----rreessiizzeeffss ]
+           [ --ii|----ssttrriippeess _N_u_m_b_e_r ]
+           [ --II|----ssttrriippeessiizzee _S_i_z_e[k|UNIT] ]
+           [    ----ppoooollmmeettaaddaattaassiizzee [++]_S_i_z_e[m|UNIT] ]
+           [ COMMON_OPTIONS ]
+           [ _P_V ... ]
+       -
+
+       Extend an LV by specified PV extents.
+
+       llvveexxtteenndd _L_V _P_V ...
+           [ --rr|----rreessiizzeeffss ]
+           [ --ii|----ssttrriippeess _N_u_m_b_e_r ]
+           [ --II|----ssttrriippeessiizzee _S_i_z_e[k|UNIT] ]
+           [ COMMON_OPTIONS ]
+       -
+
+       Extend a pool metadata SubLV by a specified size.
+
+       llvveexxtteenndd ----ppoooollmmeettaaddaattaassiizzee [++]_S_i_z_e[m|UNIT] _L_V___t_h_i_n_p_o_o_l
+           [ --ii|----ssttrriippeess _N_u_m_b_e_r ]
+           [ --II|----ssttrriippeessiizzee _S_i_z_e[k|UNIT] ]
+           [ COMMON_OPTIONS ]
+           [ _P_V ... ]
+       -
+
+       Extend an LV according to a predefined policy.
+
+       llvveexxtteenndd ----uusseeppoolliicciieess _L_V___s_n_a_p_s_h_o_t___t_h_i_n_p_o_o_l
+           [ --rr|----rreessiizzeeffss ]
+           [ COMMON_OPTIONS ]
+           [ _P_V ... ]
+       -
+
+       Common options for command:
+           [ --AA|----aauuttoobbaacckkuupp yy|nn ]
+           [ --ff|----ffoorrccee ]
+           [ --mm|----mmiirrrroorrss _N_u_m_b_e_r ]
+           [ --nn|----nnooffsscckk ]
+           [    ----aalllloocc ccoonnttiigguuoouuss|cclliinngg|cclliinngg__bbyy__ttaaggss|nnoorrmmaall|aannyywwhheerree|iinnhheerriitt
+           ]
+           [    ----nnoossyynncc ]
+           [    ----nnoouuddeevvssyynncc ]
+           [    ----rreeppoorrttffoorrmmaatt bbaassiicc|jjssoonn ]
+           [    ----ttyyppee lliinneeaarr|ssttrriippeedd|ssnnaappsshhoott|mmiirr--
+           rroorr|rraaiidd|tthhiinn|ccaacchhee|vvddoo|tthhiinn--ppooooll|ccaacchhee--ppooooll|vvddoo--ppooooll ]
+
+       Common options for lvm:
+           [ --dd|----ddeebbuugg ]
+           [ --hh|----hheellpp ]
+           [ --qq|----qquuiieett ]
+           [ --tt|----tteesstt ]
+           [ --vv|----vveerrbboossee ]
+           [ --yy|----yyeess ]
+           [    ----ccoommmmaannddpprrooffiillee _S_t_r_i_n_g ]
+           [    ----ccoonnffiigg _S_t_r_i_n_g ]
+           [    ----ddrriivveerrllooaaddeedd yy|nn ]
+           [    ----lloocckkoopptt _S_t_r_i_n_g ]
+           [    ----lloonngghheellpp ]
+           [    ----nnoolloocckkiinngg ]
+           [    ----pprrooffiillee _S_t_r_i_n_g ]
+           [    ----vveerrssiioonn ]
+
+OOPPTTIIOONNSS
+       ----aalllloocc ccoonnttiigguuoouuss|cclliinngg|cclliinngg__bbyy__ttaaggss|nnoorrmmaall|aannyywwhheerree|iinnhheerriitt
+              Determines the allocation policy when a command needs to allo-
+              cate Physical Extents (PEs) from the VG. Each VG and LV has an
+              allocation policy which can be changed with vgchange/lvchange,
+              or overriden on the command line.  nnoorrmmaall applies common sense
+              rules such as not placing parallel stripes on the same PV.  iinn--
+              hheerriitt applies the VG policy to an LV.  ccoonnttiigguuoouuss requires new
+              PEs be placed adjacent to existing PEs.  cclliinngg places new PEs on
+              the same PV as existing PEs in the same stripe of the LV.  If
+              there are sufficient PEs for an allocation, but normal does not
+              use them, aannyywwhheerree will use them even if it reduces performance,
+              e.g. by placing two stripes on the same PV.  Optional positional
+              PV args on the command line can also be used to limit which PVs
+              the command will use for allocation.  See llvvmm(8) for more infor-
+              mation about allocation.
+
+       --AA|----aauuttoobbaacckkuupp yy|nn
+              Specifies if metadata should be backed up automatically after a
+              change.  Enabling this is strongly advised! See vvggccffggbbaacckkuupp(8)
+              for more information.
+
+       ----ccoommmmaannddpprrooffiillee _S_t_r_i_n_g
+              The command profile to use for command configuration.  See
+              llvvmm..ccoonnff(5) for more information about profiles.
+
+       ----ccoonnffiigg _S_t_r_i_n_g
+              Config settings for the command. These override lvm.conf set-
+              tings.  The String arg uses the same format as lvm.conf, or may
+              use section/field syntax.  See llvvmm..ccoonnff(5) for more information
+              about config.
+
+       --dd|----ddeebbuugg ...
+              Set debug level. Repeat from 1 to 6 times to increase the detail
+              of messages sent to the log file and/or syslog (if configured).
+
+       ----ddrriivveerrllooaaddeedd yy|nn
+              If set to no, the command will not attempt to use device-mapper.
+              For testing and debugging.
+
+       --ll|----eexxtteennttss [++]_N_u_m_b_e_r[PERCENT]
+              Specifies the new size of the LV in logical extents.  The --size
+              and --extents options are alternate methods of specifying size.
+              The total number of physical extents used will be greater when
+              redundant data is needed for RAID levels.  An alternate syntax
+              allows the size to be determined indirectly as a percentage of
+              the size of a related VG, LV, or set of PVs. The suffix %%VVGG de-
+              notes the total size of the VG, the suffix %%FFRREEEE the remaining
+              free space in the VG, and the suffix %%PPVVSS the free space in the
+              specified PVs.  For a snapshot, the size can be expressed as a
+              percentage of the total size of the origin LV with the suffix
+              %%OORRIIGGIINN (110000%%OORRIIGGIINN provides space for the whole origin).  When
+              expressed as a percentage, the size defines an upper limit for
+              the number of logical extents in the new LV. The precise number
+              of logical extents in the new LV is not determined until the
+              command has completed.  When the plus ++ or minus -- prefix is
+              used, the value is not an absolute size, but is relative and
+              added or subtracted from the current size.
+
+       --ff|----ffoorrccee ...
+              Override various checks, confirmations and protections.  Use
+              with extreme caution.
+
+       --hh|----hheellpp
+              Display help text.
+
+       ----lloocckkoopptt _S_t_r_i_n_g
+              Used to pass options for special cases to lvmlockd.  See llvvmm--
+              lloocckkdd(8) for more information.
+
+       ----lloonngghheellpp
+              Display long help text.
+
+       --mm|----mmiirrrroorrss _N_u_m_b_e_r
+              Not used.
+
+       --nn|----nnooffsscckk
+              Do not perform fsck before resizing filesystem when filesystem
+              requires it. You may need to use --force to proceed with this
+              option.
+
+       ----nnoolloocckkiinngg
+              Disable locking.
+
+       ----nnoossyynncc
+              Causes the creation of mirror, raid1, raid4, raid5 and raid10 to
+              skip the initial synchronization. In case of mirror, raid1 and
+              raid10, any data written afterwards will be mirrored, but the
+              original contents will not be copied. In case of raid4 and
+              raid5, no parity blocks will be written, though any data written
+              afterwards will cause parity blocks to be stored.  This is use-
+              ful for skipping a potentially long and resource intensive ini-
+              tial sync of an empty mirror/raid1/raid4/raid5 and raid10 LV.
+              This option is not valid for raid6, because raid6 relies on
+              proper parity (P and Q Syndromes) being created during initial
+              synchronization in order to reconstruct proper user date in case
+              of device failures.  raid0 and raid0_meta do not provide any
+              data copies or parity support and thus do not support initial
+              synchronization.
+
+       ----nnoouuddeevvssyynncc
+              Disables udev synchronisation. The process will not wait for no-
+              tification from udev. It will continue irrespective of any pos-
+              sible udev processing in the background. Only use this if udev
+              is not running or has rules that ignore the devices LVM creates.
+
+       ----ppoooollmmeettaaddaattaassiizzee [++]_S_i_z_e[m|UNIT]
+              Specifies the new size of the pool metadata LV.  The plus prefix
+              ++ can be used, in which case the value is added to the current
+              size.
+
+       ----pprrooffiillee _S_t_r_i_n_g
+              An alias for --commandprofile or --metadataprofile, depending on
+              the command.
+
+       --qq|----qquuiieett ...
+              Suppress output and log messages. Overrides --debug and --ver-
+              bose.  Repeat once to also suppress any prompts with answer
+              'no'.
+
+       ----rreeppoorrttffoorrmmaatt bbaassiicc|jjssoonn
+              Overrides current output format for reports which is defined
+              globally by the report/output_format setting in lvm.conf.  bbaassiicc
+              is the original format with columns and rows.  If there is more
+              than one report per command, each report is prefixed with the
+              report name for identification. jjssoonn produces report output in
+              JSON format. See llvvmmrreeppoorrtt(7) for more information.
+
+       --rr|----rreessiizzeeffss
+              Resize underlying filesystem together with the LV using
+              fsadm(8).
+
+       --LL|----ssiizzee [++]_S_i_z_e[m|UNIT]
+              Specifies the new size of the LV.  The --size and --extents op-
+              tions are alternate methods of specifying size.  The total num-
+              ber of physical extents used will be greater when redundant data
+              is needed for RAID levels.  When the plus ++ or minus -- prefix is
+              used, the value is not an absolute size, but is relative and
+              added or subtracted from the current size.
+
+       --ii|----ssttrriippeess _N_u_m_b_e_r
+              Specifies the number of stripes in a striped LV. This is the
+              number of PVs (devices) that a striped LV is spread across. Data
+              that appears sequential in the LV is spread across multiple de-
+              vices in units of the stripe size (see --stripesize). This does
+              not change existing allocated space, but only applies to space
+              being allocated by the command.  When creating a RAID 4/5/6 LV,
+              this number does not include the extra devices that are required
+              for parity. The largest number depends on the RAID type (raid0:
+              64, raid10: 32, raid4/5: 63, raid6: 62), and when unspecified,
+              the default depends on the RAID type (raid0: 2, raid10: 2,
+              raid4/5: 3, raid6: 5.)  To stripe a new raid LV across all PVs
+              by default, see lvm.conf allocation/raid_stripe_all_devices.
+
+       --II|----ssttrriippeessiizzee _S_i_z_e[k|UNIT]
+              The amount of data that is written to one device before moving
+              to the next in a striped LV.
+
+       --tt|----tteesstt
+              Run in test mode. Commands will not update metadata.  This is
+              implemented by disabling all metadata writing but nevertheless
+              returning success to the calling function. This may lead to un-
+              usual error messages in multi-stage operations if a tool relies
+              on reading back metadata it believes has changed but hasn't.
+
+       ----ttyyppee lliinneeaarr|ssttrriippeedd|ssnnaappsshhoott|mmiirr--
+              rroorr|rraaiidd|tthhiinn|ccaacchhee|vvddoo|tthhiinn--ppooooll|ccaacchhee--ppooooll|vvddoo--ppooooll
+              The LV type, also known as "segment type" or "segtype".  See us-
+              age descriptions for the specific ways to use these types.  For
+              more information about redundancy and performance (rraaiidd<N>, mmiirr--
+              rroorr, ssttrriippeedd, lliinneeaarr) see llvvmmrraaiidd(7).  For thin provisioning
+              (tthhiinn, tthhiinn--ppooooll) see llvvmmtthhiinn(7).  For performance caching
+              (ccaacchhee, ccaacchhee--ppooooll) see llvvmmccaacchhee(7).  For copy-on-write snap-
+              shots (ssnnaappsshhoott) see usage definitions.  For VDO (vvddoo) see
+              llvvmmvvddoo(7).  Several commands omit an explicit type option be-
+              cause the type is inferred from other options or shortcuts (e.g.
+              --stripes, --mirrors, --snapshot, --virtualsize, --thin,
+              --cache, --vdo).  Use inferred types with care because it can
+              lead to unexpected results.
+
+       ----uusseeppoolliicciieess
+              Perform an operation according to the policy configured in
+              lvm.conf or a profile.
+
+       --vv|----vveerrbboossee ...
+              Set verbose level. Repeat from 1 to 4 times to increase the de-
+              tail of messages sent to stdout and stderr.
+
+       ----vveerrssiioonn
+              Display version information.
+
+       --yy|----yyeess
+              Do not prompt for confirmation interactively but always assume
+              the answer yes. Use with extreme caution.  (For automatic no,
+              see -qq.)
+
+VVAARRIIAABBLLEESS
+       _L_V
+              Logical Volume name.  See llvvmm(8) for valid names.  An  LV  posi-
+              tional  arg  generally  includes  the  VG name and LV name, e.g.
+              VG/LV.  LV followed by _<type> indicates that an LV of the given
+              type is required. (raid represents raid<N> type)
+
+       _P_V
+              Physical  Volume  name,  a device path under /dev.  For commands
+              managing physical extents, a PV positional arg generally accepts
+              a suffix indicating a range (or multiple ranges) of physical ex-
+              tents (PEs). When the first PE is omitted, it  defaults  to  the
+              start of the device, and when the last PE is omitted it defaults
+              to end.  Start and end range (inclusive):  _P_V[::_P_E--_P_E]...   Start
+              and length range (counting from 0): _P_V[::_P_E++_P_E]...
+
+       _S_t_r_i_n_g
+              See the option description for information about the string con-
+              tent.
+
+       _S_i_z_e[UNIT]
+              Size is an input number that accepts an  optional  unit.   Input
+              units are always treated as base two values, regardless of capi-
+              talization, e.g. 'k' and 'K' both refer to  1024.   The  default
+              input unit is specified by letter, followed by |UNIT.  UNIT rep-
+              resents other possible input units:  bbBBssSSkkKKmmMMggGGttTTppPPeeEE.   b|B  is
+              bytes,  s|S is sectors of 512 bytes, k|K is KiB, m|M is MiB, g|G
+              is GiB, t|T is TiB, p|P is PiB, e|E is EiB.  (This should not be
+              confused  with the output control --units, where capital letters
+              mean multiple of 1000.)
+
+EENNVVIIRROONNMMEENNTT VVAARRIIAABBLLEESS
+       See llvvmm(8) for information about environment  variables  used  by  lvm.
+       For example, LVM_VG_NAME can generally be substituted for a required VG
+       parameter.
+
+EEXXAAMMPPLLEESS
+       Extend the size of an LV by 54MiB, using a specific PV.
+       llvveexxtteenndd --LL ++5544 vvgg0011//llvvooll1100 //ddeevv//ssddkk33
+
+       Extend the size of an LV by the amount of free space on  PV  /dev/sdk3.
+       This is equivalent to specifying "-l +100%PVS" on the command line.
+       llvveexxtteenndd vvgg0011//llvvooll0011 //ddeevv//ssddkk33
+
+       Extend an LV by 16MiB using specific physical extents.
+       llvveexxtteenndd --LL++1166mm vvgg0011//llvvooll0011 //ddeevv//ssddaa::88--99 //ddeevv//ssddbb::88--99
+
+SSEEEE AALLSSOO
+       llvvmm(8) llvvmm..ccoonnff(5) llvvmmccoonnffiigg(8)
+
+       ppvvcchhaannggee(8)  ppvvcckk(8)  ppvvccrreeaattee(8)  ppvvddiissppllaayy(8)  ppvvmmoovvee(8)  ppvvrreemmoovvee(8)
+       ppvvrreessiizzee(8) ppvvss(8) ppvvssccaann(8)
+
+       vvggccffggbbaacckkuupp(8) vvggccffggrreessttoorree(8) vvggcchhaannggee(8) vvggcckk(8)  vvggccrreeaattee(8)  vvggccoonn--
+       vveerrtt(8)  vvggddiissppllaayy(8)  vvggeexxppoorrtt(8)  vvggeexxtteenndd(8)  vvggiimmppoorrtt(8)  vvggiimmppoorrtt--
+       cclloonnee(8) vvggmmeerrggee(8) vvggmmkknnooddeess(8)  vvggrreedduuccee(8)  vvggrreemmoovvee(8)  vvggrreennaammee(8)
+       vvggss(8) vvggssccaann(8) vvggsspplliitt(8)
+
+       llvvccrreeaattee(8)  llvvcchhaannggee(8)  llvvccoonnvveerrtt(8)  llvvddiissppllaayy(8)  llvveexxtteenndd(8) llvvrree--
+       dduuccee(8) llvvrreemmoovvee(8) llvvrreennaammee(8) llvvrreessiizzee(8) llvvss(8) llvvssccaann(8)
+
+       llvvmm--ffuullllrreeppoorrtt(8) llvvmm--llvvppoollll(8) llvvmm22--aaccttiivvaattiioonn--ggeenneerraattoorr(8) bbllkkddeeaaccttii--
+       vvaattee(8) llvvmmdduummpp(8)
+
+       ddmmeevveennttdd(8)  llvvmmppoolllldd(8)  llvvmmlloocckkdd(8)  llvvmmlloocckkccttll(8)  ccmmiirrrroorrdd(8) llvvmmdd--
+       bbuussdd(8)
+
+       llvvmmssyysstteemmiidd(7) llvvmmrreeppoorrtt(7) llvvmmrraaiidd(7) llvvmmtthhiinn(7) llvvmmccaacchhee(7)
+
+
+
+Red Hat, Inc.          LVM TOOLS 2.03.11(2) (2021-01-08)           LVEXTEND(8)
+7209269cdbadbcf0c3f3e33a9acf5f8c083e7b872372ba25bd3caf8be4b7a105

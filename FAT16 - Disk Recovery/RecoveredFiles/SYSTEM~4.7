@@ -1,0 +1,142 @@
+SYSTEMD.ENVIRONMENT-GENERAsTyOsRt(e7m)d.environment-geSnYeSrTaEtMoDr.ENVIRONMENT-GENERATOR(7)
+
+
+
+NNAAMMEE
+       systemd.environment-generator - systemd environment file generators
+
+SSYYNNOOPPSSIISS
+       //lliibb//ssyysstteemmdd//ssyysstteemm--eennvviirroonnmmeenntt--ggeenneerraattoorrss//ssoommee--ggeenneerraattoorr
+
+       //uussrr//lliibb//ssyysstteemmdd//uusseerr--eennvviirroonnmmeenntt--ggeenneerraattoorrss//ssoommee--ggeenneerraattoorr
+
+       /run/systemd/system-environment-generators/*
+       /etc/systemd/system-environment-generators/*
+       /usr/local/lib/systemd/system-environment-generators/*
+       /lib/systemd/system-environment-generators/*
+
+       /run/systemd/user-environment-generators/*
+       /etc/systemd/user-environment-generators/*
+       /usr/local/lib/systemd/user-environment-generators/*
+       /usr/lib/systemd/user-environment-generators/*
+
+
+DDEESSCCRRIIPPTTIIOONN
+       Generators are small executables that live in
+       /lib/systemd/system-environment-generators/ and other directories
+       listed above.  ssyysstteemmdd(1) will execute those binaries very early at the
+       startup of each manager and at configuration reload time, before
+       running the generators described in ssyysstteemmdd..ggeenneerraattoorr(7) and before
+       starting any units. Environment generators can override the environment
+       that the manager exports to services and other processes.
+
+       Generators are loaded from a set of paths determined during
+       compilation, as listed above. System and user environment generators
+       are loaded from directories with names ending in
+       system-environment-generators/ and user-environment-generators/,
+       respectively. Generators found in directories listed earlier override
+       the ones with the same name in directories lower in the list. A symlink
+       to /dev/null or an empty file can be used to mask a generator, thereby
+       preventing it from running. Please note that the order of the two
+       directories with the highest priority is reversed with respect to the
+       unit load path, and generators in /run/ overwrite those in /etc/.
+
+       After installing new generators or updating the configuration,
+       ssyysstteemmccttll ddaaeemmoonn--rreellooaadd may be executed. This will re-run all
+       generators, updating environment configuration. It will be used for any
+       services that are started subsequently.
+
+       Environment file generators are executed similarly to unit file
+       generators described in ssyysstteemmdd..ggeenneerraattoorr(7), with the following
+       differences:
+
+       +o   Generators are executed sequentially in the alphanumerical order of
+           the final component of their name. The output of each generator
+           output is immediately parsed and used to update the environment for
+           generators that run after that. Thus, later generators can use
+           and/or modify the output of earlier generators.
+
+       +o   Generators are run by every manager instance, their output can be
+           different for each user.
+
+       It is recommended to use numerical prefixes for generator names to
+       simplify ordering.
+
+EEXXAAMMPPLLEESS
+       EExxaammppllee 11.. AA ssiimmppllee ggeenneerraattoorr tthhaatt eexxtteennddss aann eennvviirroonnmmeenntt vvaarriiaabbllee iiff aa
+       ddiirreeccttoorryy eexxiissttss iinn tthhee ffiillee ssyysstteemm
+
+           # 50-xdg-data-dirs.sh
+
+           #!/bin/bash
+
+           # set the default value
+           XDG_DATA_DIRS="${XDG_DATA_DIRS:-/usr/local/share/:/usr/share}"
+
+           # add a directory if it exists
+           if [[ -d /opt/foo/share ]]; then
+               XDG_DATA_DIRS="/opt/foo/share:${XDG_DATA_DIRS}"
+           fi
+
+           # write our output
+           echo "XDG_DATA_DIRS=${XDG_DATA_DIRS}"
+
+       EExxaammppllee 22.. AA mmoorree ccoommpplliiccaatteedd ggeenneerraattoorr wwhhiicchh rreeaaddss eexxiissttiinngg
+       ccoonnffiigguurraattiioonn aanndd mmuuttaatteess oonnee vvaarriiaabbllee
+
+           # 90-rearrange-path.py
+
+           #!/usr/bin/env python3
+
+           """
+
+           Proof-of-concept systemd environment generator that makes sure that bin dirs
+           are always after matching sbin dirs in the path.
+           (Changes /sbin:/bin:/foo/bar to /bin:/sbin:/foo/bar.)
+
+           This generator shows how to override the configuration possibly created by
+           earlier generators. It would be easier to write in bash, but let's have it
+           in Python just to prove that we can, and to serve as a template for more
+           interesting generators.
+
+           """
+
+           import os
+           import pathlib
+
+           def rearrange_bin_sbin(path):
+               """Make sure any pair of .../bin, .../sbin directories is in this order
+
+               >>> rearrange_bin_sbin('/bin:/sbin:/usr/sbin:/usr/bin')
+               '/bin:/sbin:/usr/bin:/usr/sbin'
+               """
+               items = [pathlib.Path(p) for p in path.split(':')]
+               for i in range(len(items)):
+                   if 'sbin' in items[i].parts:
+                       ind = items[i].parts.index('sbin')
+                       bin = pathlib.Path(*items[i].parts[:ind], 'bin', *items[i].parts[ind+1:])
+                       if bin in items[i+1:]:
+                           j = i + 1 + items[i+1:].index(bin)
+                           items[i], items[j] = items[j], items[i]
+               return ':'.join(p.as_posix() for p in items)
+
+           if __name__ == '__main__':
+               path = os.environ['PATH'] # This should be always set.
+                                         # If it's not, we'll just crash, which is OK too.
+               new = rearrange_bin_sbin(path)
+               if new != path:
+                   print('PATH={}'.format(new))
+
+       EExxaammppllee 33.. DDeebbuuggggiinngg aa ggeenneerraattoorr
+
+           SYSTEMD_LOG_LEVEL=debug VAR_A=something VAR_B="something else" \
+           /lib/systemd/system-environment-generators/path-to-generator
+
+SSEEEE AALLSSOO
+       ssyysstteemmdd--eennvviirroonnmmeenntt--dd--ggeenneerraattoorr(8), ssyysstteemmdd..ggeenneerraattoorr(7), ssyysstteemmdd(1),
+       ssyysstteemmccttll(1)
+
+
+
+systemd 249                                   SYSTEMD.ENVIRONMENT-GENERATOR(7)
+7c31401737d1f879374cc3f691ab785696bb2c84c016c41b5082af434a40a74a

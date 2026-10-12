@@ -1,0 +1,136 @@
+dpkg-gencontrol(1)                dpkg suite                dpkg-gencontrol(1)
+
+
+
+NNAAMMEE
+       dpkg-gencontrol - generate Debian control files
+
+SSYYNNOOPPSSIISS
+       ddppkkgg--ggeennccoonnttrrooll [_o_p_t_i_o_n...]
+
+DDEESSCCRRIIPPTTIIOONN
+       ddppkkgg--ggeennccoonnttrrooll reads information from an unpacked Debian source tree
+       and generates a binary package control file (which defaults to
+       debian/tmp/DEBIAN/control); during this process it will simplify the
+       relation fields.
+
+       Thus PPrree--DDeeppeennddss, DDeeppeennddss, RReeccoommmmeennddss and SSuuggggeessttss are simplified in
+       this order by removing dependencies which are known to be true
+       according to the stronger dependencies already parsed. It will also
+       remove any self-dependency (in fact it will remove any dependency which
+       evaluates to true given the current version of the package as
+       installed). Logically it keeps the intersection of multiple
+       dependencies on the same package. The order of dependencies is
+       preserved as best as possible: if any dependency must be discarded due
+       to another dependency appearing further in the field, the superseding
+       dependency will take the place of the discarded one.
+
+       The other relation fields (EEnnhhaanncceess, CCoonnfflliiccttss, BBrreeaakkss, RReeppllaacceess and
+       PPrroovviiddeess) are also simplified individually by computing the union of
+       the various dependencies when a package is listed multiple times in the
+       field.
+
+       ddppkkgg--ggeennccoonnttrrooll also adds an entry for the binary package to
+       ddeebbiiaann//ffiilleess.
+
+OOPPTTIIOONNSS
+       --vv_v_e_r_s_i_o_n
+           Sets the version number of the binary package which will be
+           generated.
+
+       --VV_n_a_m_e==_v_a_l_u_e
+           Set an output substitution variable. See ddeebb--ssuubbssttvvaarrss(5) for
+           discussion of output substitution.
+
+       --TT_s_u_b_s_t_v_a_r_s_-_f_i_l_e
+           Read substitution variables in _s_u_b_s_t_v_a_r_s_-_f_i_l_e; the default is
+           ddeebbiiaann//ssuubbssttvvaarrss.  This option can be used multiple times to read
+           substitution variables from multiple files (since dpkg 1.15.6).
+
+       --DD_f_i_e_l_d==_v_a_l_u_e
+           Override or add an output control file field.
+
+       --UU_f_i_e_l_d
+           Remove an output control file field.
+
+       --cc_c_o_n_t_r_o_l_-_f_i_l_e
+           Specifies the main source control file to read information from.
+           The default is ddeebbiiaann//ccoonnttrrooll.
+
+       --ll_c_h_a_n_g_e_l_o_g_-_f_i_l_e
+           Specifies the changelog file to read information from. The default
+           is ddeebbiiaann//cchhaannggeelloogg.
+
+       --ff_f_i_l_e_s_-_l_i_s_t_-_f_i_l_e
+           Read or write the list of files to be uploaded here, rather than
+           using ddeebbiiaann//ffiilleess.
+
+       --FF_c_h_a_n_g_e_l_o_g_-_f_o_r_m_a_t
+           Specifies the format of the changelog. See ddppkkgg--ppaarrsseecchhaannggeelloogg(1)
+           for information about alternative formats.
+
+       --pp_p_a_c_k_a_g_e
+           Generate information for the binary package _p_a_c_k_a_g_e.  If the source
+           control file lists only one binary package then this option may be
+           omitted; otherwise it is essential to select which binary package's
+           information to generate.
+
+       --nn_f_i_l_e_n_a_m_e
+           Assume the filename of the package will be _f_i_l_e_n_a_m_e instead of the
+           normal package_version_arch.deb filename.
+
+       --iiss, --iipp, --iisspp
+           These options are ignored for compatibility with older versions of
+           the dpkg build scripts but are now deprecated. Previously they were
+           used to tell ddppkkgg--ggeennccoonnttrrooll to include the Section and Priority
+           fields in the control file. This is now the default behaviour. If
+           you want to get the old behaviour you can use the --UU option to
+           delete the fields from the control file.
+
+       --PP_p_a_c_k_a_g_e_-_b_u_i_l_d_-_d_i_r
+           Scan _p_a_c_k_a_g_e_-_b_u_i_l_d_-_d_i_r instead of ddeebbiiaann//ttmmpp.  This value is used
+           to find the default value of the IInnssttaalllleedd--SSiizzee substitution
+           variable and control file field, and for the default location of
+           the output file.
+
+       --OO[_f_i_l_e_n_a_m_e]
+           Print the control file to standard output (or _f_i_l_e_n_a_m_e if
+           specified, since dpkg 1.17.2), rather than to
+           ddeebbiiaann//ttmmpp//DDEEBBIIAANN//ccoonnttrrooll (or _p_a_c_k_a_g_e_-_b_u_i_l_d_-_d_i_r//DDEEBBIIAANN//ccoonnttrrooll if
+           --PP was used).
+
+       --??, ----hheellpp
+           Show the usage message and exit.
+
+       ----vveerrssiioonn
+           Show the version and exit.
+
+EENNVVIIRROONNMMEENNTT
+       DDPPKKGG__CCOOLLOORRSS
+           Sets the color mode (since dpkg 1.18.5).  The currently accepted
+           values are: aauuttoo (default), aallwwaayyss and nneevveerr.
+
+       DDPPKKGG__NNLLSS
+           If set, it will be used to decide whether to activate Native
+           Language Support, also known as internationalization (or i18n)
+           support (since dpkg 1.19.0).  The accepted values are: 00 and 11
+           (default).
+
+FFIILLEESS
+       ddeebbiiaann//ccoonnttrrooll
+           The main source control information file, giving version-
+           independent information about the source package and the binary
+           packages it can produce.
+
+       ddeebbiiaann//ffiilleess
+           The list of generated files which are part of the upload being
+           prepared.  ddppkkgg--ggeennccoonnttrrooll adds the presumed filenames of binary
+           packages whose control files it generates here.
+
+SSEEEE AALLSSOO
+       ddeebb--ssuubbssttvvaarrss(5), ddeebb--ssrrcc--ccoonnttrrooll(5), ddeebb--cchhaannggeelloogg(5), ddeebb--ccoonnttrrooll(5).
+
+
+
+1.21.1                            2022-05-25                dpkg-gencontrol(1)
+01c409eb039739f1920129e65d2b172f40304cc16a388e65f1f3cade5a120f17

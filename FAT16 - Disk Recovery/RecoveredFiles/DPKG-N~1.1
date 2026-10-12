@@ -1,0 +1,101 @@
+dpkg-name(1)                      dpkg suite                      dpkg-name(1)
+
+
+
+NNAAMMEE
+       dpkg-name - rename Debian packages to full package names
+
+SSYYNNOOPPSSIISS
+       ddppkkgg--nnaammee [_o_p_t_i_o_n...]  [----] _f_i_l_e...
+
+DDEESSCCRRIIPPTTIIOONN
+       This manual page documents the ddppkkgg--nnaammee program which provides an easy
+       way to rename DDeebbiiaann packages into their full package names. A full
+       package name consists of _p_a_c_k_a_g_e___v_e_r_s_i_o_n___a_r_c_h_i_t_e_c_t_u_r_e.._p_a_c_k_a_g_e_-_t_y_p_e as
+       specified in the control file of the package. The _v_e_r_s_i_o_n part of the
+       filename consists of the upstream version information optionally
+       followed by a hyphen and the revision information. The _p_a_c_k_a_g_e_-_t_y_p_e
+       part comes from that field if present or fallbacks to ddeebb.
+
+OOPPTTIIOONNSS
+       --aa, ----nnoo--aarrcchhiitteeccttuurree
+           The destination filename will not have the architecture
+           information.
+
+       --kk, ----ssyymmlliinnkk
+           Create a symlink, instead of moving.
+
+       --oo, ----oovveerrwwrriittee
+           Existing files will be overwritten if they have the same name as
+           the destination filename.
+
+       --ss, ----ssuubbddiirr [_d_i_r]
+           Files will be moved into a subdirectory. If the directory given as
+           argument exists the files will be moved into that directory
+           otherwise the name of the target directory is extracted from the
+           section field in the control part of the package. The target
+           directory will be unstable/binary-_a_r_c_h_i_t_e_c_t_u_r_e/_s_e_c_t_i_o_n.  If the
+           section is not found in the control, then nnoo--sseeccttiioonn is assumed,
+           and in this case, as well as for sections nnoonn--ffrreeee and ccoonnttrriibb the
+           target directory is _s_e_c_t_i_o_n/binary-_a_r_c_h_i_t_e_c_t_u_r_e.  The section field
+           is not required so a lot of packages will find their way to the nnoo--
+           sseeccttiioonn area.
+
+           WWaarrnniinngg:: _U_s_e _t_h_i_s _o_p_t_i_o_n _w_i_t_h _c_a_r_e_, _i_t _i_s _m_e_s_s_y_.
+
+       --cc, ----ccrreeaattee--ddiirr
+           This option can used together with the --ss option. If a target
+           directory isn't found it will be created automatically.
+
+           WWaarrnniinngg:: _U_s_e _t_h_i_s _o_p_t_i_o_n _w_i_t_h _c_a_r_e_.
+
+       --??, ----hheellpp
+           Show the usage message and exit.
+
+       --vv, ----vveerrssiioonn
+           Show the version and exit.
+
+EENNVVIIRROONNMMEENNTT
+       DDPPKKGG__CCOOLLOORRSS
+           Sets the color mode (since dpkg 1.18.5).  The currently accepted
+           values are: aauuttoo (default), aallwwaayyss and nneevveerr.
+
+       DDPPKKGG__NNLLSS
+           If set, it will be used to decide whether to activate Native
+           Language Support, also known as internationalization (or i18n)
+           support (since dpkg 1.19.0).  The accepted values are: 00 and 11
+           (default).
+
+BBUUGGSS
+       Some packages don't follow the name structure
+       _p_a_c_k_a_g_e___v_e_r_s_i_o_n___a_r_c_h_i_t_e_c_t_u_r_e..ddeebb.  Packages renamed by ddppkkgg--nnaammee will
+       follow this structure. Generally this will have no impact on how
+       packages are installed by ddsseelleecctt(1)/ddppkkgg(1), but other installation
+       tools might depend on this naming structure.
+
+EEXXAAMMPPLLEESS
+       ddppkkgg--nnaammee bbaarr--ffoooo..ddeebb
+           The file bbaarr--ffoooo..ddeebb will be renamed to bar-foo_1.0-2_i386.deb or
+           something similar (depending on whatever information is in the
+           control part of bbaarr--ffoooo..ddeebb).
+
+       ffiinndd //rroooott//ddeebbiiaann// --nnaammee ''**..ddeebb'' || xxaarrggss --nn 11 ddppkkgg--nnaammee --aa
+           All files with the extension ddeebb in the directory /root/debian and
+           its subdirectory's will be renamed by ddppkkgg--nnaammee if required into
+           names with no architecture information.
+
+       ffiinndd --nnaammee ''**..ddeebb'' || xxaarrggss --nn 11 ddppkkgg--nnaammee --aa --oo --ss --cc
+           DDoonn''tt ddoo tthhiiss..  Your archive will be messed up completely because a
+           lot of packages don't come with section information.  DDoonn''tt ddoo
+           tthhiiss..
+
+       ddppkkgg--ddeebb ----bbuuiilldd ddeebbiiaann--ttmmpp &&&& ddppkkgg--nnaammee --oo --ss .... ddeebbiiaann--ttmmpp..ddeebb
+           This can be used when building new packages.
+
+SSEEEE AALLSSOO
+       ddeebb(5), ddeebb--ccoonnttrrooll(5), ddppkkgg(1), ddppkkgg--ddeebb(1), ffiinndd(1), xxaarrggss(1).
+
+
+
+1.21.1                            2022-05-25                      dpkg-name(1)
+74139ebd58ff5c0c62a97e3ac12b4100e6b4923e0f5795840aa8dd2926739605

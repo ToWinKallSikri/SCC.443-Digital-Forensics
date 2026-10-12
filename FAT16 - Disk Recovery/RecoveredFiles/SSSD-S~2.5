@@ -1,0 +1,88 @@
+SSSD-SIMPLE(5)           File Formats and Conventions           SSSD-SIMPLE(5)
+
+
+
+NNAAMMEE
+       sssd-simple - the configuration file for SSSD's 'simple' access-control
+       provider
+
+DDEESSCCRRIIPPTTIIOONN
+       This manual page describes the configuration of the simple
+       access-control provider for ssssssdd(8). For a detailed syntax reference,
+       refer to the "FILE FORMAT" section of the ssssssdd..ccoonnff(5) manual page.
+
+       The simple access provider grants or denies access based on an access
+       or deny list of user or group names. The following rules apply:
+
+       +o   If all lists are empty, access is granted
+
+       +o   If any list is provided, the order of evaluation is allow,deny.
+           This means that any matching deny rule will supersede any matched
+           allow rule.
+
+       +o   If either or both "allow" lists are provided, all users are denied
+           unless they appear in the list.
+
+       +o   If only "deny" lists are provided, all users are granted access
+           unless they appear in the list.
+
+
+CCOONNFFIIGGUURRAATTIIOONN OOPPTTIIOONNSS
+       Refer to the section "DOMAIN SECTIONS" of the ssssssdd..ccoonnff(5) manual page
+       for details on the configuration of an SSSD domain.
+
+       simple_allow_users (string)
+           Comma separated list of users who are allowed to log in.
+
+       simple_deny_users (string)
+           Comma separated list of users who are explicitly denied access.
+
+       simple_allow_groups (string)
+           Comma separated list of groups that are allowed to log in. This
+           applies only to groups within this SSSD domain. Local groups are
+           not evaluated.
+
+       simple_deny_groups (string)
+           Comma separated list of groups that are explicitly denied access.
+           This applies only to groups within this SSSD domain. Local groups
+           are not evaluated.
+
+       Specifying no values for any of the lists is equivalent to skipping it
+       entirely. Beware of this while generating parameters for the simple
+       provider using automated scripts.
+
+       Please note that it is an configuration error if both,
+       simple_allow_users and simple_deny_users, are defined.
+
+EEXXAAMMPPLLEE
+       The following example assumes that SSSD is correctly configured and
+       example.com is one of the domains in the _[_s_s_s_d_] section. This examples
+       shows only the simple access provider-specific options.
+
+           [domain/example.com]
+           access_provider = simple
+           simple_allow_users = user1, user2
+
+
+NNOOTTEESS
+       The complete group membership hierarchy is resolved before the access
+       check, thus even nested groups can be included in the access lists.
+       Please be aware that the "ldap_group_nesting_level" option may impact
+       the results and should be set to a sufficient value. (ssssssdd--llddaapp(5))
+       option.
+
+SSEEEE AALLSSOO
+       ssssssdd(8), ssssssdd..ccoonnff(5), ssssssdd--llddaapp(5), ssssssdd--kkrrbb55(5), ssssssdd--ssiimmppllee(5),
+       ssssssdd--iippaa(5), ssssssdd--aadd(5), ssssssdd--ffiilleess(5), ssssssdd--ssuuddoo(5), ssssssdd--sseessssiioonn--
+       rreeccoorrddiinngg(5), ssssss__ccaacchhee(8), ssssss__ddeebbuugglleevveell(8), ssssss__oobbffuussccaattee(8),
+       ssssss__sseeeedd(8), ssssssdd__kkrrbb55__llooccaattoorr__pplluuggiinn(8), ssssss__sssshh__aauutthhoorriizzeeddkkeeyyss(8),
+       ssssss__sssshh__kknnoowwnnhhoossttsspprrooxxyy(8), ssssssdd--iiffpp(5), ppaamm__ssssss(8).  ssssss__rrppcciiddmmaappdd(5)
+       ssssssdd--ssyysstteemmttaapp(5)
+
+AAUUTTHHOORRSS
+       TThhee SSSSSSDD uuppssttrreeaamm -- hhttttppss::////ggiitthhuubb..ccoomm//SSSSSSDD//ssssssdd//
+
+
+
+SSSD                              10/04/2022                    SSSD-SIMPLE(5)
+cadedaf7968b9a0b409a82950939eff135c1441c5a13f0ab86b6bb67a4d06a33

@@ -1,0 +1,225 @@
+SMARTPQI(4)                Linux Programmer's Manual               SMARTPQI(4)
+
+
+
+NNAAMMEE
+       smartpqi - Microsemi Smart Family SCSI driver
+
+SSYYNNOOPPSSIISS
+       mmooddpprroobbee ssmmaarrttppqqii [ddiissaabbllee__ddeevviiccee__iidd__wwiillddccaarrddss=={00|11}]
+                         [ddiissaabbllee__hheeaarrttbbeeaatt=={00|11}]
+                         [ddiissaabbllee__ccttrrll__sshhuuttddoowwnn=={00|11}]
+                         [lloocckkuupp__aaccttiioonn=={nnoonnee|rreebboooott|ppaanniicc}]
+                         [eexxppoossee__lldd__ffiirrsstt=={00|11}] [hhiiddee__vvsseepp=={00|11}]
+
+DDEESSCCRRIIPPTTIIOONN
+       ssmmaarrttppqqii is a SCSI driver for Microsemi Smart Family controllers.
+
+   SSuuppppoorrtteedd _ii_oo_cc_tt_ll(()) ooppeerraattiioonnss
+       For  compatibility  with  applications  written  for  the  cccciissss(4) and
+       hhppssaa(4) drivers, many, but not all of the iiooccttll(2) operations supported
+       by the hhppssaa driver are also supported by the ssmmaarrttppqqii driver.  The data
+       structures used by these operations are described in the  Linux  kernel
+       source file _i_n_c_l_u_d_e_/_l_i_n_u_x_/_c_c_i_s_s___i_o_c_t_l_._h.
+
+       CCCCIISSSS__DDEERREEGGDDIISSKK, CCCCIISSSS__RREEGGNNEEWWDDIISSKK, CCCCIISSSS__RREEGGNNEEWWDD
+              These  operations  all  do  exactly  the same thing, which is to
+              cause the driver to re-scan for new devices.  This does  exactly
+              the  same  thing as writing to the ssmmaarrttppqqii-specific host _r_e_s_c_a_n
+              attribute.
+
+       CCCCIISSSS__GGEETTPPCCIIIINNFFOO
+              This operation Returns the PCI domain, bus, device and  function
+              and "board ID" (PCI subsystem ID).
+
+       CCCCIISSSS__GGEETTDDRRIIVVVVEERR
+              This operation returns the driver version in four bytes, encoded
+              as:
+
+                  (major_version << 28) | (minor_version << 24) |
+                          (release << 16) | revision
+
+       CCCCIISSSS__PPAASSSSTTHHRRUU
+              Allows BMIC and CISS commands to be passed through to  the  con-
+              troller.
+
+   BBoooott ooppttiioonnss
+       ddiissaabbllee__ddeevviiccee__iidd__wwiillddccaarrddss=={00|11}
+              Disables  support for device ID wildcards.  The default value is
+              0.
+
+       ddiissaabbllee__hheeaarrttbbeeaatt=={00|11}
+              Disables support for the controller's heartbeat check.  This pa-
+              rameter is used for debugging purposes.  The default value is 0,
+              leaving the controller's heartbeat check active.
+
+       ddiissaabbllee__ccttrrll__sshhuuttddoowwnn=={00|11}
+              Disables support for shutting down the controller in  the  event
+              of a controller lockup.  The default value is 0.
+
+       lloocckkuupp__aaccttiioonn=={nnoonnee|rreebboooott|ppaanniicc}
+              Specifies  the  action the driver takes when a controller lockup
+              is detected.  The default action is nnoonnee.
+
+              parameter   action
+              ---------------------------------------------
+
+              nnoonnee        take controller offline only
+              rreebboooott      reboot the system
+              ppaanniicc       panic the system
+
+       eexxppoossee__lldd__ffiirrsstt=={00|11}
+              This option enables support for exposing logical devices to  the
+              operating  system before physical devices.  The default value is
+              0.
+
+       hhiiddee__vvsseepp=={00|11}
+              This option enables disabling exposure of the virtual SEP to the
+              host.   This  is usually associated with direct attached drives.
+              The default value is 0.
+
+FFIILLEESS
+   DDeevviiccee nnooddeess
+       Logical drives are accessed via the SCSI disk driver (_s_d), tape  drives
+       via  the  SCSI  tape  driver (_s_t), and the RAID controller via the SCSI
+       generic driver (_s_g), with device nodes named  _/_d_e_v_/_s_d*,  _/_d_e_v_/_s_t*,  and
+       _/_d_e_v_/_s_g*, respectively.
+
+   SSmmaarrttPPQQII--ssppeecciiffiicc hhoosstt aattttrriibbuuttee ffiilleess iinn _//_ss_yy_ss
+       _/_s_y_s_/_c_l_a_s_s_/_s_c_s_i___h_o_s_t_/_h_o_s_t*_/_r_e_s_c_a_n
+              The host _r_e_s_c_a_n attribute is a write-only attribute.  Writing to
+              this attribute will cause the driver to scan for  new,  changed,
+              or removed devices (e.g., hot-plugged tape drives, or newly con-
+              figured or deleted logical drives) and notify the SCSI mid-layer
+              of any changes detected.  Usually this action is triggered auto-
+              matically by configuration changes, so the user should not  nor-
+              mally  have  to write to this file.  Doing so may be useful when
+              hot-plugging devices such as tape drives or entire storage boxes
+              containing pre-configured logical drives.
+
+       _/_s_y_s_/_c_l_a_s_s_/_s_c_s_i___h_o_s_t_/_h_o_s_t*_/_v_e_r_s_i_o_n
+              The  host  _v_e_r_s_i_o_n attribute is a read-only attribute.  This at-
+              tribute contains the driver version and the controller  firmware
+              version.
+
+              For example:
+
+                  $ ccaatt //ssyyss//ccllaassss//ssccssii__hhoosstt//hhoosstt11//vveerrssiioonn
+                  driver: 1.1.2-126
+                  firmware: 1.29-112
+
+       _/_s_y_s_/_c_l_a_s_s_/_s_c_s_i___h_o_s_t_/_h_o_s_t*_/_l_o_c_k_u_p___a_c_t_i_o_n
+              The  host  _l_o_c_k_u_p___a_c_t_i_o_n  attribute  is  a read/write attribute.
+              This attribute will cause the driver to perform a  specific  ac-
+              tion in the unlikely event that a controller lockup has been de-
+              tected.  See OOPPTTIIOONNSS above for an explanation of the  _l_o_c_k_u_p___a_c_-
+              _t_i_o_n values.
+
+       _/_s_y_s_/_c_l_a_s_s_/_s_c_s_i___h_o_s_t_/_h_o_s_t_*_/_d_r_i_v_e_r___v_e_r_s_i_o_n
+              The  _d_r_i_v_e_r___v_e_r_s_i_o_n attribute is read-only.  This attribute con-
+              tains the smartpqi driver version.
+
+              For example:
+
+                  $ ccaatt //ssyyss//ccllaassss//ssccssii__hhoosstt//hhoosstt11//ddrriivveerr__vveerrssiioonn
+                  1.1.2-126
+
+       _/_s_y_s_/_c_l_a_s_s_/_s_c_s_i___h_o_s_t_/_h_o_s_t_*_/_f_i_r_m_w_a_r_e___v_e_r_s_i_o_n
+              The _f_i_r_m_w_a_r_e___v_e_r_s_i_o_n attribute  is  read-only.   This  attribute
+              contains the controller firmware version.
+
+              For example:
+
+                  $ ccaatt //ssyyss//ccllaassss//ssccssii__hhoosstt//hhoosstt11//ffiirrmmwwaarree__vveerrssiioonn
+                  1.29-112
+
+       _/_s_y_s_/_c_l_a_s_s_/_s_c_s_i___h_o_s_t_/_h_o_s_t_*_/_m_o_d_e_l
+              The  _m_o_d_e_l  attribute is read-only.  This attribute contains the
+              product identification string of the controller.
+
+              For example:
+
+                  $ ccaatt //ssyyss//ccllaassss//ssccssii__hhoosstt//hhoosstt11//mmooddeell
+                  1100-16i
+
+       _/_s_y_s_/_c_l_a_s_s_/_s_c_s_i___h_o_s_t_/_h_o_s_t_*_/_s_e_r_i_a_l___n_u_m_b_e_r
+              The _s_e_r_i_a_l___n_u_m_b_e_r attribute is read-only.  This  attribute  con-
+              tains the unique identification number of the controller.
+
+              For example:
+
+                  $ ccaatt //ssyyss//ccllaassss//ssccssii__hhoosstt//hhoosstt11//sseerriiaall__nnuummbbeerr
+                  6A316373777
+
+       _/_s_y_s_/_c_l_a_s_s_/_s_c_s_i___h_o_s_t_/_h_o_s_t_*_/_v_e_n_d_o_r
+              The  _v_e_n_d_o_r attribute is read-only.  This attribute contains the
+              vendor identification string of the controller.
+
+              For example:
+
+                  $ ccaatt //ssyyss//ccllaassss//ssccssii__hhoosstt//hhoosstt11//vveennddoorr
+                  Adaptec
+
+   SSmmaarrttPPQQII--ssppeecciiffiicc ddiisskk aattttrriibbuuttee ffiilleess iinn _//_ss_yy_ss
+       In the file specifications below, _c stands for the number of the appro-
+       priate SCSI controller, _b is the bus number, _t the target number, and _l
+       is the logical unit number (LUN).
+
+       _/_s_y_s_/_c_l_a_s_s_/_s_c_s_i___d_i_s_k_/c_:b_:t_:l_/_d_e_v_i_c_e_/_r_a_i_d___l_e_v_e_l
+              The _r_a_i_d___l_e_v_e_l attribute is read-only.  This attribute  contains
+              the RAID level of each logical drive.
+
+              For example:
+
+                  $ ccaatt //ssyyss//ccllaassss//ssccssii__ddiisskk//44::00::00::00//ddeevviiccee//rraaiidd__lleevveell
+                  RAID 0
+
+       _/_s_y_s_/_c_l_a_s_s_/_s_c_s_i___d_i_s_k_/_c:_b:_t:_l_/_d_e_v_i_c_e_/_s_a_s___a_d_d_r_e_s_s
+              The _s_a_s___a_d_d_r_e_s_s attribute is read-only.  This attribute contains
+              the unique identifier of the disk.
+
+              For example:
+
+                  $ ccaatt //ssyyss//ccllaassss//ssccssii__ddiisskk//11::00::33::00//ddeevviiccee//ssaass__aaddddrreessss
+                  0x5001173d028543a2
+
+       _/_s_y_s_/_c_l_a_s_s_/_s_c_s_i___d_i_s_k_/_c:_b:_t:_l_/_d_e_v_i_c_e_/_s_s_d___s_m_a_r_t___p_a_t_h___e_n_a_b_l_e_d
+              The _s_s_d___s_m_a_r_t___p_a_t_h___e_n_a_b_l_e_d attribute is read-only.  This  attri-
+              bute is for ioaccel-enabled volumes.  (Ioaccel is an alternative
+              driver submission path that allows the driver to  send  I/O  re-
+              quests  directly  to  backend  SCSI  devices, bypassing the con-
+              troller firmware.  This results in an increase  in  performance.
+              This  method  is used for HBA disks and for logical volumes com-
+              prised of SSDs.)  Contains 1 if ioaccel is enabled for the  vol-
+              ume and 0 otherwise.
+
+              For example:
+
+                  $ ccaatt //ssyyss//ccllaassss//ssccssii__ddiisskk//11::00::33::00//ddeevviiccee//ssssdd__ssmmaarrtt__ppaatthh__eennaabblleedd
+                  0
+
+VVEERRSSIIOONNSS
+       The ssmmaarrttppqqii driver was added in Linux 4.9.
+
+NNOOTTEESS
+   CCoonnffiigguurraattiioonn
+       To  configure  a  Microsemi  Smart Family controller, refer to the User
+       Guide for the controller, which can be found by searching for the  spe-
+       cific controller at <https://storage.microsemi.com/>.
+
+SSEEEE AALLSSOO
+       cccciissss(4), hhppssaa(4), ssdd(4), sstt(4)
+
+       _D_o_c_u_m_e_n_t_a_t_i_o_n_/_A_B_I_/_t_e_s_t_i_n_g_/_s_y_s_f_s_-_b_u_s_-_p_c_i_-_d_e_v_i_c_e_s_-_c_c_i_s_s in the Linux ker-
+       nel source tree.
+
+CCOOLLOOPPHHOONN
+       This page is part of release 5.10 of the Linux  _m_a_n_-_p_a_g_e_s  project.   A
+       description  of  the project, information about reporting bugs, and the
+       latest    version    of    this    page,    can     be     found     at
+       https://www.kernel.org/doc/man-pages/.
+
+
+
+Linux                             2019-10-10                       SMARTPQI(4)
+00b059877e4a707782065eae1edec185c24a745eb8ddc2c0febda1e93fb86d05

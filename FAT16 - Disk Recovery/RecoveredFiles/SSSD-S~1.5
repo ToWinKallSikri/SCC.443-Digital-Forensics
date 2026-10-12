@@ -1,0 +1,106 @@
+SSSD-SESSION-RECOR(5)    File Formats and Conventions    SSSD-SESSION-RECOR(5)
+
+
+
+NNAAMMEE
+       sssd-session-recording - Configuring session recording with SSSD
+
+DDEESSCCRRIIPPTTIIOONN
+       This manual page describes how to configure ssssssdd(8) to work with ttlloogg--
+       rreecc--sseessssiioonn(8), a part of tlog package, to implement user session
+       recording on text terminals. For a detailed configuration syntax
+       reference, refer to the "FILE FORMAT" section of the ssssssdd..ccoonnff(5)
+       manual page.
+
+       SSSD can be set up to enable recording of everything specific users see
+       or type during their sessions on text terminals. E.g. when users log in
+       on the console, or via SSH. SSSD itself doesn't record anything, but
+       makes sure tlog-rec-session is started upon user login, so it can
+       record according to its configuration.
+
+       For users with session recording enabled, SSSD replaces the user shell
+       with tlog-rec-session in NSS responses, and adds a variable specifying
+       the original shell to the user environment, upon PAM session setup.
+       This way tlog-rec-session can be started in place of the user shell,
+       and know which actual shell to start, once it set up the recording.
+
+CCOONNFFIIGGUURRAATTIIOONN OOPPTTIIOONNSS
+       These options can be used to configure the session recording.
+
+       scope (string)
+           One of the following strings specifying the scope of session
+           recording:
+
+           "none"
+               No users are recorded.
+
+           "some"
+               Users/groups specified by _u_s_e_r_s and _g_r_o_u_p_s options are
+               recorded.
+
+           "all"
+               All users are recorded.
+
+           Default: "none"
+
+       users (string)
+           A comma-separated list of users which should have session recording
+           enabled. Matches user names as returned by NSS. I.e. after the
+           possible space replacement, case changes, etc.
+
+           Default: Empty. Matches no users.
+
+       groups (string)
+           A comma-separated list of groups, members of which should have
+           session recording enabled. Matches group names as returned by NSS.
+           I.e. after the possible space replacement, case changes, etc.
+
+           NOTE: using this option (having it set to anything) has a
+           considerable performance cost, because each uncached request for a
+           user requires retrieving and matching the groups the user is member
+           of.
+
+           Default: Empty. Matches no groups.
+
+       exclude_users (string)
+           A comma-separated list of users to be excluded from recording, only
+           applicable with 'scope=all'.
+
+           Default: Empty. No users excluded.
+
+       exclude_groups (string)
+           A comma-separated list of groups, members of which should be
+           excluded from recording. Only applicable with 'scope=all'.
+
+           NOTE: using this option (having it set to anything) has a
+           considerable performance cost, because each uncached request for a
+           user requires retrieving and matching the groups the user is member
+           of.
+
+           Default: Empty. No groups excluded.
+
+EEXXAAMMPPLLEE
+       The following snippet of sssd.conf enables session recording for users
+       "contractor1" and "contractor2", and group "students".
+
+           [session_recording]
+           scope = some
+           users = contractor1, contractor2
+           groups = students
+
+
+SSEEEE AALLSSOO
+       ssssssdd(8), ssssssdd..ccoonnff(5), ssssssdd--llddaapp(5), ssssssdd--kkrrbb55(5), ssssssdd--ssiimmppllee(5),
+       ssssssdd--iippaa(5), ssssssdd--aadd(5), ssssssdd--ffiilleess(5), ssssssdd--ssuuddoo(5), ssssssdd--sseessssiioonn--
+       rreeccoorrddiinngg(5), ssssss__ccaacchhee(8), ssssss__ddeebbuugglleevveell(8), ssssss__oobbffuussccaattee(8),
+       ssssss__sseeeedd(8), ssssssdd__kkrrbb55__llooccaattoorr__pplluuggiinn(8), ssssss__sssshh__aauutthhoorriizzeeddkkeeyyss(8),
+       ssssss__sssshh__kknnoowwnnhhoossttsspprrooxxyy(8), ssssssdd--iiffpp(5), ppaamm__ssssss(8).  ssssss__rrppcciiddmmaappdd(5)
+       ssssssdd--ssyysstteemmttaapp(5)
+
+AAUUTTHHOORRSS
+       TThhee SSSSSSDD uuppssttrreeaamm -- hhttttppss::////ggiitthhuubb..ccoomm//SSSSSSDD//ssssssdd//
+
+
+
+SSSD                              10/04/2022             SSSD-SESSION-RECOR(5)
+a78c7648e20ac99da35d4a6c651d96267502362ce13b2701d6edfd7f0b1e3fdc

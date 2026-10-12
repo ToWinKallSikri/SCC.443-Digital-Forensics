@@ -1,0 +1,65 @@
+lsusb(8)                      Linux USB Utilities                     lsusb(8)
+
+
+
+NNAAMMEE
+       lsusb - list USB devices
+
+SSYYNNOOPPSSIISS
+       llssuussbb [ _o_p_t_i_o_n_s ]
+
+DDEESSCCRRIIPPTTIIOONN
+       llssuussbb  is  a  utility for displaying information about USB buses in the
+       system and the devices connected to them. It uses udev's hardware data-
+       base  to  associate a full human-readable name to the vendor ID and the
+       product ID.
+
+
+OOPPTTIIOONNSS
+       --vv, ----vveerrbboossee
+              Tells _l_s_u_s_b to be verbose and display detailed information about
+              the  devices shown.  This includes configuration descriptors for
+              the device's current speed.  Class descriptors  will  be  shown,
+              when  available,  for  USB  device classes including hub, audio,
+              HID, communications, and chipcard. Can be used with  the  tt  op-
+              tion.
+
+       --ss [[_b_u_s]::][_d_e_v_n_u_m]
+              Show  only devices in specified _b_u_s and/or _d_e_v_n_u_m.  Both IDs are
+              given in decimal and may be omitted.
+
+       --dd [_v_e_n_d_o_r]::[_p_r_o_d_u_c_t]
+              Show only devices with the  specified  vendor  and  product  ID.
+              Both IDs are given in hexadecimal.
+
+       --DD _d_e_v_i_c_e
+              Do not scan the /dev/bus/usb directory, instead display only in-
+              formation about the device whose device file is given.  The  de-
+              vice  file  should be something like /dev/bus/usb/001/001.  This
+              option displays detailed information like the vv option; you must
+              be root to do this.
+
+       --tt, ----ttrreeee
+              Tells _l_s_u_s_b to dump the physical USB device hierarchy as a tree.
+              Verbosity can be increased twice with the vv option.
+
+       --VV, ----vveerrssiioonn
+              Print version information on standard output, then exit success-
+              fully.
+
+
+RREETTUURRNN VVAALLUUEE
+       If the specified device is not found, a non-zero exit code is returned.
+
+
+SSEEEE AALLSSOO
+       llssppccii(8), uussbbvviieeww(8).
+
+
+AAUUTTHHOORR
+       Thomas Sailer, <sailer@ife.ee.ethz.ch>.
+
+
+
+usbutils-014                   11 February 2019                       lsusb(8)
+fa59f2d56796b8c2b524b486825b9d7b6f0b8cb78426f35cb3726a9eaad9cae9
